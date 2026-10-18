@@ -1,0 +1,8 @@
+query_id,product_id,labels
+89,24413,exact|partial
+243,5766,exact|partial
+246,38402,irrelevant|partial
+258,2076,exact|partial
+293,19210,exact|partial
+313,602,irrelevant|partial
+327,22268,exact|partial

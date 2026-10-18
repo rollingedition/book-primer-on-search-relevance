@@ -1,0 +1,18 @@
+{
+  "script": "recordings/cross_encoder.py",
+  "model": "Alibaba-NLP/gte-reranker-modernbert-base",
+  "model_version": "f7481e6055501a30fb19d090657df9ec1f79ab2c",
+  "model_licence": "Apache-2.0",
+  "prompt_sha256": "3387321b0d4b1f80d3896bbd60af40a51b1c31ef6288153876749f36d9621185",
+  "prompts": {
+    "pair": "(query text, lib.store.product_text)",
+    "activation": "none: raw scores"
+  },
+  "created": "2026-10-16",
+  "outputs": [
+    "scores.csv"
+  ],
+  "candidates": "union of BM25 top 100 and embeddings top 100",
+  "pairs": 10882,
+  "device": "cuda"
+}

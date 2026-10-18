@@ -1,0 +1,23 @@
+probe_id,pair,kind,query,of_query_id
+0,arms,negation,sofa with arms,
+1,arms,negation,sofa without arms,
+2,glass,negation,coffee table with glass top,
+3,glass,negation,coffee table not glass,
+4,round,negation,round rug,
+5,round,negation,rug that is not round,
+6,hood,number,36 inch kitchen hood,
+7,hood,number,48 inch kitchen hood,
+8,cooker,number,4 qt slow cooker,
+9,cooker,number,7 qt slow cooker,
+10,bed,number,twin bed,
+11,bed,number,king bed,
+12,seats,number,2 seat sofa,
+13,seats,number,4 seat sofa,
+14,code,code,shag rug w003096809,
+15,code,code,shag rug w003096810,
+16,resolution,code,1920x1080p projector,
+17,resolution,code,2560x1440p projector,
+18,ligth,spelling,light bulb,305
+19,foutains,spelling,fountains with brick look,20
+20,desins,spelling,twin over full bunk beds cool designs,224
+21,ice-an,spelling,refrigerator with ice and water in door,406

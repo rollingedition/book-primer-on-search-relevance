@@ -1,0 +1,255 @@
+query_id,context,context_ids,answer,cited
+39,semantic,25251 15702 8406 10672 9250,"I recommend the following products for your door jewelry organizer: 
+
+1. over door or wall mounted jewelry holder (ID: 25251)
+2. hanging jewelry organizer , double sided 40 pockets and 20 magic tape hook jewelry organizer, necklace holder jewelry chain organizer for earrings necklace bracelet ring with hanger, beige (ID: 15702)
+3. maura storage organizer over the door/wall mounted jewelry armoire with mirror (ID: 8406)",25251 15702 8406
+39,bm25,25251 15702 10672 8406 15701,"I recommend the following door jewelry organizers: 
+
+1. over door or wall mounted jewelry holder (ID: 25251)
+2. hanging jewelry organizer, double sided 40 pockets and 20 magic tape hook jewelry organizer (ID: 15702)
+3. maura storage organizer over the door/wall mounted jewelry armoire with mirror (ID: 8406)",25251 15702 8406
+39,random,26804 15489 8133 36574 1232,"I'm sorry, but none of the products listed fit your request for a door jewelry organizer.",
+46,semantic,11815 11812 11820 11811 34459,"I recommend the beach upholstered panel headboard (ID: 11815), which features a blue color and a coastal style.",11815
+46,bm25,35736 21250 11815 11820 30393,"I recommend the following products that match your request for a beach blue headboard: 
+
+- beach upholstered panel headboard (ID: 11815)
+- beach east urban home upholstered panel headboard (ID: 11820)",11815 11820
+46,random,38960 35652 33594 15119 29771,none of them fit,
+58,semantic,8171 25068 23910 17406 9320,"I recommend the sybil 12 - light unique / statement classic / traditional chandelier with antler accents (ID: 8171), as it is specifically described as a perfect medium-sized lighting fixture.",8171
+58,bm25,20082 8171 36813 29291 38304,"I recommend the following medium-sized chandeliers: the rachael 8-light sputnik sphere chandelier (20082), the sybil 12-light unique/statement classic chandelier (8171), and the lenna 6-light unique/statement geometric chandelier (29291).",20082 8171 29291
+58,random,4358 7589 41656 12999 30764,none of them fit,
+63,semantic,40313 40323 11096 37144 11095,"I recommend the following monthly calendars: 
+
+1. monthly calendar chalkboard wall decal (ID: 40313)
+2. monthly calendar chalkboard decal (ID: 40323)
+3. wyeth magnetic wall mounted chalkboard (ID: 11096)
+4. monthly calendar pocket chart (ID: 37144)",40313 40323 11096 37144
+63,bm25,25294 25295 25296 37144 40317,"I recommend the following monthly calendars: 
+
+- summer monthly magnetic calendar board (25294)
+- spring monthly magnetic calendar board (25295)
+- winter monthly magnetic calendar board (25296)",25294 25295 25296
+63,random,22003 32068 35493 5517 27191,none of them fit,
+68,semantic,41856 33916 31999 33917 11742,"I recommend the following nautical platters for your home: the riley transitional platter (41856), the lakin crab melamine platter (33916), and the lakefield lobster melamine platter (33917).",41856 33916 33917
+68,bm25,26674 16516 41509 26673 31999,"I recommend the following nautical platters: the high seas knot rope platter (26674), the stacie sea turtle honeymoon platter (16516), and the nia melamine platter (31999).",26674 16516 31999
+68,random,36624 10276 12304 7300 6853,"I'm sorry, but none of the products listed fit your request for nautical platters.",
+72,semantic,540 8791 14322 16333 33671,"I recommend the following fold-in-half tables: 540, 8791, and 14322.",540 8791 14322
+72,bm25,29116 29115 972 16280 37113,"I recommend the following fold-in-half tables: 29116 (47.3 '' rectangular fold-in-half folding table), 29115 (23.6 '' square fold-in-half folding table), and 972 (47 '' rectangular fold-in-half adjustable folding table).",29116 29115 972
+72,random,19766 537 27850 35631 18901,none of them fit,
+89,semantic,37697 17898 37700 13840 20917,"I recommend the following whimsical solar lights for your garden: 
+
+1. solar garden light mystic gnome fairy house with color changing led solar outdoor garden light (ID: 37697)
+2. 4.19 '' solar powered integrated led lawn ornament (ID: 17898)
+3. fairy solar powered led outdoor garden light with crackled glass globe (ID: 37700)",37697 17898 37700
+89,bm25,20917 15698 3427 13537 32030,"I recommend the following whimsical solar lights: 
+
+- solar powered led pathway light (ID: 20917): These feature a whimsical design with paw prints and are perfect for walkways and gardens.
+- butterflies solar powered pathway light pack (ID: 32030): These provide a fun garden accent with a butterfly design.",20917 32030
+89,random,13978 27856 20360 18324 24818,none of them fit,
+94,semantic,22230 22201 22187 23292 22203,"I found several Whitehaven farmhouse kitchen sinks that match your request. Here are the available options:
+
+- whitehaven 35.69 '' l x 21.56 '' w farmhouse single bowl kitchen sink (ID: 22230)
+- whitehaven 29.69 '' l x 21.69 '' w farmhouse single bowl kitchen sink (ID: 22201)
+- whitehaven self-trimming 36 '' l x 22 '' w farmhouse kitchen sink (ID: 22187)",22230 22201 22187
+94,bm25,22198 22230 23292 22187 22202,"I recommend the following Kohler Whitehaven farmhouse kitchen sinks:
+
+- whitehaven self-trimming 36 '' l x 22 '' w farmhouse kitchen sink (ID: 22187)
+- whitehaven single-bowl farmhouse kitchen sink with tall apron (ID: 23292)
+- whitehaven smart divide 36 '' l x 22 '' w farmhouse double-bowl kitchen sink with tall apron (ID: 22202)",22187 23292 22202
+94,random,37388 33985 22395 25339 41093,none of them fit,
+133,semantic,17281 23534 41034 1363 12431,"I recommend the following outdoor light fixtures: 
+
+1. malikah 1 -bulb outdoor bulkhead light (ID: 17281)
+2. buradale 1 - bulb outdoor bulkhead light (ID: 23534)
+3. shinault oil rubbed bronze 1 -bulb 17.32 '' h outdoor hanging lantern (ID: 41034)",17281 23534 41034
+133,bm25,17281 41030 41031 41040 41029,"I recommend the following outdoor light fixture: 
+
+- malikah 1 -bulb outdoor bulkhead light (ID: 17281)",17281
+133,random,23428 24821 18209 33865 17595,"I'm sorry, but none of the products listed fit your request for outdoor light fixtures.",
+145,semantic,23424 23423 23422 23402 23421,"I'm sorry, but none of the products listed match the 'liberty hardware francisco' search.",
+145,bm25,11560 11559 13966 13965 26218,"I found several Francisco hardware options for you: 
+
+- francisco 5 '' center to center bar pull (ID: 11560)
+- francisco 4 '' center bar pull multipack (ID: 11559)
+- francisco drawer 5 '' center to center bar pull (ID: 13966)",11560 11559 13966
+145,random,3336 11699 17272 13407 29187,"I'm sorry, but none of the products listed fit your request for liberty hardware francisco.",
+237,semantic,22882 35080 1705 35081 6864,"I recommend the following modular sectionals that offer a 'floating on a cloud' feel of comfort:
+
+- 132 '' wide reversible modular corner sectional (ID: 22882)
+- 132 '' wide reversible modular corner sectional with ottoman (ID: 35080)
+- 176 '' wide reversible modular corner sectional with ottoman (ID: 35081)",22882 35080 35081
+237,bm25,35069 1708 1701 1699 22882,"I recommend the following modular sectionals that offer a cloud-like feel: 
+
+- mielke 44 '' wide modular corner sectional with ottoman (ID: 35069)
+- 132 '' wide reversible modular corner sectional (ID: 22882)
+- albus 103 '' wide reversible modular corner sectional (ID: 1708)",35069 22882 1708
+237,random,24098 21081 20085 26296 22827,none of them fit,
+243,semantic,8667 39467 11145 27435 20360,"I recommend the following multi-tiered plant stands for your indoor space: 
+
+1. schley rectangular multi-tiered plant stand (ID: 8667) - A powder-coated metal stand with a minimal, industrial-inspired silhouette.
+2. kreger rectangular multi-tiered plant stand (ID: 39467) - A 3-tier metal stand featuring an elegant scrollwork design and a classic black finish.
+3. basehor rectangular multi-tiered plant stand (ID: 11145) - A melamine-coated particleboard stand featuring nine flat wood shelves staggered across three rows.",8667 39467 11145
+243,bm25,8750 8740 11145 8743 42036,"I recommend the following multi-tiered plant stands for indoor use: 
+
+1. basehor rectangular multi-tiered plant stand (ID: 11145) - This stand is specifically intended for indoor spaces and features nine flat wood shelves across three rows.
+2. ekow plant stand (ID: 8750) - A 4-tier wood plant stand suitable for a living room or indoor flower pots.
+3. christchurch rectangular multi-tiered plant stand (ID: 42036) - A corner plant stand designed for indoor corners and living rooms.",8750 11145 42036
+243,random,1601 23156 26090 15741 19108,I recommend the burrus rectangular multi-tiered plant stand (ID: 1601).,1601
+244,semantic,7848 33294 42355 32354 42668,"I recommend the following sleeper loveseats for your home:
+
+- isarely 51 '' square arm sofa bed with reversible cushions (ID: 7848)
+- freyr 65 '' square arm sleeper (ID: 33294)
+- sabine 43.31 '' armless sofa bed (ID: 42355)",7848 33294 42355
+244,bm25,7848 1355 36123 8371 34520,"I recommend the following pull-out sleeper loveseats: 
+
+- isarely 51 '' square arm sofa bed with reversible cushions (7848)
+- watonga 53.15 '' square arm sofa bed (36123)",7848 36123
+244,random,36686 33997 20005 28348 1582,"I'm sorry, but none of the products listed fit your request for a pull out sleeper loveseat.",
+246,semantic,20429 20428 20132 9752 20425,"I recommend the following clear shower curtains: 
+
+- woolley vinyl solid color single shower curtain (ID: 20429)
+- woolley vinyl single shower curtain (ID: 20428)
+- siniard single shower curtain (ID: 20425)",20429 20428 20425
+246,bm25,9752 20428 20429 20425 20430,"I recommend the following clear shower curtains: the rodas vinyl shower curtain (9752), the woolley vinyl single shower curtain (20428), and the woolley vinyl solid color single shower curtain (20429).",9752 20428 20429
+246,random,22169 99 33793 1815 37375,none of them fit,
+249,semantic,42241 33594 15245 6979 27939,"I recommend the following bistro table and chair sets: 
+
+- 3 piece patio bistro table set outdoor furniture antique aluminium chair bistro (ID: 42241)
+- bistro table set outdoor patio set 3 piece table and chairs (ID: 33594)
+- fryar 3 piece bistro set (ID: 15245)",42241 33594 15245
+249,bm25,16470 16471 7390 1806 8443,"I recommend the following bistro sets that include both a table and chairs: 
+
+1. bearden 3-piece commercial-grade patio set with 2 woven dining chairs and a 30-in . glass-top bistro table (ID: 16470)
+2. bearden 3-piece commercial-grade patio set with 2 woven dining chairs and a 30-in . aluminum slat-top bistro table (ID: 16471)
+3. springmont 3 piece bistro set (ID: 7390)",16470 16471 7390
+249,random,38908 8005 13258 4062 18784,none of them fit,
+255,semantic,2882 37769 37768 8086 22569,"I recommend the following desk and chair sets for your home or office: 
+
+1. perreira desk and chair set (ID: 2882)
+2. abraham desk and chair set (ID: 37769)
+3. aceves desk and chair set (ID: 37768)",2882 37769 37768
+255,bm25,19145 8796 2680 19211 33538,"I recommend the following desk and chair sets: the tolliver desk and chair set (2680), the fortinbras desk and chair set (33538), and the osterley 31.5 '' w writing desk and chair set (19145).",2680 33538 19145
+255,random,31332 15255 13415 30899 29558,none of them fit,
+285,semantic,35511 8686 34128 34127 31189,"I'm sorry, but none of the products listed fit your specific requirement for a 48"" sliding single track barn door.",
+285,bm25,7502 34127 34129 40156 40155,"I'm sorry, but none of the products listed fit your specific requirement for a 48"" sliding single track barn door.",
+285,random,22187 8566 32973 41189 40634,none of them fit,
+292,semantic,27234 21241 13376 13369 3076,"I recommend the following products that include white elements: 
+
+- ID: 21241 (white lumbar pillow included in the set)
+- ID: 13369 (blue/white square throw pillow)",21241 13369
+292,bm25,21561 39176 3634 15221 11026,I recommend the following white decorative pillows: the adelina white european pillow cover (21561) and the astoria pineapple decorative cotton lumbar pillow (3634).,21561 3634
+292,random,11948 1104 40688 4693 7437,none of them fit,
+293,semantic,36918 36917 36916 21201 15374,"I recommend the following products to protect your wood floors: 
+
+1. office desk chair mat for hard wood floor pvc mat (ID: 36918)
+2. premium heavy-duty furniture felt pad protectors for hardwood (ID: 21201)
+3. trendsetter hard floor straight rectangle chair mat (ID: 15374)",36918 21201 15374
+293,bm25,28072 36917 36916 36918 13187,"I recommend the following floor protector mats for your wood floors: 
+
+1. ID: 28072 - harding office hardwood high pile carpet beveled chair mat
+2. ID: 36918 - office desk chair mat for hard wood floor pvc mat
+3. ID: 13187 - wood veneer style hard floor straight edge chair mat",28072 36918 13187
+293,random,2448 20808 3666 28117 4514,"I'm sorry, but none of the products listed fit your request for a wood floor protector mat.",
+312,semantic,19221 29269 11556 8766 38340,"I recommend the following coat racks for your bedroom: 
+
+1. sodhi 5 - hook wall mounted coat rack (ID: 19221) - This elegant wall-mounted rack is specifically noted as being perfect for use in a bedroom.
+2. richmond 5-hook wall mounted coat rack (ID: 8766) - This stylish rack provides ten points of storage and is perfect for hanging clothing in a bedroom or wherever additional storage is needed.
+3. sheetz wall mounted coat rack (ID: 11556) - This classic design is perfectly suited to match the decor of any room in your home, including the bedroom.",19221 8766 11556
+312,bm25,19221 5291 2577 30250 30249,"I recommend the sodhi 5 - hook wall mounted coat rack (ID: 19221), as its description specifically mentions it is perfect for use in a bedroom.",19221
+312,random,25251 23298 40090 25163 20994,"I'm sorry, but none of the products listed fit your request for a coat rack.",
+346,semantic,34935 3767 5741 3779 24062,"I recommend the following nesting tray sets: 
+
+- kugler nesting 3 piece serving tray set (ID: 34935)
+- anniedale nesting 3 piece serving tray (ID: 3767)
+- home nesting 2 piece serving tray set (ID: 5741)",34935 3767 5741
+346,bm25,24062 757 24063 3779 34935,"I recommend the following nesting tray sets: the jaylon nesting serving pedestal 6 piece tray set (24062), the albert nesting 3 piece vanity tray set (757), and the zackery nesting serving pedestal 3 piece tray set (24063).",24062 757 24063
+346,random,8479 39436 7920 13255 11386,none of them fit,
+367,semantic,19284 28023 26195 26196 6641,"I recommend the following wooden outdoor chairs: 
+
+1. patio chair with cushions (ID: 19284)
+2. acacia wood outdoor rocking chair (ID: 28023)
+3. jettie modern outdoor wood patio chair with cushions (ID: 26195)",19284 28023 26195
+367,bm25,29237 29006 38720 19284 21391,"I recommend the following wooden chairs for outdoor use: the abdool wooden rocking chair (29237), the cooney wooden porch rocking chair (29006), and the patio chair with cushions (19284).",29237 29006 19284
+367,random,3307 26766 27759 23094 2923,none of them fit,
+382,semantic,42313 20009 27425 2918 31167,"I recommend the following products that fit your request for a countertop hot water dispenser: 
+
+1. invite instant hot water dispenser (ID: 20009) - This faucet-style dispenser delivers up to 60 cups per hour of 200-degree hot water.
+2. top loading countertop hot and cold electric water cooler (ID: 27425) - This is a countertop unit that dispenses both hot and cold water from a jug.
+3. avalon countertop hot and cold electric water cooler (ID: 2918) - This countertop unit features paddle spouts for convenient hot and cold water dispensing.",20009 27425 2918
+382,bm25,28949 31167 42313 10296 28948,"I'm sorry, but none of the products listed fit your request for a counter top one cup hot water dispenser.",
+382,random,31164 20228 25046 34832 32732,"I'm sorry, but none of the products listed fit your request for a counter top one cup hot water dispenser.",
+406,semantic,33570 3441 2328 16200 33544,"I recommend the following refrigerator which features a dispenser: 
+
+ID: 16200 - modern glass 36 '' energy star french door 27.8 cu . ft. smart refrigerator (features a hands-free autofill dispenser)
+
+ID: 33544 - 36 '' french door 27.8 cu . ft. smart energy star refrigerator with food showcase (features a minimal dispenser)",33544 16200
+406,bm25,2328 22648 35269 4607 4606,"I'm sorry, but none of the products listed currently feature an ice and water dispenser in the door. The available refrigerators include internal ice makers, but do not specify door-mounted dispensers.",
+406,random,16802 14357 2896 32628 6816,none of them fit,
+408,semantic,27964 36644 27967 27959 27803,"I recommend the following girl reading statues: 
+
+1. girl sitting on books and reading statue (ID: 27964)
+2. bookworm girl garden reader statue (ID: 36644)
+3. young girl with her puppy on bench reading statue (ID: 27967)",27964 36644 27967
+408,bm25,27959 6425 36558 27964 27956,"I recommend the following statues of a girl reading: 
+
+1. girl sitting and reading a book statue (ID: 27959)
+2. leeton lying girl reading book statue (ID: 6425)
+3. girl sitting on books and reading statue (ID: 27964)",27959 6425 27964
+408,random,15325 1408 26327 40487 13730,none of them fit,
+436,semantic,5059 18845 14356 2098 737,"I recommend the following products that fit your request for a full bed with a trundle:
+
+1. eitan full bed with trundle (ID: 5059)
+2. full size platform bed with adjustable trundle, white (ID: 2098)
+3. full size platform bed with adjustable trundle (ID: 737)",5059 2098 737
+436,bm25,10075 17399 15670 737 4766,"I recommend the following products that fit your request for a full bed with a trundle: 
+
+1. hajrah full over full bunk bed with trundle (ID: 10075)
+2. full size platform bed with adjustable trundle (ID: 737)",10075 737
+436,random,5965 20042 12396 28017 34999,none of them fit,
+459,semantic,11869 11867 17332 11876 14546,"I found several tie dye duvet cover options for you: 
+
+1. ethnic vivid colored tie dye effect flower kids duvet cover set (ID: 11869)
+2. 70s party peace and love tie dye effect funky color splash duvet cover set (ID: 11867)
+3. tangerine tie dye by laura trevey lightweight duvet cover (ID: 17332)",11869 11867 17332
+459,bm25,13578 10982 17332 41525 10316,"I recommend the following tie dye duvet covers: 
+
+- tie dye block single duvet cover (ID: 10982)
+- tangerine tie dye by laura trevey lightweight duvet cover (ID: 17332)
+- hearts in tie dye duvet cover set (ID: 10316)",10982 17332 10316
+459,random,39815 40312 23280 10488 17717,none of them fit,
+461,semantic,3335 3337 3336 3338 40003,"I recommend the following luau string lights: 
+
+- summer luau flower string lights (ID: 3335)
+- summer luau bamboo string lights (ID: 3337)
+- summer luau hibiscus 5 string lights (ID: 3336)",3335 3337 3336
+461,bm25,3336 3335 3337 3338 19139,"I recommend the following luau string lights: 
+- summer luau hibiscus 5 string lights (3336)
+- summer luau flower string lights (3335)
+- summer luau bamboo string lights (3337)",3336 3335 3337
+461,random,33118 15122 37757 31649 13616,"I'm sorry, but none of the products listed fit your request for luau string lights.",
+469,semantic,32530 42171 29141 25249 9982,"I recommend the following products for your garage sports storage needs:
+
+1. ID: 9982 - rebrilliant sports equipment ball storage rack for garage. This is a comprehensive organizer featuring a ball rail and a wide storage basket.
+2. ID: 42171 - 7-shelf steel ball wall mounted sports rack. This is a space-saving design specifically designed to fit between garage doors.
+3. ID: 32530 - passabe freestanding sports rack. This all-in-one cart features multiple baskets, shelves, and hooks to organize sports gear.",32530 42171 9982
+469,bm25,42930 27361 29141 42171 27364,"I recommend the following products for your garage sports storage needs: 
+
+1. mythinglogic garage storage system (ID: 27361) - A garage organizer with baskets and hooks specifically designed for sports equipment and ball storage.
+2. storage freestanding sports rack (ID: 29141) - A customizable and easy-to-clean freestanding rack perfect for added storage.
+3. 7-shelf steel ball wall mounted sports rack (ID: 42171) - A space-saving steel rack designed to fit between garage doors to keep sports equipment organized.",27361 29141 42171
+469,random,11393 19209 35038 27851 12656,"I'm sorry, but none of the products listed fit your request for a garage sports storage rack.",
+482,semantic,42477 42482 42487 39478 42490,"I recommend the following 48-inch kitchen hoods: 
+
+1. 48 '' 1200 cfm ducted wall mount range hood in brushed 430 stainless steel (ID: 42477)
+2. 48 '' 400 cfm ducted wall mount range hood in brushed 430 stainless steel (ID: 42482)
+3. 48 '' 400 cfm convertible wall mount range hood (ID: 42487)
+
+Additionally, there is a 48 '' hand crafted designer wood island hood (ID: 42490) if you are looking for a wood finish.",42477 42482 42487 42490
+482,bm25,4019 42477 42482 19594 30313,"I found four options for a 48 inch kitchen hood: 
+
+- 48 inch wall mount chimney range hood with 600 cfm internal blower (ID: 4019)
+- 48 '' 1200 cfm ducted wall mount range hood in brushed 430 stainless steel (ID: 42477)
+- 48 '' 400 cfm ducted wall mount range hood in brushed 430 stainless steel (ID: 42482)
+- 48 '' island range hood (ID: 19594)",4019 42477 42482 19594
+482,random,39800 31753 41179 22432 29343,none of them fit,

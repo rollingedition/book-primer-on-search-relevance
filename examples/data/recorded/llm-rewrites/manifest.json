@@ -1,0 +1,62 @@
+{
+  "script": "recordings/llm_rewrites.py",
+  "model": "gemma4:12b-it-q4_K_M",
+  "model_version": "6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b",
+  "model_licence": "Apache-2.0",
+  "prompt_sha256": "7a99a2010dd11c9b71da45f41250c9b1406e8dd33da3f12c7a63032cbdafcfcd",
+  "prompts": {
+    "rewrite": "Rewrite this search query from an online furniture and home-goods store so that a search engine finds what the shopper wants. Fix spelling, expand abbreviations and add common synonyms for the product type, but keep every requirement the shopper stated and add none of your own. Return a single line.\n\nQuery: {query}\n\nAnswer in JSON.",
+    "hypothetical": "A shopper searched an online furniture and home-goods store for: {query}\n\nWrite the product listing that would match it best, as the store would list it: a product name, the product class and a description of two or three sentences. Answer in JSON."
+  },
+  "created": "2026-10-16",
+  "outputs": [
+    "rewrites.csv",
+    "rewrites.npy",
+    "hypothetical.npy",
+    "calls.jsonl"
+  ],
+  "options": {
+    "temperature": 0,
+    "seed": 2026,
+    "num_ctx": 8192,
+    "think": false
+  },
+  "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+  "embedding_revision": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+  "embedded_as": {
+    "rewrite": "query (model's query prompt)",
+    "hypothetical": "document (no prompt)"
+  },
+  "schemas": {
+    "rewrite": {
+      "type": "object",
+      "properties": {
+        "rewrite": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "rewrite"
+      ]
+    },
+    "hypothetical": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "product_class": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "product_class",
+        "description"
+      ]
+    }
+  }
+}

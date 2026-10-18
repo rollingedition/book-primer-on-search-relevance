@@ -1,0 +1,69 @@
+{
+  "script": "recordings/agent_trace.py",
+  "model": "gemma4:12b-it-q4_K_M",
+  "model_version": "6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b",
+  "model_licence": "Apache-2.0",
+  "prompt_sha256": "c24cecf362f0703cc600ef57f004a84540cfd7c4ab01e47c84fe943090d28333",
+  "prompts": {
+    "task": "You help a shopper at an online furniture and home-goods store. The shopper wants: {query}\n\nUse the search tool to find the three products that best match what the shopper wants. You may search up to three times, with any wording. When you're done, reply with only JSON: {{\"product_ids\": [three IDs]}}.",
+    "no_more_searches": "No more searches. Reply with only the JSON now.",
+    "tool": {
+      "type": "function",
+      "function": {
+        "name": "search",
+        "description": "Search the store's catalog. Returns the top 5 products: ID, name, class and attributes.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "the search text"
+            }
+          },
+          "required": [
+            "query"
+          ]
+        }
+      }
+    }
+  },
+  "created": "2026-10-17",
+  "outputs": [
+    "traces.jsonl"
+  ],
+  "options": {
+    "temperature": 0,
+    "seed": 2026,
+    "num_ctx": 8192,
+    "think": false
+  },
+  "schemas": {
+    "tool": {
+      "type": "function",
+      "function": {
+        "name": "search",
+        "description": "Search the store's catalog. Returns the top 5 products: ID, name, class and attributes.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "the search text"
+            }
+          },
+          "required": [
+            "query"
+          ]
+        }
+      }
+    }
+  },
+  "max_searches": 3,
+  "results_shown": 5,
+  "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+  "embedding_revision": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+  "retrievers": {
+    "bm25": "lib.lexical",
+    "semantic": "recorded product embeddings; tool text embedded live"
+  }
+}

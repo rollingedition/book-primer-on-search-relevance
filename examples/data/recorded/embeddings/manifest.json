@@ -1,0 +1,24 @@
+{
+  "script": "recordings/embeddings.py",
+  "model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+  "model_version": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+  "model_licence": "Apache-2.0",
+  "prompt_sha256": "61d4ace8c061a91f414892f5e9e6ee01f29ee04d2e88fdd22c7d3cde0f8076b8",
+  "prompts": {
+    "document": "lib.store.product_text: name. class. category. description",
+    "query": "Represent this sentence for searching relevant passages: "
+  },
+  "created": "2026-10-16",
+  "outputs": [
+    "products.npy",
+    "product_ids.npy",
+    "queries.npy",
+    "query_ids.npy"
+  ],
+  "dimensions": 768,
+  "dtype": "float16",
+  "normalized": true,
+  "device": "cuda",
+  "longest_product_tokens": 201,
+  "max_seq_length": 512
+}

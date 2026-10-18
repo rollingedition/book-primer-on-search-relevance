@@ -1,0 +1,11 @@
+# Libraries the recording scripts need. Recordings run once, with a GPU and network, never in the example checks.
+# recordings/requirements.txt pins them, compiled with:
+#   uv pip compile recordings/requirements.in -c examples/requirements.txt -o recordings/requirements.txt --python-version 3.12 --no-header --no-annotate
+# The constraint keeps the libraries the examples share (bm25s, numpy, pandas, scipy) at the examples' versions.
+numpy
+pandas
+sentence-transformers
+torch
+ollama
+bm25s
+scipy

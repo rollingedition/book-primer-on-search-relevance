@@ -1,0 +1,43 @@
+{
+  "script": "recordings/llm_judgments.py",
+  "model": "gemma4:12b-it-q4_K_M",
+  "model_version": "6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b",
+  "model_licence": "Apache-2.0",
+  "prompt_sha256": "caf9465a5865c0576ae4ca99b9232ae20cacabd1d6e2352187f1076b42196dd1",
+  "prompts": {
+    "short": "You judge product search results for an online furniture and home-goods store.\n\nExact: the product fully matches the search query.\nPartial: the product only matches the target entity of the query, but does not satisfy the modifiers for the query.\nIrrelevant: the product is not relevant to the query.\n\nQuery: {query}\n\nProduct:\n{product}\n\nAnswer with the label in JSON.",
+    "guidelines": "You judge product search results for an online furniture and home-goods store. A shopper typed the query and was shown the product. Decide how well the product matches what the shopper asked for.\n\nExact: the product fully matches the search query.\nPartial: the product only matches the target entity of the query, but does not satisfy the modifiers for the query.\nIrrelevant: the product is not relevant to the query.\n\nGuidelines:\n- First find the target entity: the kind of product the query asks for (a sofa, a lamp, a rug).\n- Then find the modifiers: everything else the query asks for, such as colour, size, material, style, brand or a feature.\n- Exact needs the right kind of product and every modifier. Partial is the right kind of product with at least one modifier missing or contradicted. Irrelevant is the wrong kind of product, even when it shares words with the query, such as an accessory for the product asked for.\n- Read misspelled queries as the shopper meant them.\n- Judge only from the product's text and attributes. If a modifier isn't mentioned, decide from what is written, and don't assume it is met.\n\nQuery: {query}\n\nProduct:\n{product}\n\nAnswer with the label in JSON."
+  },
+  "created": "2026-10-17",
+  "outputs": [
+    "judgments.csv",
+    "calls.jsonl"
+  ],
+  "options": {
+    "temperature": 0,
+    "seed": 2026,
+    "num_ctx": 8192,
+    "think": false
+  },
+  "schemas": {
+    "label": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "partial",
+            "irrelevant"
+          ]
+        }
+      },
+      "required": [
+        "label"
+      ]
+    }
+  },
+  "pairs": 1140,
+  "invalid": 0,
+  "sees": "lib.store text plus attributes; no images"
+}

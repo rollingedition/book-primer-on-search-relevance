@@ -1,0 +1,44 @@
+{
+  "script": "recordings/rag_answers.py",
+  "model": "gemma4:12b-it-q4_K_M",
+  "model_version": "6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b",
+  "model_licence": "Apache-2.0",
+  "prompt_sha256": "a10f443fc1f8017ea082df829f9cadf83a150dea2c66db356843336055913299",
+  "prompts": "You help shoppers at an online furniture and home-goods store. Using only the products listed below, answer the shopper. Recommend up to three products that fit, cite each one by its ID, and say plainly if none of them fit. Don't mention products that aren't listed.\n\nShopper: I'm looking for {query}.\n\nProducts:\n{products}\n\nAnswer in JSON: the answer to show the shopper, and the IDs you cited.",
+  "created": "2026-10-17",
+  "outputs": [
+    "answers.csv",
+    "calls.jsonl"
+  ],
+  "options": {
+    "temperature": 0,
+    "seed": 2026,
+    "num_ctx": 8192,
+    "think": false
+  },
+  "schemas": {
+    "answer": {
+      "type": "object",
+      "properties": {
+        "answer": {
+          "type": "string"
+        },
+        "cited": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      },
+      "required": [
+        "answer",
+        "cited"
+      ]
+    }
+  },
+  "contexts": {
+    "semantic": "lib.semantic top 5",
+    "bm25": "lib.lexical top 5",
+    "random": "5 products, seed 2026"
+  }
+}

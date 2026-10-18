@@ -1,0 +1,133 @@
+{
+  "script": "recordings/probes.py",
+  "model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+  "model_version": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+  "model_licence": "Apache-2.0",
+  "prompt_sha256": "8fccfa6b436a8f345723b4891ddfb39bff313861322ab29db352ba671199e8f0",
+  "prompts": {
+    "query": "Represent this sentence for searching relevant passages: ",
+    "probes": [
+      [
+        "arms",
+        "negation",
+        "sofa with arms"
+      ],
+      [
+        "arms",
+        "negation",
+        "sofa without arms"
+      ],
+      [
+        "glass",
+        "negation",
+        "coffee table with glass top"
+      ],
+      [
+        "glass",
+        "negation",
+        "coffee table not glass"
+      ],
+      [
+        "round",
+        "negation",
+        "round rug"
+      ],
+      [
+        "round",
+        "negation",
+        "rug that is not round"
+      ],
+      [
+        "hood",
+        "number",
+        "36 inch kitchen hood"
+      ],
+      [
+        "hood",
+        "number",
+        "48 inch kitchen hood"
+      ],
+      [
+        "cooker",
+        "number",
+        "4 qt slow cooker"
+      ],
+      [
+        "cooker",
+        "number",
+        "7 qt slow cooker"
+      ],
+      [
+        "bed",
+        "number",
+        "twin bed"
+      ],
+      [
+        "bed",
+        "number",
+        "king bed"
+      ],
+      [
+        "seats",
+        "number",
+        "2 seat sofa"
+      ],
+      [
+        "seats",
+        "number",
+        "4 seat sofa"
+      ],
+      [
+        "code",
+        "code",
+        "shag rug w003096809"
+      ],
+      [
+        "code",
+        "code",
+        "shag rug w003096810"
+      ],
+      [
+        "resolution",
+        "code",
+        "1920x1080p projector"
+      ],
+      [
+        "resolution",
+        "code",
+        "2560x1440p projector"
+      ]
+    ],
+    "spellings": [
+      [
+        "ligth",
+        "light bulb",
+        305
+      ],
+      [
+        "foutains",
+        "fountains with brick look",
+        20
+      ],
+      [
+        "desins",
+        "twin over full bunk beds cool designs",
+        224
+      ],
+      [
+        "ice-an",
+        "refrigerator with ice and water in door",
+        406
+      ]
+    ]
+  },
+  "created": "2026-10-16",
+  "outputs": [
+    "probes.csv",
+    "queries.npy"
+  ],
+  "dtype": "float16",
+  "normalized": true,
+  "device": "cuda",
+  "note": "Probe queries written for the book; not shopper queries, no judgments."
+}

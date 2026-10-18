@@ -1,0 +1,114 @@
+{
+  "script": "recordings/llm_conversations.py",
+  "model": "gemma4:12b-it-q4_K_M",
+  "model_version": "6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b",
+  "model_licence": "Apache-2.0",
+  "prompt_sha256": "19561fa754de63eb52ea84400a50afd9bc5be2486e3b028ad9603e268e2531d8",
+  "prompts": {
+    "standalone": "A shopper is searching an online furniture and home-goods store.\n\nTheir previous search: {query}\nTheir next message: {follow_up}\n\nRewrite the next message as one standalone search query that keeps everything the shopper still wants. Answer in JSON.",
+    "follow_ups": [
+      [
+        255,
+        "do you have it in white?",
+        "color",
+        "white"
+      ],
+      [
+        244,
+        "in gray please",
+        "color",
+        "gray"
+      ],
+      [
+        249,
+        "only round tables",
+        "shape",
+        "round"
+      ],
+      [
+        292,
+        "a square one",
+        "shape",
+        "square"
+      ],
+      [
+        312,
+        "something in black",
+        "color",
+        "black"
+      ],
+      [
+        46,
+        "it's for a queen bed",
+        "size",
+        "queen"
+      ],
+      [
+        459,
+        "king size",
+        "size",
+        "king"
+      ],
+      [
+        293,
+        "round, please",
+        "shape",
+        "round"
+      ],
+      [
+        436,
+        "in white",
+        "color",
+        "white"
+      ],
+      [
+        58,
+        "with a gold finish",
+        "finish",
+        "gold"
+      ],
+      [
+        243,
+        "in black",
+        "color",
+        "black"
+      ],
+      [
+        346,
+        "round ones",
+        "shape",
+        "round"
+      ]
+    ]
+  },
+  "created": "2026-10-16",
+  "outputs": [
+    "conversations.csv",
+    "follow_up.npy",
+    "joined.npy",
+    "standalone.npy",
+    "calls.jsonl"
+  ],
+  "options": {
+    "temperature": 0,
+    "seed": 2026,
+    "num_ctx": 8192,
+    "think": false
+  },
+  "embedding_model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+  "embedding_revision": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+  "note": "Follow-ups are written for the book, not taken from shoppers.",
+  "schemas": {
+    "standalone": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  }
+}
