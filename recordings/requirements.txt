@@ -8,7 +8,7 @@ click==8.5.0
 cloudpickle==3.1.2
 cuda-bindings==13.4.4
 cuda-pathfinder==1.8.3
-cuda-toolkit==13.0.3.0
+cuda-toolkit==13.4.3
 filelock==4.2.0
 fsspec==2026.9.0
 h11==0.16.0
