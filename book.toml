@@ -8,5 +8,4 @@ reader = "For readers comfortable with Python, pandas and NumPy who are new to s
 skills = ["search-relevance", "search-evaluation", "semantic-search", "learning-to-rank", "retrieval-augmented-generation"]   # 1 to 5; the first is primary
 line = "main"                         # edition line
 core_libraries = ["numpy", "pandas", "scipy", "scikit-learn", "bm25s", "faiss-cpu", "lightgbm"]   # names only; versions are pinned in examples/requirements.txt
-expert_reviewer = ""                  # set by a maintainer when granted (D-042)
 sponsor = ""
