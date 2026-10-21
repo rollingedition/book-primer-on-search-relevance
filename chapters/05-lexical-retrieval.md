@@ -30,7 +30,7 @@ The number of products that the hand-written tokenizer and bm25s's split differe
 
 The stop list fails the same way, and bm25s raises no error. Take `rug not wool`, a **probe query**: one written for this chapter to test a behaviour, not one of the store's queries. It becomes `rug wool`, so a wool rug matches both of its terms. The judgments can measure this harm only on queries with a negation, and {{out:tokenize-product-text:queries with not or no}} of the store's queries contain `not` or `no`. Search systems have moved from long stop lists to short ones or none, in part because stop words carry meaning in some queries, and in part because keeping them has become cheap ([Manning et al., 2008](https://nlp.stanford.edu/IR-book/html/htmledition/dropping-common-terms-stop-words-1.html)).
 
-**What to do:** print the terms that your queries and products become before you tune any scoring, and run both through the same tokenizer. Start from bm25s's defaults, as the store does. When shoppers type sizes, quantities or model numbers, use a token pattern that keeps single digits and splits a number from its unit, such as the one above. When they type negations, turn the stop list off. Each is a change to search, so measure it on the [train queries](#store-data) and check it on test queries before you keep it.
+**Working rule:** Print the terms that your queries and products become before you tune any scoring, and run both through the same tokenizer. Start from bm25s's defaults, as the store does. When shoppers type sizes, quantities or model numbers, use a token pattern that keeps single digits and splits a number from its unit, such as the one above. When they type negations, turn the stop list off. Each is a change to search, so measure it on the [train queries](#store-data) and check it on test queries before you keep it.
 
 ## Build an inverted index {#build-an-inverted-index}
 
@@ -44,7 +44,7 @@ The store's {{out:load-the-store:products}} products use {{out:inverted-index-by
 
 For `7qt slow cooker`, the postings list {{out:inverted-index-by-hand:products with slow}} products for `slow`, {{out:inverted-index-by-hand:products with cooker}} for `cooker` and {{out:inverted-index-by-hand:products with 7qt}} for `7qt`. Together they cover {{out:inverted-index-by-hand:products with any query term}} products, and those are all that scoring this query has to read. The number that contain every term is {{out:inverted-index-by-hand:products with every query term}}, because no product contains `7qt`. A Boolean AND query, which returns only the products that contain every query term, returns nothing for this query. A search that scores every product containing any of the terms, as BM25 does, still returns slow cookers, and leaves it to the scores to decide which come first.
 
-**What to do:** when a query's results look wrong, look up its terms in the index before you change the scoring. A term with no postings, such as `7qt`, can't help any product whatever the scorer does, so fix the tokenizer or the query instead. For queries that shoppers type, match products that contain any of the terms rather than all of them, because one unmatched word would otherwise empty the results. Serve from a library's index, and keep a small one like this to check what a term matches.
+**Working rule:** When a query's results look wrong, look up its terms in the index before you change the scoring. A term with no postings, such as `7qt`, can't help any product whatever the scorer does, so fix the tokenizer or the query instead. For queries that shoppers type, match products that contain any of the terms rather than all of them, because one unmatched word would otherwise empty the results. Serve from a library's index, and keep a small one like this to check what a term matches.
 
 ## Weight terms with TF-IDF {#weight-terms-with-tf-idf}
 
@@ -63,7 +63,7 @@ In the store, `furniture` is a common term. The example computes TF-IDF over the
 
 Over the train queries, TF-IDF averages an [nDCG@10](#score-one-ranking) of {{out:tf-idf-by-hand:tf-idf train ndcg@10}} against BM25's {{out:tf-idf-by-hand:bm25 train ndcg@10}}, and BM25 scores higher and lower on {{out:tf-idf-by-hand:train queries where bm25 scores higher, lower}} queries respectively. TF-IDF's [judged@10](#score-every-test-query) is {{out:tf-idf-by-hand:tf-idf train judged@10}} against BM25's {{out:tf-idf-by-hand:bm25 train judged@10}}; when a run's judged@10 is lower, part of its gap may be products that nobody judged rather than worse ones. This comparison on train queries tells you which scorer to build on, and the book keeps its evidence for the test queries.
 
-**What to do:** weight terms by IDF in any lexical scorer, because a match on a rare term is better evidence. Don't rank products by raw TF-IDF: cap what a repeated term can add, and correct for long texts, which is what BM25 does. Keep TF-IDF for explaining a ranking, where you can read off each term's tf and idf.
+**Working rule:** Weight terms by IDF in any lexical scorer, because a match on a rare term is better evidence. Don't rank products by raw TF-IDF: cap what a repeated term can add, and correct for long texts, which is what BM25 does. Keep TF-IDF for explaining a ranking, where you can read off each term's tf and idf.
 
 ## Rebuild BM25 by hand to match bm25s {#bm25-from-scratch}
 
@@ -85,7 +85,7 @@ The word `your` occurs in {{out:bm25-by-hand:products with your}} of the {{out:l
 
 The scores match. The largest difference over every product and query is {{out:bm25-by-hand:largest score difference from bm25s}}, at the precision of the `{{out:bm25-by-hand:bm25s score type}}` numbers bm25s returns. Matching scores don't settle a ranking on their own, though: where scores are equal, an implementation still has to choose which tied product comes first. Ours lists tied products by product ID. So does the book's shared BM25, `lib.lexical` from [chapter 1](#rank-with-bm25), which takes every product's score from bm25s and then orders equal scores by product ID. Asked whether both give the same top 100 for every query, the example answers {{out:bm25-by-hand:same top 100 for every query}}. On the train queries, the mean nDCG@10 is {{out:bm25-by-hand:train ndcg@10 by hand}} by hand and {{out:bm25-by-hand:train ndcg@10 with bm25s}} with bm25s; on the test queries, {{out:bm25-by-hand:test ndcg@10 by hand}} and {{out:bm25-by-hand:test ndcg@10 with bm25s}}.
 
-**What to do:** serve BM25 from a library such as bm25s, and keep a small version you wrote yourself to check it, because yours shows where every part of a score comes from. Compare two implementations by their scores first, then by their rankings. Before you compare rankings, break ties the same way in both, by product ID as the book's BM25 does, or tied products alone can make two correct implementations rank differently. When two BM25 systems rank differently, compare their tokenizers before their formulas. The study of variants held tokenization and stop words fixed, and notes that more mundane settings, such as the choice of stop words, often make larger differences than the formula (Kamphuis et al.).
+**Working rule:** Serve BM25 from a library such as bm25s, and keep a small version you wrote yourself to check it, because yours shows where every part of a score comes from. Compare two implementations by their scores first, then by their rankings. Before you compare rankings, break ties the same way in both, by product ID as the book's BM25 does, or tied products alone can make two correct implementations rank differently. When two BM25 systems rank differently, compare their tokenizers before their formulas. The study of variants held tokenization and stop words fixed, and notes that more mundane settings, such as the choice of stop words, often make larger differences than the formula (Kamphuis et al.).
 
 ## Stem terms so word forms match {#stem-word-forms}
 
@@ -105,7 +105,7 @@ To serve stemmed BM25 from bm25s, pass the same stemmer to `bm25s.tokenize` for 
 
 `pool floats` becomes `pool` and `float`, and the largest score difference over all products and queries is {{out:bm25s-with-a-stemmer:largest score difference from bm25s with a stemmer}}, the same rounding as [without stemming](#bm25-from-scratch).
 
-**What to do:** stem English product text and queries with the Snowball English stemmer, at indexing time and at query time alike: in bm25s, pass `stemmer=` to `bm25s.tokenize` on both sides. Read the products that a stem adds, as the `floats` counts do, before you trust a gain. When a stem merges words that your shoppers keep apart, such as `molding` and `mold`, keep a list of words you don't stem. For text in another language, use that language's stemmer.
+**Working rule:** Stem English product text and queries with the Snowball English stemmer, at indexing time and at query time alike: in bm25s, pass `stemmer=` to `bm25s.tokenize` on both sides. Read the products that a stem adds, as the `floats` counts do, before you trust a gain. When a stem merges words that your shoppers keep apart, such as `molding` and `mold`, keep a list of words you don't stem. For text in another language, use that language's stemmer.
 
 ## Check stemming on the test queries {#check-stemming-on-test}
 
@@ -119,7 +119,7 @@ On the test queries, judged@10 goes from {{out:measure-stemming:test judged@10 w
 
 One query explains why the two tests split. Query {{out:measure-stemming:test query with the largest gain}}, `outdoor light fixtures`, gains {{out:measure-stemming:its gain}}, and without it the mean gain is {{out:measure-stemming:mean test gain without it}}. The t-test assumes the differences are roughly normal, so one large gain widens their spread and lowers t; the permutation test assumes nothing about their shape ([chapter 3](#when-a-difference-is-established)). That query is also the one whose unstemmed top 10 [chapter 1 found full of unjudged light bulbs](#score-every-test-query).
 
-**What to do:** choose a text-processing change on train queries, and keep it only if its planned test comparison is established. When the permutation test and the t-test disagree, read the largest per-query differences, and report the gain without the largest one beside the mean. Stemming is established, so stem when you build lexical search. The book's shared BM25 stays unstemmed, so that later chapters' results stay comparable ([decisions](#lexical-retrieval-decisions)). Treat the size of the gain as fragile.
+**Working rule:** Choose a text-processing change on train queries, and keep it only if its planned test comparison is established. When the permutation test and the t-test disagree, read the largest per-query differences, and report the gain without the largest one beside the mean. Stemming is established, so stem when you build lexical search. The book's shared BM25 stays unstemmed, so that later chapters' results stay comparable ([decisions](#lexical-retrieval-decisions)). Treat the size of the gain as fragile.
 
 ## Tune BM25's parameters on train queries {#tune-bm25-parameters}
 
@@ -137,7 +137,7 @@ On test, the best setting scores {{out:sweep-k1-and-b:test ndcg@10 at the train 
 
 If you predicted a gain of a few hundredths, the train grid makes it unlikely. On train, the best setting beats the defaults by {{out:sweep-k1-and-b:train gain of the best over the defaults}}, and even that is an optimistic estimate: of all the settings, it is the one that happened to fit these queries best, so on other queries you should expect less.
 
-**What to do:** start from the library's defaults. Tune `k1` and `b` on train queries when you change what you index, such as fields or stemming, and keep a tuned setting only if its planned test comparison is established. The store's tuned setting isn't, so the store keeps `k1=1.5` and `b=0.75`.
+**Working rule:** Start from the library's defaults. Tune `k1` and `b` on train queries when you change what you index, such as fields or stemming, and keep a tuned setting only if its planned test comparison is established. The store's tuned setting isn't, so the store keeps `k1=1.5` and `b=0.75`.
 
 ## Weight the product name above the description {#weight-the-product-name}
 
@@ -155,7 +155,7 @@ The second example tries BM25F with whole-number weights: the name counted 1, 2,
 
 On train, the best name weight is {{out:repeat-the-name-field:best name weight on train}}, which scores {{out:repeat-the-name-field:name weight 2, train ndcg@10}} against {{out:repeat-the-name-field:name weight 1, train ndcg@10}} for one field, with judged@10 of {{out:repeat-the-name-field:name weight 2, train judged@10}} and {{out:repeat-the-name-field:name weight 1, train judged@10}}. On test, it scores {{out:repeat-the-name-field:best name weight, test ndcg@10}} against {{out:repeat-the-name-field:one field, test ndcg@10}}, with judged@10 of {{out:repeat-the-name-field:best name weight, test judged@10}} and {{out:repeat-the-name-field:one field, test judged@10}}. The gain isn't established; neither the t-test nor the interval disagrees ([the planned comparisons](#lexical-retrieval-decisions)).
 
-**What to do:** don't add up BM25 scores from separate fields. To weight a field, combine term frequencies before saturation, with BM25F or by repeating the field. Tune the weight on train queries, and keep it only if its planned test comparison is established. For the store, one combined field stays.
+**Working rule:** Don't add up BM25 scores from separate fields. To weight a field, combine term frequencies before saturation, with BM25F or by repeating the field. Tune the weight on train queries, and keep it only if its planned test comparison is established. For the store, one combined field stays.
 
 ## Index product attributes as a field {#index-attributes-as-a-field}
 
@@ -169,7 +169,7 @@ Of the {{out:add-attributes-field:exact products for query 246}} exact products 
 
 On train, judged@10 goes from {{out:add-attributes-field:train judged@10, one field}} to {{out:add-attributes-field:train judged@10, with attributes}}, and nDCG@10 from {{out:add-attributes-field:train ndcg@10, one field}} to {{out:add-attributes-field:train ndcg@10, with attributes}}. On test, judged@10 goes from {{out:add-attributes-field:test judged@10, one field}} to {{out:add-attributes-field:test judged@10, with attributes}}, and nDCG@10 from {{out:add-attributes-field:test ndcg@10, one field}} to {{out:add-attributes-field:test ndcg@10, with attributes}}. The permutation test doesn't establish the gain ([the planned comparisons](#lexical-retrieval-decisions)).
 
-**What to do:** keep structured attributes, and read the queries they help, but don't add them to the BM25 text on the strength of a few queries. Index the values without the names, so that a query word such as `size` doesn't match every product with a size, and keep the field only if its planned test comparison is established. For the store, the attributes stay out of the BM25 text. When a modifier names an attribute value exactly, such as a color, a filter or a ranking feature can use it without adding its words to every product's text.
+**Working rule:** Keep structured attributes, and read the queries they help, but don't add them to the BM25 text on the strength of a few queries. Index the values without the names, so that a query word such as `size` doesn't match every product with a size, and keep the field only if its planned test comparison is established. For the store, the attributes stay out of the BM25 text. When a modifier names an attribute value exactly, such as a color, a filter or a ranking feature can use it without adding its words to every product's text.
 
 ## Match phrases with term positions {#match-phrases-with-positions}
 
@@ -187,7 +187,7 @@ A bonus is gentler than a filter: a fixed amount added to a product's BM25 score
 
 On train, the best bonus is {{out:phrase-bonus-train-and-test:best bonus on train}}, which scores {{out:phrase-bonus-train-and-test:bonus 0.5, train ndcg@10}} against {{out:phrase-bonus-train-and-test:bonus 0, train ndcg@10}} without one, with [judged@10](#score-every-test-query) of {{out:phrase-bonus-train-and-test:bonus 0.5, train judged@10}} and {{out:phrase-bonus-train-and-test:bonus 0, train judged@10}}. On test, it scores {{out:phrase-bonus-train-and-test:bonus 0.5, test ndcg@10}} against {{out:phrase-bonus-train-and-test:bonus 0, test ndcg@10}}, with judged@10 of {{out:phrase-bonus-train-and-test:bonus 0.5, test judged@10}} and {{out:phrase-bonus-train-and-test:bonus 0, test judged@10}}. No gain is established ([the planned comparisons](#lexical-retrieval-decisions)).
 
-**What to do:** don't add a phrase bonus to every query by default, and keep one only if its planned test comparison is established. Build positions when shoppers quote phrases, or when word order changes what they want, as between `table lamp` and `lamp table`. Prefer a bonus that you measure on train queries to a filter, because a filter removes products like the hardware kit.
+**Working rule:** Don't add a phrase bonus to every query by default, and keep one only if its planned test comparison is established. Build positions when shoppers quote phrases, or when word order changes what they want, as between `table lamp` and `lamp table`. Prefer a bonus that you measure on train queries to a filter, because a filter removes products like the hardware kit.
 
 ## What goes wrong in production {#lexical-retrieval-in-production}
 
@@ -203,7 +203,7 @@ On train, the best bonus is {{out:phrase-bonus-train-and-test:best bonus on trai
 
 **The test queries wear out.** This chapter makes [five planned comparisons](#lexical-retrieval) on the same test queries, and the Bonferroni threshold of 0.01 keeps the chance of any false positive among them at 5% or less when none of the changes does anything. It can't count what nobody planned: every extra setting tried on test, and every look at a test query to explain a result, is another comparison. Confirm stemming's gain on queries and judgments that none of these choices has seen.
 
-**What to do:** keep a set of probe queries for negations, sizes and codes, and read their results after every change to text processing. Store the tokenizer's and stemmer's settings with the index they built, log the terms that each query becomes, and watch for queries whose terms have no postings.
+**Working rule:** Keep a set of probe queries for negations, sizes and codes, and read their results after every change to text processing. Store the tokenizer's and stemmer's settings with the index they built, log the terms that each query becomes, and watch for queries whose terms have no postings.
 
 ## Decisions this chapter made {#lexical-retrieval-decisions}
 

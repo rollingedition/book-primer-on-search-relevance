@@ -29,7 +29,7 @@ In the store, the recording of answers ([Score each answer](#retrieval-bounds-th
 
 Even with the book's sample cutting descriptions to about 400 characters ([data card](../examples/data/wands/README.md)), the catalog holds {{out:catalog-against-the-context:words in the catalog as the LLM reads it}} words, and a prompt with five products holds a median of {{out:catalog-against-the-context:words in one prompt with five products, median}}: the catalog is {{out:catalog-against-the-context:the catalog against one prompt}} larger. The examples have no tokenizer for this model, so they count words. The recording set a context window of {{out:catalog-against-the-context:context window the recording set, in tokens}} tokens. If every word were a single token, the catalog would fill that window {{out:catalog-against-the-context:the catalog against the recording's window, at one token per word}} over, and the vendor's 200,000 tokens {{out:catalog-against-the-context:the catalog against 200,000 tokens, at one token per word}} over. The store has to retrieve.
 
-**What to do:** put a few retrieved items in the prompt, not the collection, and choose how many by measuring answers on train queries at several sizes, because more context can help or hurt. The store's recording answered only the test queries, five products each, so five is a fixed setting here, not a measured one. Consider sending the whole collection only when it fits well inside the window, and then test it against retrieval on the same queries.
+**Working rule:** Put a few retrieved items in the prompt, not the collection, and choose how many by measuring answers on train queries at several sizes, because more context can help or hurt. The store's recording answered only the test queries, five products each, so five is a fixed setting here, not a measured one. Consider sending the whole collection only when it fits well inside the window, and then test it against retrieval on the same queries.
 
 ## Score each answer by the products it cites {#retrieval-bounds-the-answer}
 
@@ -62,7 +62,7 @@ The ceiling holds: the number of answers that cite more exact products than thei
 
 Semantic retrieval's lead on [nDCG@10](#score-one-ranking) is established ([chapter 3](#compare-runs-in-a-harness)), but on the first planned comparison its difference from BM25 of {{out:rag-answers-by-context:answers, semantic over bm25, mean difference}} in mean exact share isn't, at a permutation p-value of {{out:rag-answers-by-context:answers, semantic over bm25, permutation p}} ([both comparisons](#retrieval-for-llm-applications-decisions)).
 
-**What to do:** score every answer by its cited products' human grades, and report beside it how many answers recommend nothing, split by whether the context held an exact product. Keep a random context as a floor whenever you change the model or the prompt: an answer that recommends something from random products has invented a fit. Test a retriever's gain on the answers too, because a gain in ranking needn't carry through.
+**Working rule:** Score every answer by its cited products' human grades, and report beside it how many answers recommend nothing, split by whether the context held an exact product. Keep a random context as a floor whenever you change the model or the prompt: an answer that recommends something from random products has invented a fit. Test a retriever's gain on the answers too, because a gain in ranking needn't carry through.
 
 ## Check every citation against the context {#check-citations-against-context}
 
@@ -78,7 +78,7 @@ Of the {{out:citations-inside-the-context:answers}} answers, the check counts {{
 
 On this recording, the ID check finds no ungrounded citation. That is the result you want, and no reason to drop the check: it costs a set lookup per answer, and a different model, prompt or context length can fail it. Passing it says only that each recommended product was in front of the model, not that it fits.
 
-**What to do:** run the ID check on every answer, offline and before a shopper sees it, and treat an ID outside the context as a failed answer: drop it or retry, and never show it. Ask for citations in a field of their own so that the check doesn't parse prose, and check that the text and the field agree. Count the instructions the answers break, such as the number of recommendations, and enforce in code the ones that matter.
+**Working rule:** Run the ID check on every answer, offline and before a shopper sees it, and treat an ID outside the context as a failed answer: drop it or retry, and never show it. Ask for citations in a field of their own so that the check doesn't parse prose, and check that the text and the field agree. Count the instructions the answers break, such as the number of recommendations, and enforce in code the ones that matter.
 
 ## Check what the cited product supports {#check-citation-support}
 
@@ -94,7 +94,7 @@ The answer recommends one chandelier, saying it "is specifically described as a 
 
 Across both retrievers' answers, the {{out:faithful-but-partial:cited products, semantic and bm25 contexts}} cited products break down as {{out:faithful-but-partial:cited products, exact}} exact, {{out:faithful-but-partial:cited products, partial}} partial, {{out:faithful-but-partial:cited products, irrelevant}} irrelevant and {{out:faithful-but-partial:cited products, unjudged}} unjudged. Every cited product that isn't exact is partial, apart from the {{out:faithful-but-partial:cited products, unjudged}} nobody judged: the kind of product the shopper asked for, with a modifier wrong by the judges' reading.
 
-**What to do:** score answers on your judgments first, because they say whether a recommendation fits. Add a support check for the claims an answer makes about each product, by an NLI model or an LLM judge. Calibrate that judge on a human sample, as [chapter 4 does](#calibrate-on-a-human-sample) and as ARES does: "To mitigate potential prediction errors," it uses "a small set of human-annotated datapoints for prediction-powered inference (PPI)", a method that corrects the judge's estimate with the human labels ([Saad-Falcon et al., 2024](https://arxiv.org/abs/2311.09476)). For queries you have no judgments for, a support check is all you have, so say so when you report it.
+**Working rule:** Score answers on your judgments first, because they say whether a recommendation fits. Add a support check for the claims an answer makes about each product, by an NLI model or an LLM judge. Calibrate that judge on a human sample, as [chapter 4 does](#calibrate-on-a-human-sample) and as ARES does: "To mitigate potential prediction errors," it uses "a small set of human-annotated datapoints for prediction-powered inference (PPI)", a method that corrects the judge's estimate with the human labels ([Saad-Falcon et al., 2024](https://arxiv.org/abs/2311.09476)). For queries you have no judgments for, a support check is all you have, so say so when you report it.
 
 ## Measure the context, then the answer {#measure-the-context}
 
@@ -121,7 +121,7 @@ The hand-built Spearman matches SciPy's ({{out:context-measures-against-answers:
 
 Read these correlations as a description of one recording, not a test. Both sides use the same judgments, and an answer can cite only what its context holds, so some correlation is built in. The contexts also come in pairs, semantic and BM25, from the same queries.
 
-**What to do:** for a context of fixed size, report the context's precision@k or context precision from your judgments, with recall@k beside it. Use recall when an answer must cover every relevant item, such as every part that fits one appliance. Without judgments, Ragas's LLM-judged versions estimate similar quantities; calibrate them on a human sample before you trust them. Choose k by measuring answers on train queries at several values of k, which takes answers recorded for those queries.
+**Working rule:** For a context of fixed size, report the context's precision@k or context precision from your judgments, with recall@k beside it. Use recall when an answer must cover every relevant item, such as every part that fits one appliance. Without judgments, Ragas's LLM-judged versions estimate similar quantities; calibrate them on a human sample before you trust them. Choose k by measuring answers on train queries at several values of k, which takes answers recorded for those queries.
 
 ## Choose the retrievable unit {#choose-the-retrievable-unit}
 
@@ -145,7 +145,7 @@ The recorded embeddings cover each product's whole text, so the example tries ot
 
 The highest train precision@5 goes to the {{out:retrievable-unit-on-train:highest train precision@5}}. The fair comparison is with the sentences that carry the other fields: the same fields, the same products within reach, and judged@5 of {{out:retrievable-unit-on-train:sentences with the other fields, train judged@5}} against {{out:retrievable-unit-on-train:whole product, train judged@5}}. Cutting the description into sentences costs {{out:retrievable-unit-on-train:whole product minus sentences with the other fields, train precision@5}} in train precision@5 and {{out:retrievable-unit-on-train:whole product minus sentences with the other fields, train recall@5}} in recall@5. Ties decide part of those gaps: where products tie across the fifth place, the tie rule picks which reach the context, and reversing it changes the top 5 for {{out:retrievable-unit-on-train:sentences with the other fields, train queries whose top 5 changes with ties reversed}} train queries with the sentences with the other fields and {{out:retrievable-unit-on-train:whole product, train queries whose top 5 changes with ties reversed}} with the whole product. Read a gap of a few hundredths here as rough. The other units also drop fields. The description alone can never return the products that have no description, and bare sentences surface many products nobody judged, so their precision is partly a guess. These are train numbers and untested: they inform a choice and prove nothing.
 
-**What to do:** when your items are short, index each whole item as one unit, as the store does. When they are long, chunk them, put the item's title in front of every chunk, and choose the chunk size on train queries by the context measures of [the previous section](#measure-the-context). Pass the LLM the whole item, or the chunk with its title, so it knows what it is reading. Before you trust a small gap, count the queries whose top k changes when ties break the other way.
+**Working rule:** When your items are short, index each whole item as one unit, as the store does. When they are long, chunk them, put the item's title in front of every chunk, and choose the chunk size on train queries by the context measures of [the previous section](#measure-the-context). Pass the LLM the whole item, or the chunk with its title, so it knows what it is reading. Before you trust a small gap, count the queries whose top k changes when ties break the other way.
 
 ## Read an agent's searches from its trace {#read-agent-searches}
 
@@ -165,7 +165,7 @@ The agent rarely looks again. With BM25 it makes {{out:agent-searches-in-traces:
 
 Under BM25, {{out:agent-later-searches:bm25, later searches}} later searches add {{out:agent-later-searches:bm25, words that later searches add}} words, {{out:agent-later-searches:bm25, of those, words the tool had shown}} of them shown by the tool before. Under semantic retrieval, {{out:agent-later-searches:semantic, later searches}} later searches add {{out:agent-later-searches:semantic, words that later searches add}}, {{out:agent-later-searches:semantic, of those, words the tool had shown}} of them shown before. Counts this small describe these traces; they are not a rate to compare with Ning et al.'s.
 
-**What to do:** read the traces before you score an agent. Count its searches per task, compare each search with the shopper's words, and find where added words come from. Add the agent's searches to the queries you test your retriever on, scored with the judgments for the shopper's request or judged afresh, because a retriever tuned on people's queries hasn't been tested on an agent's. Expect an agent that mostly passes the shopper's words through to be bounded by the same retrieval as a RAG answer.
+**Working rule:** Read the traces before you score an agent. Count its searches per task, compare each search with the shopper's words, and find where added words come from. Add the agent's searches to the queries you test your retriever on, scored with the judgments for the shopper's request or judged afresh, because a retriever tuned on people's queries hasn't been tested on an agent's. Expect an agent that mostly passes the shopper's words through to be bounded by the same retrieval as a RAG answer.
 
 ## Compare the retrievers behind the agent's tool {#retriever-behind-agent-tool}
 
@@ -183,7 +183,7 @@ The picks score a precision@3 of {{out:agent-picks-by-tool:semantic, precision@3
 
 The exploratory check reads the same way. The tool's own top 3 for the first search scores {{out:agent-picks-by-tool:bm25, precision@3 of the first search's top 3}} under BM25 and {{out:agent-picks-by-tool:semantic, precision@3 of the first search's top 3}} under semantic retrieval, and the permutation p-values for picks against that top 3 are {{out:agent-picks-by-tool:bm25, picks against the top 3, exploratory permutation p}} and {{out:agent-picks-by-tool:semantic, picks against the top 3, exploratory permutation p}}: {{out:agent-picks-by-tool:picks against the top 3, p-values below 0.05 uncorrected}} fall below an uncorrected 0.05. We chose the check after seeing test results, so it is never established.
 
-**What to do:** test the retriever behind an agent's tool as you test it for people, on the agent's own searches and on its final picks, scored with human judgments. Check that every pick came from a tool result. Count the tasks where the tool never returned a relevant product, because no agent can fix those and only retrieval can.
+**Working rule:** Test the retriever behind an agent's tool as you test it for people, on the agent's own searches and on its final picks, scored with human judgments. Check that every pick came from a tool result. Count the tasks where the tool never returned a relevant product, because no agent can fix those and only retrieval can.
 
 ## What goes wrong in production {#retrieval-for-llm-applications-in-production}
 
@@ -201,7 +201,7 @@ A live assistant answers every shopper with a fresh model call, on a context tha
 
 **Agent traffic is a different workload.** In the logs [Ning et al.](#read-agent-searches) studied, agents send many machine-written queries per task, while the store's agent mostly sent one. One study warns that with agent traffic, "caching may lose effectiveness, query pre-processing may add overhead without improving results" ([Pezzuti et al., 2026](https://arxiv.org/abs/2602.17518)). Log agents' searches apart from people's, and test the retriever on both.
 
-**What to do:** version the model, prompt and context settings with the answers, check citations on every answer, track abstentions, and keep agents' searches in a test set of their own.
+**Working rule:** Version the model, prompt and context settings with the answers, check citations on every answer, track abstentions, and keep agents' searches in a test set of their own.
 
 ## Decisions this chapter made {#retrieval-for-llm-applications-decisions}
 

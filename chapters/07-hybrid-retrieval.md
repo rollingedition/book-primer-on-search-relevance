@@ -34,7 +34,7 @@ For `butcher block island`, BM25's top 10 holds {{out:two-queries-two-winners:ex
 
 Those are single queries: they show a kind of failure, not how often it happens. [The per-query count](#bm25-semantic-wins-by-query) also lists the {{out:bm25-semantic-wins-by-query:queries where bm25 leads by 0.1 or more}} train queries where BM25 leads by 0.1 nDCG@10 or more. Most name a specific kind of product in two or more words that all have to match, and one, `malachi sled`, names a product line. [Chapter 1](#search-by-meaning) found BM25 ahead on {{out:compare-lexical-semantic:of those, bm25 better}} of the {{out:compare-lexical-semantic:test queries with a size in inches}} test queries that give a size in inches, yet of the {{out:bm25-semantic-wins-by-query:queries with a digit}} train queries that contain a digit, BM25 wins {{out:bm25-semantic-wins-by-query:queries with a digit, bm25 better}}.
 
-**What to do:** before you fuse, count per query where each retriever wins on your train queries, and check how many relevant products the union of their lists holds that the better one misses. Consider fusing when each retriever wins a real share of queries and the union holds more relevant products than either list. That is necessary, not sufficient: next, [check each retriever alone](#check-each-retriever-before-fusing), and [test the tuned blend on held-out queries](#report-blends-on-test) before you adopt it.
+**Working rule:** Before you fuse, count per query where each retriever wins on your train queries, and check how many relevant products the union of their lists holds that the better one misses. Consider fusing when each retriever wins a real share of queries and the union holds more relevant products than either list. That is necessary, not sufficient: next, [check each retriever alone](#check-each-retriever-before-fusing), and [test the tuned blend on held-out queries](#report-blends-on-test) before you adopt it.
 
 ## Check each retriever before you fuse {#check-each-retriever-before-fusing}
 
@@ -50,7 +50,7 @@ On the {{out:fusion-gain-by-winning-retriever:bm25 wins, queries}} train queries
 
 The split uses the judgments to decide which retriever wins, so it is a diagnosis: you can't use it to choose a retriever for a live query, which has no judgments.
 
-**What to do:** check each retriever alone on train queries, with judged@10 and a paired test, before you fuse. When one is weaker and wins fewer queries, don't give it an equal vote: weight it and [tune the weight](#tune-blend-on-train), or leave it out. Equal votes suit two retrievers of about the same quality.
+**Working rule:** Check each retriever alone on train queries, with judged@10 and a paired test, before you fuse. When one is weaker and wins fewer queries, don't give it an equal vote: weight it and [tune the weight](#tune-blend-on-train), or leave it out. Equal votes suit two retrievers of about the same quality.
 
 ## Normalize scores before you add them {#normalize-scores-before-adding}
 
@@ -73,7 +73,7 @@ After min-max scaling, the top 10 shares {{out:raw-scores-versus-min-max:min-max
 
 Raw scores can work with a tuned weight. The authors of DPR, an embedding-based retriever, ranked candidates by BM25 plus 1.1 times DPR's similarity, with the 1.1 chosen on a development set ([Karpukhin et al., 2020](https://arxiv.org/abs/2004.04906)). Normalization gives α the same meaning for every query; without it, BM25's share of the say changes with its range from query to query. Min-max isn't an absolute scale, though. It is relative to the query's candidates, so the best candidate always gets 1, however poor it is.
 
-**What to do:** never add raw BM25 and cosine scores with a guessed weight. We recommend per-query min-max as the default, because it needs no knowledge of either scoring function. Use theoretical min-max when you know each score's lowest possible value and want a floor that doesn't move with the candidates. In either case, tune α on train queries.
+**Working rule:** Never add raw BM25 and cosine scores with a guessed weight. We recommend per-query min-max as the default, because it needs no knowledge of either scoring function. Use theoretical min-max when you know each score's lowest possible value and want a floor that doesn't move with the candidates. In either case, tune α on train queries.
 
 ## Test reciprocal rank fusion's settings on train queries {#rrf-settings-on-train}
 
@@ -89,7 +89,7 @@ Try six values of k on the store's train queries, fusing BM25 and semantic retri
 
 At k = 1, rank 1 earns {{out:rrf-k-on-train:rank 1 over rank 10 at k=1}} times what rank 10 earns. At k = 60, it earns {{out:rrf-k-on-train:rank 1 over rank 10 at k=60}} times as much, so a product near the top of both lists beats one at the top of only one. From k = 1 to k = 300, the six settings score {{out:rrf-k-on-train:k=1 ndcg@10}}, {{out:rrf-k-on-train:k=10 ndcg@10}}, {{out:rrf-k-on-train:k=30 ndcg@10}}, {{out:rrf-k-on-train:k=60 ndcg@10}}, {{out:rrf-k-on-train:k=100 ndcg@10}} and {{out:rrf-k-on-train:k=300 ndcg@10}}. The best, k = {{out:rrf-k-on-train:best k on train}}, leads k = 60 by {{out:rrf-k-on-train:best k minus k=60}}, with a permutation p-value of {{out:rrf-k-on-train:best k minus k=60, permutation p}} and a t-test p-value of {{out:rrf-k-on-train:best k minus k=60, t-test p}}. Its 95% bootstrap interval, {{out:rrf-k-on-train:best k minus k=60, 95% interval}}, excludes 0, so it disagrees with both tests. The two settings' rankings differ on only a handful of queries (wins, losses and ties: {{out:rrf-k-on-train:best k minus k=60, wins, losses, ties}}), and the book takes its verdict from the permutation test, which can't tell the gain from chance at 0.05. Which k is best is fragile too: [with BM25's tied products listed the other way](#tuned-weight-stability), k = {{out:tuning-with-ties-reversed:best rrf k, ties reversed}} wins instead. This fits Cormack et al.'s finding that the choice of k is not critical.
 
-**What to do:** keep k = 60 as the default, and fuse lists at least 100 deep, because a deeper list can only add candidates. Move off k = 60 only when the best k on train beats it by a margin the permutation test can tell from chance, with p below 0.05. When one retriever is [the stronger one](#check-each-retriever-before-fusing), as in the store, k isn't the setting to change: RRF's equal vote is. Give the rankings weights and [tune them](#tune-blend-on-train).
+**Working rule:** Keep k = 60 as the default, and fuse lists at least 100 deep, because a deeper list can only add candidates. Move off k = 60 only when the best k on train beats it by a margin the permutation test can tell from chance, with p below 0.05. When one retriever is [the stronger one](#check-each-retriever-before-fusing), as in the store, k isn't the setting to change: RRF's equal vote is. Give the rankings weights and [tune them](#tune-blend-on-train).
 
 ## Tune the blend's weight on train queries {#tune-blend-on-train}
 
@@ -109,7 +109,7 @@ The output's second line traces the min-max blend from α = 0 to α = 1. It peak
 
 Every tuned blend scores at least as well as semantic retrieval on the train queries, and that is guaranteed: α = 1 is in the grid. Yet even on the queries that chose them, the permutation test can't tell either blend's gain from chance at 0.05. The weighted sum gains {{out:tune-blend-weights-on-train:min-max gain over semantic}}, with a permutation p-value of {{out:tune-blend-weights-on-train:min-max gain over semantic, permutation p}}, and weighted RRF gains {{out:tune-blend-weights-on-train:weighted rrf gain over semantic}}, with {{out:tune-blend-weights-on-train:weighted rrf gain over semantic, permutation p}}. Each gain is also the best of {{out:tune-blend-weights-on-train:alphas tried}} tries on the same queries, which flatters it further.
 
-**What to do:** tune one weight on train queries over a coarse grid, and keep the normalization at min-max unless another one beats it by a margin the test on train queries can tell from chance, with p below 0.05. Treat the train gain over the best single retriever as optimistic, and expect it to shrink on test queries, a rule of thumb for any setting picked as the best of several. Before you trust the setting, [check that it's stable](#tuned-weight-stability), then [report it on test queries](#report-blends-on-test).
+**Working rule:** Tune one weight on train queries over a coarse grid, and keep the normalization at min-max unless another one beats it by a margin the test on train queries can tell from chance, with p below 0.05. Treat the train gain over the best single retriever as optimistic, and expect it to shrink on test queries, a rule of thumb for any setting picked as the best of several. Before you trust the setting, [check that it's stable](#tuned-weight-stability), then [report it on test queries](#report-blends-on-test).
 
 ## Check that the tuned weight is stable {#tuned-weight-stability}
 
@@ -129,7 +129,7 @@ With the ties reversed, the best k is {{out:tuning-with-ties-reversed:best rrf k
 
 Stability says the train queries agree on a weight, not that the weight improves search on queries it wasn't tuned on: the resamples reuse the same train queries, so they share whatever those queries have in common.
 
-**What to do:** bootstrap the train queries and tune on each sample, then tune once more with ties listed in another order that carries no information. If the chosen weight scatters across the grid, use a coarser grid or more train queries, or prefer the simpler setting. If the tie order alone moves it, say so wherever you report it. If it holds steady under both checks, take it to the test queries.
+**Working rule:** Bootstrap the train queries and tune on each sample, then tune once more with ties listed in another order that carries no information. If the chosen weight scatters across the grid, use a coarser grid or more train queries, or prefer the simpler setting. If the tie order alone moves it, say so wherever you report it. If it holds steady under both checks, take it to the test queries.
 
 ## Report the tuned blends on test queries {#report-blends-on-test}
 
@@ -145,7 +145,7 @@ Neither blend beats semantic retrieval. The weighted sum differs from it by {{ou
 
 If you predicted "above", you trusted a train gain that the permutation test couldn't tell from chance even on the queries that chose it, and that was the best of several tries.
 
-**What to do:** adopt a blend only when it beats the best single retriever on held-out queries, with a permutation p-value below a threshold corrected for the number of planned comparisons. When it doesn't, keep the simpler system. For the store, that leaves semantic retrieval alone as the ranker to beat. Keep the tuned weights and the code, and test the blends again when a retriever or the catalog changes.
+**Working rule:** Adopt a blend only when it beats the best single retriever on held-out queries, with a permutation p-value below a threshold corrected for the number of planned comparisons. When it doesn't, keep the simpler system. For the store, that leaves semantic retrieval alone as the ranker to beat. Keep the tuned weights and the code, and test the blends again when a retriever or the catalog changes.
 
 ## Learn sparse term weights with SPLADE {#learned-sparse-splade}
 
@@ -165,7 +165,7 @@ Of {{out:exact-products-missing-query-words:exact train pairs}} exact (query, pr
 
 The SPLADE authors' own technical report gives SPLADE-v3 an MRR@10 above 0.40 on the MS MARCO development set, a passage-ranking benchmark where [MRR@10](#score-the-first-relevant-result) measures how high the first relevant passage lands, and describes it as "comparing well to cross-encoder re-rankers" ([Lassance et al., 2024](https://arxiv.org/abs/2403.06789)). The book doesn't run SPLADE. The reference checkpoints, [`naver/splade-cocondenser-ensembledistil`](https://huggingface.co/naver/splade-cocondenser-ensembledistil) and [`naver/splade-v3`](https://huggingface.co/naver/splade-v3), are licensed CC-BY-NC-SA-4.0, which rules out commercial use. An Apache-2.0 model, [`opensearch-neural-sparse-encoding-doc-v3-distill`](https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill), runs its neural model on products only, and encodes queries with a tokenizer and a table of weights.
 
-**What to do:** consider learned sparse retrieval when BM25's misses are mostly vocabulary misses and you want to keep an inverted index. Check the model's licence first, and measure it like any retriever: alone, per query, on train queries, then on test.
+**Working rule:** Consider learned sparse retrieval when BM25's misses are mostly vocabulary misses and you want to keep an inverted index. Check the model's licence first, and measure it like any retriever: alone, per query, on train queries, then on test.
 
 ## Match token by token with ColBERT {#late-interaction-colbert}
 
@@ -179,7 +179,7 @@ Because products are encoded without the query, their token vectors are computed
 
 In the store, take `midcentury tv unit` again, the query whose exact products [say `stand`, never `unit`](#learned-sparse-splade). A single vector has to fold the whole query into one direction, and the whole product text into another. With late interaction, the query's `unit` is compared with each of the product's tokens, `stand` among them, and its best match counts on its own. Token-level matching helps on some hard cases. On NevIR, a negation benchmark where random choice scores 25%, ColBERTv1 scored 19.7% and ColBERTv2 13.0%, above every single-vector model tested (12% or less), though still below chance ([Weller et al., 2024](https://arxiv.org/abs/2305.07614)). In BEIR, a benchmark that tests models zero-shot, on datasets they weren't trained for, rerankers and late-interaction models "on average achieve the best zero-shot performances", at a high computational cost ([Thakur et al., 2021](https://arxiv.org/abs/2104.08663)). Open tooling exists, such as the PyLate library and the Apache-2.0 model [`lightonai/GTE-ModernColBERT-v1`](https://huggingface.co/lightonai/GTE-ModernColBERT-v1) ([Chaffin and Sourty, 2025](https://arxiv.org/abs/2508.03555)). The book doesn't run ColBERT either.
 
-**What to do:** consider late interaction when single-vector retrieval misses details that hang on one word, and you can afford a vector per token. For a catalog the size of the store's, we recommend testing a reranker on a shortlist first ([chapter 9](#rerank-semantic-with-cross-encoder)): it reads the same details at query time and needs no new index, though none of chapter 9's rerankers shows an established gain over the store's semantic retrieval.
+**Working rule:** Consider late interaction when single-vector retrieval misses details that hang on one word, and you can afford a vector per token. For a catalog the size of the store's, we recommend testing a reranker on a shortlist first ([chapter 9](#rerank-semantic-with-cross-encoder)): it reads the same details at query time and needs no new index, though none of chapter 9's rerankers shows an established gain over the store's semantic retrieval.
 
 ## Decide when hybrid retrieval pays {#when-hybrid-helps}
 
@@ -191,7 +191,7 @@ The store sits in the strong-retriever case: on the test queries, [chapter 3](#c
 
 Fusing scores isn't the only kind of hybrid. A search engine can also use lexical matches as a filter on semantic retrieval: one engine adds an embedding operator to its query language, so that "hybrid retrieval expressions, with arbitrary combinations of embeddings and terms" run as one query (Huang et al., 2020). For the store, that could mean requiring a size such as `48` to match exactly, then ranking the matches by embedding. That is a hypothesis to test, not a result, and a naive filter fails on `7qt slow cooker`, whose spelling [no product uses](#queries-each-retriever-wins). Deciding when a query carries such a constraint is query understanding ([chapter 8](#classify-queries-from-products)), and chapter 8 [tries such a filter](#standalone-follow-ups) on a shopper's follow-up messages that name a color, shape, size or finish. Choosing a weight per query is query understanding too, and this book doesn't build it. Picking the better ranking for each train query would score {{out:bm25-semantic-wins-by-query:better of the two, chosen per query}}, and a per-query weight, which mixes the lists, isn't bound by that figure. One per-query method asks an LLM, a large language model, to judge each retriever's top result and sets α from that ([Hsu and Tzeng, 2025](https://arxiv.org/abs/2503.23013)). The BRIGHT study found a score-based variant of it unstable (Abdallah et al., 2026).
 
-**What to do:** we recommend trying a hybrid when your two retrievers are close in quality, when your embedding model works outside the domain it was trained for, or when many queries depend on exact terms your embeddings miss. Start with weighted RRF: it needs ranks only, and on the store's train queries the permutation test couldn't tell it from the weighted sum. Move to a weighted sum of normalized scores when both engines give you scores for every candidate: two studies found it ahead of RRF on their data (Bruch et al., 2023; Abdallah et al., 2026), and on the store's train queries its weight was [the more stable](#tuned-weight-stability). When one retriever is established as the stronger on held-out queries and no tuned blend beats it there, use it alone, keep the other as a baseline, and test a lexical filter for queries with exact constraints. That is the store's case.
+**Working rule:** We recommend trying a hybrid when your two retrievers are close in quality, when your embedding model works outside the domain it was trained for, or when many queries depend on exact terms your embeddings miss. Start with weighted RRF: it needs ranks only, and on the store's train queries the permutation test couldn't tell it from the weighted sum. Move to a weighted sum of normalized scores when both engines give you scores for every candidate: two studies found it ahead of RRF on their data (Bruch et al., 2023; Abdallah et al., 2026), and on the store's train queries its weight was [the more stable](#tuned-weight-stability). When one retriever is established as the stronger on held-out queries and no tuned blend beats it there, use it alone, keep the other as a baseline, and test a lexical filter for queries with exact constraints. That is the store's case.
 
 ## What goes wrong in production {#hybrid-retrieval-in-production}
 
@@ -207,7 +207,7 @@ Fusing scores isn't the only kind of hybrid. A search engine can also use lexica
 
 **A tuned weight belongs to one pair of retrievers.** The store's α fits these BM25 settings, this embedding model and this catalog. Change any of them, and re-tune on train queries before you trust the old weight. A tuned RRF "generalizes poorly to out-of-domain datasets" ([Bruch et al., 2023](https://arxiv.org/abs/2210.11934)).
 
-**What to do:** log both retrievers' ranks next to the fused result, check the list depth in every engine's configuration, and re-tune α whenever a retriever changes.
+**Working rule:** Log both retrievers' ranks next to the fused result, check the list depth in every engine's configuration, and re-tune α whenever a retriever changes.
 
 ## Decisions this chapter made {#hybrid-retrieval-decisions}
 
