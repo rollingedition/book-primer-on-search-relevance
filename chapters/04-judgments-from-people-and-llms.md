@@ -24,7 +24,7 @@ In the store, the two prompts of [the recording](#judgments-from-people-and-llms
 
 The `guidelines` prompt runs to {{out:print-judging-guidelines:words in the guidelines prompt}} words, against {{out:print-judging-guidelines:words in the short prompt}} for `short`. Finding the entity first, then the modifiers, spells out WANDS's definition of partial. The rule on accessories settles a case on which WANDS's own labels split: for `clear shower curtain`, WANDS lists one set of shower curtain hooks twice, once partial and once irrelevant ([Expect judges to disagree](#judges-disagree-on-some-pairs)). The rule on misspellings follows WANDS's note. The last rule has no counterpart in WANDS's guidelines: the store's data has no images, so the recording shows the LLM text only. Neither prompt has worked examples, which WANDS's guidelines rely on.
 
-**What to do:** write guidelines as definitions, a procedure, a worked example with a reason for each grade, and a rule for each case your judges have disagreed on. Log disagreements and revise the guidelines when one kind keeps coming back. Give an LLM judge the same guidelines as people, plus a rule for what it can't see, and then measure what it does, because a rule you write isn't a rule the judge follows.
+**Working rule:** Write guidelines as definitions, a procedure, a worked example with a reason for each grade, and a rule for each case your judges have disagreed on. Log disagreements and revise the guidelines when one kind keeps coming back. Give an LLM judge the same guidelines as people, plus a rule for what it can't see, and then measure what it does, because a rule you write isn't a rule the judge follows.
 
 ## Measure agreement beyond chance with kappa {#agreement-beyond-chance}
 
@@ -43,7 +43,7 @@ The LLM and the store's judges give the same grade to a share of {{out:kappa-by-
 
 Is that good? Scales that call a kappa "moderate" or "substantial" are conventions from particular fields, and Artstein and Poesio's survey concludes that "deciding what counts as an adequate level of agreement for a specific purpose is still little more than a black art" ([Artstein and Poesio, 2008](https://aclanthology.org/J08-4004/)). Published figures give context, not a bar: WANDS's annotators agreed with each other at a kappa of 0.467 in their first two months and 0.826 in their fourth ([Chen et al., 2022, Table 2](https://easychair.org/publications/preprint/wm4R)). On a stratified sample of pairs from TREC, the Text REtrieval Conference's shared evaluations, Thomas et al. found that GPT-4's kappa against the assessors varied "from as low as 0.20 ... to 0.64" with the prompt, while "two groups of trained human assessors" reached 0.52 on TREC ad hoc documents judged a second time (Cormack et al., 1998, as reported by [Thomas et al., 2024](https://arxiv.org/abs/2309.10621)). Each figure comes from a different sample, and [kappa depends on the sample's label mix](#kappa-depends-on-label-mix).
 
-**What to do:** report kappa, with observed agreement beside it, never observed agreement alone. Measure it on pairs people judged for train queries, and label any threshold you use as a rule of thumb. With more than two judges or missing labels, use Krippendorff's alpha, which compares observed with chance disagreement and handles "Any number of observers, not just two" and "Incomplete or missing data" ([Krippendorff, 2011](https://www.asc.upenn.edu/sites/default/files/2021-03/Computing%20Krippendorff%27s%20Alpha-Reliability.pdf)).
+**Working rule:** Report kappa, with observed agreement beside it, never observed agreement alone. Measure it on pairs people judged for train queries, and label any threshold you use as a rule of thumb. With more than two judges or missing labels, use Krippendorff's alpha, which compares observed with chance disagreement and handles "Any number of observers, not just two" and "Incomplete or missing data" ([Krippendorff, 2011](https://www.asc.upenn.edu/sites/default/files/2021-03/Computing%20Krippendorff%27s%20Alpha-Reliability.pdf)).
 
 ## Give near misses partial credit with weighted kappa {#weighted-kappa-for-grades}
 
@@ -61,7 +61,7 @@ In the store, compute linear weighted kappa by hand for both [prompts](#write-ju
 
 For `short`, weighting raises kappa from {{out:weighted-kappa-by-hand:kappa, short prompt}} to {{out:weighted-kappa-by-hand:linear weighted kappa by hand, short prompt}}, and for `guidelines` from {{out:weighted-kappa-by-hand:kappa, guidelines prompt}} to {{out:weighted-kappa-by-hand:linear weighted kappa by hand, guidelines prompt}}. Both match scikit-learn. Weighting raises both because more of the disagreements sit one grade apart than chance would put there: a share of {{out:weighted-kappa-by-hand:disagreements one grade apart, share, short prompt}} against {{out:weighted-kappa-by-hand:one grade apart, share expected by chance, short prompt}} for `short`, and {{out:weighted-kappa-by-hand:disagreements one grade apart, share, guidelines prompt}} against {{out:weighted-kappa-by-hand:one grade apart, share expected by chance, guidelines prompt}} for `guidelines`. The prompts differ in their far misses: {{out:weighted-kappa-by-hand:pairs two grades apart, short prompt}} pairs for `short` and {{out:weighted-kappa-by-hand:pairs two grades apart, guidelines prompt}} for `guidelines`. Whether either prompt agrees better is a question for [an interval](#prompt-sensitivity).
 
-**What to do:** for ordered grades, report linear weighted kappa next to plain kappa, and count the far misses separately. Weight each disagreement by the gap in gain it costs. With the book's linear gains, that's linear weights. With exponential gains of 0, 1 and 3 ([Choose a metric](#choose-a-ranking-metric)), the gaps are 1, 2 and 3, which neither of scikit-learn's options gives, so build that matrix as the example builds the linear one.
+**Working rule:** For ordered grades, report linear weighted kappa next to plain kappa, and count the far misses separately. Weight each disagreement by the gap in gain it costs. With the book's linear gains, that's linear weights. With exponential gains of 0, 1 and 3 ([Choose a metric](#choose-a-ranking-metric)), the gaps are 1, 2 and 3, which neither of scikit-learn's options gives, so build that matrix as the example builds the linear one.
 
 ## Read kappa against the label mix {#kappa-depends-on-label-mix}
 
@@ -77,7 +77,7 @@ Published numbers carry their mix with them. The one study of LLM judges on WAND
 
 The pairs the store will ask an LLM to judge are the products its rankers put in their top 10s, the test pool. Of its judged pairs, a share of {{out:kappa-under-two-label-mixes:exact share, judged test-pool pairs}} are exact, {{out:kappa-under-two-label-mixes:partial share, judged test-pool pairs}} partial and {{out:kappa-under-two-label-mixes:irrelevant share, judged test-pool pairs}} irrelevant. That is a third mix, and a different kind of pair, which [Read the direction of the LLM's errors](#read-llm-error-direction) measures.
 
-**What to do:** report the label mix with every kappa, and never compare kappas from samples with different mixes, your own or published ones. We recommend drawing the agreement sample the way you'll use the judge: if it will grade your rankers' top 10s, sample pairs from top 10s on train queries.
+**Working rule:** Report the label mix with every kappa, and never compare kappas from samples with different mixes, your own or published ones. We recommend drawing the agreement sample the way you'll use the judge: if it will grade your rankers' top 10s, sample pairs from top 10s on train queries.
 
 ## Read the direction of the LLM's errors {#read-llm-error-direction}
 
@@ -93,7 +93,7 @@ On the test pool, the answer is {{out:llm-confusion-matrix:stricter than the sto
 
 Nor does the direction of the errors say what happens to a ranker's score. A lenient judge counts more products as relevant, which raises precision@10 ([Count the relevant products](#count-relevant-in-top-k)). nDCG@10 divides by an ideal top 10 built from the same grades ([Score one ranking](#score-one-ranking)), so raising grades can raise the ideal too, and the net effect can go either way and differ by ranker. [The check of the rankers' order](#system-order-human-versus-llm) measures it on the test pool.
 
-**What to do:** read the confusion matrix before you read kappa, on pairs drawn the way you'll use the judge, and name the direction and the largest error for that pool. Don't carry a direction from one pool to another, and don't predict a ranker's nDCG@10 from it. Compare rankers with each other under the same grades, and never compare a score under LLM grades with a score under human grades.
+**Working rule:** Read the confusion matrix before you read kappa, on pairs drawn the way you'll use the judge, and name the direction and the largest error for that pool. Don't carry a direction from one pool to another, and don't predict a ranker's nDCG@10 from it. Compare rankers with each other under the same grades, and never compare a score under LLM grades with a score under human grades.
 
 ## Compare what the LLM saw with what the judges saw {#what-the-llm-saw}
 
@@ -109,7 +109,7 @@ Counted over the pools, the pattern holds. With `short`, exact pairs whose text 
 
 The pools differ in which case is common. The train pool holds {{out:llm-grades-follow-written-words:exact train pairs missing a query word}} exact pairs that miss a word and {{out:llm-grades-follow-written-words:partial train pairs with every query word}} partial pairs that have every word. The test pool holds {{out:llm-grades-follow-written-words:exact test pairs missing a query word}} and {{out:llm-grades-follow-written-words:partial test pairs with every query word}}. By our reading, that is why [the error direction](#read-llm-error-direction) differs between the pools. The check is rough: a plural or a misspelling counts as a missing word too. The `guidelines` prompt asks for the demotions: "If a modifier isn't mentioned, decide from what is written, and don't assume it is met." The `short` prompt has no such rule, and demotes as well.
 
-**What to do:** give an LLM judge every field your judges relied on that you can turn into text, such as attributes and the full description, and write down what it can't see. Before you count a disagreement against the LLM, check whether the evidence was in what it saw. When your judges' evidence is visual, measure whether the LLM grades exact products lower, as this one does on both pools, or give it the images if your model accepts them.
+**Working rule:** Give an LLM judge every field your judges relied on that you can turn into text, such as attributes and the full description, and write down what it can't see. Before you count a disagreement against the LLM, check whether the evidence was in what it saw. When your judges' evidence is visual, measure whether the LLM grades exact products lower, as this one does on both pools, or give it the images if your model accepts them.
 
 ## Measure how much the prompt changes the labels {#prompt-sensitivity}
 
@@ -123,7 +123,7 @@ The prompts disagree on {{out:prompt-disagreement:train pairs where the prompts 
 
 On kappa with the store's judges, `guidelines` leads `short` by {{out:prompt-disagreement:kappa with people, guidelines minus short}}, and the 95% interval over resampled train queries, from {{out:prompt-disagreement:95% interval over resampled train queries}}, includes 0. The train pool can't tell the prompts apart, so the store keeps both.
 
-**What to do:** treat the prompt as part of the judge. Record every prompt word for word with the model version, as the recording's manifest does, and the settings and answer schema too, which this recording keeps in its script. Treat a change of prompt as a different judge whose agreement you measure again. Run at least two prompts, and trust a conclusion from LLM grades only when both give it. Choose one prompt over another on train pairs, and only when the interval for their difference excludes 0.
+**Working rule:** Treat the prompt as part of the judge. Record every prompt word for word with the model version, as the recording's manifest does, and the settings and answer schema too, which this recording keeps in its script. Treat a change of prompt as a different judge whose agreement you measure again. Run at least two prompts, and trust a conclusion from LLM grades only when both give it. Choose one prompt over another on train pairs, and only when the interval for their difference excludes 0.
 
 ## Fill unjudged pairs with LLM grades {#fill-unjudged-with-llm-grades}
 
@@ -139,7 +139,7 @@ With the holes filled, BM25 scores {{out:fill-unjudged-pairs:bm25 ndcg@10, fille
 
 How far can the filled grades be trusted? The judged pairs of the same pool are the closest evidence: there, the LLM's kappa with the store's judges is {{out:llm-confusion-matrix:kappa, test pool, short prompt}} for `short` and {{out:llm-confusion-matrix:kappa, test pool, guidelines prompt}} for `guidelines`. Its grade is lower than the judges' on {{out:llm-confusion-matrix:llm grade lower than human, test pool, short prompt}} pairs and higher on {{out:llm-confusion-matrix:llm grade higher than human, test pool, short prompt}} with `short`, and lower on {{out:llm-confusion-matrix:llm grade lower than human, test pool, guidelines prompt}} and higher on {{out:llm-confusion-matrix:llm grade higher than human, test pool, guidelines prompt}} with `guidelines` ([Read the direction of the LLM's errors](#read-llm-error-direction)).
 
-**What to do:** fill the unjudged pairs in your rankers' top 10s with LLM grades as a diagnostic, under every prompt you run, and report the filled score beside the human-only one with the number of pairs filled. If filling changes the order of two rankers or a verdict, have people judge those pairs. Never let a filled grade replace a human one.
+**Working rule:** Fill the unjudged pairs in your rankers' top 10s with LLM grades as a diagnostic, under every prompt you run, and report the filled score beside the human-only one with the number of pairs filled. If filling changes the order of two rankers or a verdict, have people judge those pairs. Never let a filled grade replace a human one.
 
 ## Check whether LLM grades order the rankers the same way {#system-order-human-versus-llm}
 
@@ -157,7 +157,7 @@ Against the control, LLM grades don't move the four rankers by the same amount, 
 
 Under `short`, semantic retrieval, the hybrid and the reranked hybrid nearly tie, at {{out:kendall-tau-four-rankers:semantic ndcg@10 under the short prompt}}, {{out:kendall-tau-four-rankers:hybrid ndcg@10 under the short prompt}} and {{out:kendall-tau-four-rankers:reranked ndcg@10 under the short prompt}}. Tau ignores how far apart two rankers score, so a swap between near-ties counts as much as one between the best ranker and the worst. It also weighs a swap at the top the same as one at the bottom: "Kendall’s τ equally penalizes errors that occur at any part of the list" ([Yilmaz et al., 2008](https://www.ccs.neu.edu/home/jaa/tmp/RankCorrelation.pdf)). Yilmaz et al. note of the TREC runs they compared that the systems "have very similar performance. Hence, the Kendall’s τ statistic may be affected by these systems" ([Yilmaz et al., 2012](https://static.aminer.org/pdf/20170130/pdfs/sigir/jcmbhoqtt46bhqr5xegf9zy7snars82a.pdf)). These rankers keep their place under every set of grades: `{{out:kendall-tau-four-rankers:rankers in the same place under every set of grades}}`. If you predicted the same order, notice where the orders differ: among the three rankers that human grades score {{out:kendall-tau-four-rankers:semantic ndcg@10 under people}}, {{out:kendall-tau-four-rankers:hybrid ndcg@10 under people}} and {{out:kendall-tau-four-rankers:reranked ndcg@10 under people}}, gaps that no planned comparison establishes ([Rerun the planned comparisons](#llm-graded-verdicts)).
 
-**What to do:** report tau with the list of swapped pairs, never alone. With a handful of rankers, where one swap moves tau by {{out:kendall-tau-four-rankers:change in tau from one swapped pair}}, don't read it against 0.9. Then test whether the swapped pairs differ at all, with [the planned comparisons under each set of grades](#llm-graded-verdicts).
+**Working rule:** Report tau with the list of swapped pairs, never alone. With a handful of rankers, where one swap moves tau by {{out:kendall-tau-four-rankers:change in tau from one swapped pair}}, don't read it against 0.9. Then test whether the swapped pairs differ at all, with [the planned comparisons under each set of grades](#llm-graded-verdicts).
 
 ## Rerun the planned comparisons with LLM grades {#llm-graded-verdicts}
 
@@ -191,7 +191,7 @@ Under `short`, the verdicts that differ from the human ones are {{out:planned-co
 
 LLM judges can also favour rankers that use LLMs: Balog et al. report "the first empirical evidence of LLM judges exhibiting significant bias towards LLM-based rankers" ([Balog et al., 2025](https://arxiv.org/abs/2503.19092)). Chapter 1's rankers use no LLM, so this chapter can't measure that bias. The book scores the LLM-based rankers of [chapter 8](#rewrite-queries-with-llm) and [chapter 9](#llm-pointwise-reranking) on human grades.
 
-**What to do:** never ship a change on a verdict from LLM grades alone. Use LLM grades to decide which candidates are worth judging, and decide on human grades. When two prompts give different verdicts, the LLM can't settle the comparison, and people must.
+**Working rule:** Never ship a change on a verdict from LLM grades alone. Use LLM grades to decide which candidates are worth judging, and decide on human grades. When two prompts give different verdicts, the LLM can't settle the comparison, and people must.
 
 ## Correct LLM scores with a human sample {#calibrate-on-a-human-sample}
 
@@ -211,7 +211,7 @@ For semantic retrieval minus BM25, the LLM alone estimates {{out:correct-llm-sco
 
 For the hybrid minus semantic retrieval, the corrected spread is {{out:correct-llm-scores-with-humans:hybrid minus semantic, short prompt, corrected, spread}}, against {{out:correct-llm-scores-with-humans:hybrid minus semantic, human sample alone, spread}} for the human sample alone, with a correlation of {{out:correct-llm-scores-with-humans:hybrid minus semantic, short prompt, correlation of per-query gaps with people's}}. Is the corrected spread smaller than the human sample's? For this gap: {{out:correct-llm-scores-with-humans:hybrid minus semantic, short prompt, corrected spread smaller than the human sample's}} with `short` and {{out:correct-llm-scores-with-humans:hybrid minus semantic, guidelines prompt, corrected spread smaller than the human sample's}} with `guidelines`. For semantic retrieval minus BM25: {{out:correct-llm-scores-with-humans:semantic minus bm25, short prompt, corrected spread smaller than the human sample's}} and {{out:correct-llm-scores-with-humans:semantic minus bm25, guidelines prompt, corrected spread smaller than the human sample's}}. The correction fixes the level of a score, but narrows the uncertainty only where the LLM's per-query scores track the human ones, and here they track them least on the closer of the two gaps.
 
-**What to do:** whenever you report a score from LLM grades, have people judge a random sample of queries and report the corrected estimate. On that sample, check how well the LLM's per-query gaps correlate with the human ones. When they correlate weakly, spend the budget on judging more queries.
+**Working rule:** Whenever you report a score from LLM grades, have people judge a random sample of queries and report the corrected estimate. On that sample, check how well the LLM's per-query gaps correlate with the human ones. When they correlate weakly, spend the budget on judging more queries.
 
 ## What goes wrong in production {#judgments-from-people-and-llms-in-production}
 
@@ -225,7 +225,7 @@ For the hybrid minus semantic retrieval, the corrected spread is {{out:correct-l
 
 **Human grades aren't the truth either.** On the TREC Podcast track, where an LLM and a TREC assessor disagreed most, Mansour et al. found that experts re-judging the pairs more often sided with the LLM ([Mansour et al., 2026](https://arxiv.org/abs/2601.05603)). Treat human grades as the reference you chose, and read disagreements before you blame either side.
 
-**What to do:** pin the judge, keep a human sample in every evaluation, rerun agreement when anything changes, and never score a ranker with the judge you tuned it on.
+**Working rule:** Pin the judge, keep a human sample in every evaluation, rerun agreement when anything changes, and never score a ranker with the judge you tuned it on.
 
 ## Decisions this chapter made {#judgments-from-people-and-llms-decisions}
 

@@ -22,7 +22,7 @@ The mean rises from {{out:diff-semantic-against-bm25:bm25 ndcg@10}} to {{out:dif
 
 The losses are where you learn something. The largest is {{out:diff-semantic-against-bm25:largest loss}}, and two of them give a size in inches, `48 inch kitchen hood` and `48" sliding single track , barn door for laundry`: two queries, not a pattern. [Chapter 6](#embeddings-match-digits) tests the pattern on every query with a digit.
 
-**What to do:** keep a regression set of judged queries that nothing is ever tuned on, and run every candidate against the baseline on it. List your planned comparisons first, and report each with its permutation p-value, its t-test and its interval. Count wins, losses and ties, and read every loss before you ship. When the losses seem to share a pattern, check it on train queries before you act on it, then fix that kind of query or send it to the baseline.
+**Working rule:** Keep a regression set of judged queries that nothing is ever tuned on, and run every candidate against the baseline on it. List your planned comparisons first, and report each with its permutation p-value, its t-test and its interval. Count wins, losses and ties, and read every loss before you ship. When the losses seem to share a pattern, check it on train queries before you act on it, then fix that kind of query or send it to the baseline.
 
 ## Weigh losses more than wins with URisk {#weigh-losses-with-urisk}
 
@@ -46,7 +46,7 @@ Its [judged@10](#score-every-test-query) is {{out:urisk-of-two-candidates:semant
 
 URisk describes risk without testing it. Dinçer et al. define a related measure, TRisk, that "is a linear transformation of the t statistic", so it can be tested like the [paired t-test](#paired-t-test-on-queries) ([Dinçer et al., 2014](https://eprints.gla.ac.uk/95215)).
 
-**What to do:** report URisk with α = 1 next to the mean change for every candidate. Don't ship a candidate whose URisk is negative, whatever its mean, and read its losses to find out why. Raise α when failures are expensive, and report URisk separately on the store's most frequent queries. Use α = 0 only when a loss on one query is no worse than a gain on another.
+**Working rule:** Report URisk with α = 1 next to the mean change for every candidate. Don't ship a candidate whose URisk is negative, whatever its mean, and read its losses to find out why. Raise α when failures are expensive, and report URisk separately on the store's most frequent queries. Use α = 0 only when a loss on one query is no worse than a gain on another.
 
 ## Judge the products a new ranker surfaces {#judge-new-results}
 
@@ -62,7 +62,7 @@ BM25 has {{out:unjudged-score-range:unjudged pairs in the top 10, bm25}} unjudge
 
 Don't guess what the judges will say. On an old TREC collection, Voorhees et al. judged new pools of documents from neural and BM25 runs, and found that "the vast majority of those documents were not relevant" ([Voorhees et al., 2022](https://arxiv.org/abs/2201.11086)). But that collection was pooled deeply from many systems, and WANDS was built differently. Human judgments are the reference. Judgments from a large language model (LLM) are cheaper. [Chapter 4](#fill-unjudged-with-llm-grades) fills the store's unjudged pairs with them as a diagnostic, and has people judge the pairs whenever the filled grades change a verdict or the order of two rankers. Thomas et al. add a warning for testing changes: "LLM-generated labels may also show bias towards rankers that themselves incorporate LLMs" ([Thomas et al., 2024](https://arxiv.org/abs/2309.10621)).
 
-**What to do:** for every candidate, compute judged@10 for both runs and rescore them under the two scenarios. When the leader changes, judge the unjudged pairs before you compare, and add the new judgments to the regression set for good, so that it covers every ranker you have tested. When the leader holds in both scenarios, the unjudged products are unlikely to reverse the comparison.
+**Working rule:** For every candidate, compute judged@10 for both runs and rescore them under the two scenarios. When the leader changes, judge the unjudged pairs before you compare, and add the new judgments to the regression set for good, so that it covers every ranker you have tested. When the leader holds in both scenarios, the unjudged products are unlikely to reverse the comparison.
 
 ## Keep the test queries out of every choice {#keep-test-queries-held-out}
 
@@ -76,7 +76,7 @@ Semantic retrieval alone scores {{out:tuning-on-test-inflates:semantic alone, te
 
 The random splits put a number on the bias. On report sets of 20 queries, choosing on the queries you report adds {{out:tuning-on-test-inflates:average inflation, 20 reported queries}} to nDCG@10 on average, with {{out:tuning-on-test-inflates:settings tried}} settings to choose from. That gain appears in the report and nowhere else. Each extra setting you try is another chance for a lucky winner.
 
-**What to do:** choose every setting on train queries, including which candidate to take forward. Look at the test queries once per decision, and log each look: what you compared and what you chose. When a test set has guided many decisions, move it to the train side and judge a fresh set of test queries.
+**Working rule:** Choose every setting on train queries, including which candidate to take forward. Look at the test queries once per decision, and log each look: what you compared and what you chose. When a test set has guided many decisions, move it to the train side and judge a fresh set of test queries.
 
 ## Run an A/B test {#run-an-ab-test}
 
@@ -98,7 +98,7 @@ Read at the planned end, the share of A/A tests that come out significant is {{o
 
 A p-value is often misread. A p-value of 0.05 doesn't mean a 5% chance that the result is a false positive; Kohavi et al. (2022) call that "a very common misunderstanding". It is the chance of data at least this extreme if the change did nothing.
 
-**What to do:** before the test, choose the primary metric and the guardrails that must not get worse, and size the test ([with power](#size-tests-with-power)). Run an A/A test on the same setup first. Check the sample ratio before you read any result, and read the result once, at the planned size. If you must watch a test as it runs, use a sequential method built for continuous monitoring, such as always-valid p-values ([Johari et al., 2015](https://arxiv.org/abs/1512.04922)).
+**Working rule:** Before the test, choose the primary metric and the guardrails that must not get worse, and size the test ([with power](#size-tests-with-power)). Run an A/A test on the same setup first. Check the sample ratio before you read any result, and read the result once, at the planned size. If you must watch a test as it runs, use a sequential method built for continuous monitoring, such as always-valid p-values ([Johari et al., 2015](https://arxiv.org/abs/1512.04922)).
 
 ## Size the test with power {#size-tests-with-power}
 
@@ -122,7 +122,7 @@ The same arithmetic says what the [regression set](#diff-runs-per-query) can det
 
 The spread is {{out:queries-needed-for-power:spread of per-query changes}}, so {{out:load-the-store:test queries}} test queries detect a change of {{out:queries-needed-for-power:smallest change 30 queries detect}} in nDCG@10 with 80% power. A change of 0.01 would need {{out:queries-needed-for-power:queries needed for a change of 0.01}} queries. `scipy.stats.power` checks the arithmetic by simulation, drawing normally distributed differences: at that change, the paired t-test has a simulated power of {{out:queries-needed-for-power:simulated power at that change}}. Below the planned 0.8: {{out:queries-needed-for-power:simulated power below the planned 0.8}}, because the formula uses the normal distribution where the t-test, on 30 queries, uses the wider t-distribution. The real differences aren't normal, so the simulation checks the formula, not the data. When you add queries, add many and judge each shallowly: Webber et al. found that "greater statistical power is achieved for the same relevance assessment effort by evaluating a large number of topics shallowly than a small number deeply", where topics are what information retrieval research calls queries ([Webber et al., 2008](https://people.eng.unimelb.edu.au/ammoffat/abstracts/wmz08cikm.html)).
 
-**What to do:** size every A/B test before it starts. If it needs more users than the store sees in a few weeks, test a bigger change, use a metric that varies less, or adjust the metric with each user's data from before the test. On Bing's experiments, Deng et al. report that this "can reduce variance by about 50%" ([Deng et al., 2013](https://exp-platform.com/cuped/)); how much it saves depends on how well a user's past behaviour predicts the metric. Offline, compute the smallest change your regression set can detect, and add queries when your changes are smaller. Fix the number in advance: adding queries until a power estimate says you have enough biases you toward finding significance (Webber et al.).
+**Working rule:** Size every A/B test before it starts. If it needs more users than the store sees in a few weeks, test a bigger change, use a metric that varies less, or adjust the metric with each user's data from before the test. On Bing's experiments, Deng et al. report that this "can reduce variance by about 50%" ([Deng et al., 2013](https://exp-platform.com/cuped/)); how much it saves depends on how well a user's past behaviour predicts the metric. Offline, compute the smallest change your regression set can detect, and add queries when your changes are smaller. Fix the number in advance: adding queries until a power estimate says you have enough biases you toward finding significance (Webber et al.).
 
 ## Interleave two rankings with team draft {#team-draft-interleaving}
 
@@ -136,7 +136,7 @@ Interleave the store's semantic retrieval and BM25 for the test query `clear sho
 
 Team draft always gives each ranker half of a ten-place list, 5 places each; the coin flips decide which places. A product that both rankers place high appears once, credited to whichever team took it first, so neither ranker gets credit twice for the same product. For this query, one of the shower curtain hooks that BM25 ranks ([chapter 1](#rank-with-bm25)) enters, at the bottom, as BM25's last pick. A shopper's clicks on semantic retrieval's picks count for semantic retrieval, clicks on BM25's picks count for BM25, and the team with more clicks wins the search.
 
-**What to do:** use team-draft interleaving to compare two rankers online when you need to know which one users prefer, with fewer searches than an A/B test. Use an A/B test instead when you need an absolute number, such as revenue, or when the change isn't in the ranking. By our reasoning, an interleaved list can't show the effect of latency, page layout or a different number of results.
+**Working rule:** Use team-draft interleaving to compare two rankers online when you need to know which one users prefer, with fewer searches than an A/B test. Use an A/B test instead when you need an absolute number, such as revenue, or when the change isn't in the ranking. By our reasoning, an interleaved list can't show the effect of latency, page layout or a different number of results.
 
 ## Rehearse interleaving with simulated shoppers {#simulate-interleaving-with-clicks}
 
@@ -156,7 +156,7 @@ The hybrid's verdict at 100 searches also rests on a detail that carries no info
 
 Three limits keep this a rehearsal. The clicks come from the same grades nDCG@10 uses, so interleaving tends to agree with nDCG@10; it adds no evidence about the rankers. Every search comes from the same {{out:load-the-store:test queries}} queries, so the sign test speaks for these queries only. And real shoppers aren't this model. Deffayet et al. studied what happens when the ranker that produced a click log changes, and found that "click models are sensitive to it" ([Deffayet et al., 2023](https://dare.uva.nl/id/4f8740ca-2677-4a9a-bb04-9475ceafb007)). On real traffic at three search engines, interleaving agreed with expert judgments whenever both were significant, and needed "approximately 1–2 orders of magnitude less data than absolute metrics" ([Chapelle et al., 2012](https://www.cs.cornell.edu/people/tj/publications/chapelle_etal_12a.pdf)). By our reasoning, the simulation can't show that advantage, because its shoppers all behave alike.
 
-**What to do:** rehearse an interleaving test in simulation to check your code and your sign test. Treat any count of searches it suggests as only as good as the assumed shopper, and rerun a simulated verdict with ties broken the other way before you read anything into it. Never report a simulated verdict as evidence about a ranker. On real traffic, fix the number of searches in advance and decide with a sign test.
+**Working rule:** Rehearse an interleaving test in simulation to check your code and your sign test. Treat any count of searches it suggests as only as good as the assumed shopper, and rerun a simulated verdict with ties broken the other way before you read anything into it. Never report a simulated verdict as evidence about a ranker. On real traffic, fix the number of searches in advance and decide with a sign test.
 
 ## Find the cause when offline and online disagree {#offline-online-disagree}
 
@@ -172,7 +172,7 @@ For the navigational shopper, BM25 gets {{out:clicks-per-search-misleads:navigat
 
 If you predicted one answer for every shopper, you treated clicks as a measure of quality. They measure behaviour, and behaviour varies.
 
-**What to do:** when offline and online results disagree, find the cause before you trust either. Check that the online metric measures success, such as a purchase, and not activity. Check judged@10 on the online winner's results, and judge what is missing. Then decide on the online result of the metric you chose in advance, and add queries or judgments to the regression set so that it predicts better next time.
+**Working rule:** When offline and online results disagree, find the cause before you trust either. Check that the online metric measures success, such as a purchase, and not activity. Check judged@10 on the online winner's results, and judge what is missing. Then decide on the online result of the metric you chose in advance, and add queries or judgments to the regression set so that it predicts better next time.
 
 ## Decide whether to ship {#decide-whether-to-ship}
 
@@ -188,7 +188,7 @@ A decision to ship combines the offline and online checks. Write the checklist d
 
 For the store's switch from BM25 to semantic retrieval, here are the first three items. Item 1, an established gain: {{out:diff-semantic-against-bm25:established}}, with a mean change of {{out:diff-semantic-against-bm25:mean change}} and a 95% interval of {{out:diff-semantic-against-bm25:95% interval}}. Item 2, URisk with α = 1: {{out:urisk-of-two-candidates:semantic urisk with alpha 1}}. Item 3, judgments that cover both runs: if BM25's unjudged products were all exact, BM25 would score {{out:unjudged-score-range:bm25's unjudged exact, bm25}} and semantic retrieval {{out:unjudged-score-range:bm25's unjudged exact, semantic}}, and the leader changes: {{out:unjudged-score-range:leader changes, semantic against bm25}}. The online items wait for traffic.
 
-**What to do:** ship when every offline item passes and the online test, sized in advance, shows a significant gain on the primary metric with no guardrail worse. When an offline item fails, fix it before going online, because online tests spend shoppers' time. When the online test is inconclusive at its planned size, keep the baseline.
+**Working rule:** Ship when every offline item passes and the online test, sized in advance, shows a significant gain on the primary metric with no guardrail worse. When an offline item fails, fix it before going online, because online tests spend shoppers' time. When the online test is inconclusive at its planned size, keep the baseline.
 
 ## What goes wrong in production {#testing-changes-in-production}
 
@@ -206,7 +206,7 @@ A store tests change after change on live traffic, with real shoppers in place o
 
 **Interleaving can't see the whole page.** By our reasoning, a ranker that is slower, or that changes how many results appear, can win an interleaved test and still lose shoppers. Run an A/B test for changes like these.
 
-**What to do:** automate the A/A test, the sample ratio check and the fixed test size in the experiment platform, keep a log of every look at the test queries, break ties by an ID, and confirm LLM-judged gains on human judgments.
+**Working rule:** Automate the A/A test, the sample ratio check and the fixed test size in the experiment platform, keep a log of every look at the test queries, break ties by an ID, and confirm LLM-judged gains on human judgments.
 
 ## Decisions this chapter made {#testing-changes-decisions}
 

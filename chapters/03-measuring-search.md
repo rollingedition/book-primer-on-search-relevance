@@ -22,7 +22,7 @@ Neither metric has the same ceiling for every query. A query with fewer than 10 
 
 Recall has a second problem: its denominator counts only the exact products the judges found. WANDS judged candidates gathered for each query, not the whole catalog ([chapter 1](#store-data)), so some exact products were never judged. Zobel found that judgments gathered this way overestimate recall ([Know where the judgments came from](#pooled-judgments)).
 
-**What to do:** use precision@10 when you care how much of the first page is right, and read it next to each query's ceiling. Don't make recall@10 a headline in product search, where a query can have more than a hundred relevant products, as `{{out:precision-recall-by-hand:query with the most exact products}}` has. We recommend recall at a deep cutoff, such as the top 100, for one job only: checking that retrieval passes enough relevant products to a reranker. Even then, read it as an overestimate.
+**Working rule:** Use precision@10 when you care how much of the first page is right, and read it next to each query's ceiling. Don't make recall@10 a headline in product search, where a query can have more than a hundred relevant products, as `{{out:precision-recall-by-hand:query with the most exact products}}` has. We recommend recall at a deep cutoff, such as the top 100, for one job only: checking that retrieval passes enough relevant products to a reranker. Even then, read it as an overestimate.
 
 ## Score the first relevant result with reciprocal rank {#score-the-first-relevant-result}
 
@@ -38,7 +38,7 @@ BM25's first result for `clear shower curtain` is a partial match and its second
 
 RR is 1 for {{out:reciprocal-rank-by-hand:semantic queries with rr of 1}} test queries under semantic retrieval, and for {{out:reciprocal-rank-by-hand:bm25 queries with rr of 1}} under BM25. On those queries RR sees nothing below the first result: a ranker that puts one exact product first and nine irrelevant ones after it scores the same as a perfect top 10.
 
-**What to do:** report MRR as the headline only when shoppers need one right product, as for a model number or a named product such as `kohler whitehaven farmhouse kitchen sink`. For queries where shoppers browse a page of options, such as `wooden chair outdoor`, use nDCG@10 as the headline and report MRR beside it.
+**Working rule:** Report MRR as the headline only when shoppers need one right product, as for a model number or a named product such as `kohler whitehaven farmhouse kitchen sink`. For queries where shoppers browse a page of options, such as `wooden chair outdoor`, use nDCG@10 as the headline and report MRR beside it.
 
 ## Build nDCG from discounted gains {#build-ndcg-from-dcg}
 
@@ -59,7 +59,7 @@ Write DCG and nDCG from scratch and check them against `lib.metrics` on the stor
 
 All {{out:ndcg-from-scratch:rankings checked}} rankings agree with `lib.metrics` to three decimals: the largest difference is {{out:ndcg-from-scratch:largest difference from lib.metrics}}. For `luau string lights`, BM25's top 10 holds {{out:ndcg-from-scratch:exact in the top 10}} exact products and scores {{out:ndcg-from-scratch:ndcg@10}}. That's not a mistake. The query has only {{out:ndcg-from-scratch:exact products judged}} exact products judged, so the best possible top 10 holds those and then partial ones, and BM25 found that order. An nDCG@10 of 1 means "as good as the best order of the judged products", not "ten exact products".
 
-**What to do:** use the linear-gain, log2(i + 1) form at a cutoff of 10, with the ideal ranking built from every judged product, and state that variant whenever you quote a number. Compare nDCG only between runs scored on the same judgments: new judgments change the ideal ranking, and with it every score.
+**Working rule:** Use the linear-gain, log2(i + 1) form at a cutoff of 10, with the ideal ranking built from every judged product, and state that variant whenever you quote a number. Compare nDCG only between runs scored on the same judgments: new judgments change the ideal ranking, and with it every score.
 
 ## Match scikit-learn's `ndcg_score` {#match-scikit-learn-ndcg}
 
@@ -77,7 +77,7 @@ Passed only the top 10, `ndcg_score` returns {{out:ndcg-matches-scikit-learn:ndc
 
 The recipe has one limit. When a run holds fewer than k products, the products it didn't retrieve tie for the empty places inside the top k, and `ndcg_score` credits them with their average gain. `lib.metrics` gives an empty place nothing, because the shopper sees nothing there. For BM25's ranking cut to 5 products, `lib.metrics` gives {{out:ndcg-matches-scikit-learn:5-product ranking, lib.metrics}} and `ndcg_score` gives {{out:ndcg-matches-scikit-learn:5-product ranking, scikit-learn}}. Short runs happen: `LexicalSearch` returns only products with a score above 0.
 
-**What to do:** report your own nDCG, and use `ndcg_score` as an independent check, with every judged product in each query's row and scores taken from ranks. Before you compare the two, check that every run holds at least k products. If you pass a ranker's raw scores instead, break ties in a fixed order first, such as by `product_id`, or the two will disagree wherever scores tie.
+**Working rule:** Report your own nDCG, and use `ndcg_score` as an independent check, with every judged product in each query's row and scores taken from ranks. Before you compare the two, check that every run holds at least k products. If you pass a ranker's raw scores instead, break ties in a fixed order first, such as by `product_id`, or the two will disagree wherever scores tie.
 
 ## Choose a metric before you compare {#choose-a-ranking-metric}
 
@@ -91,7 +91,7 @@ Semantic retrieval scores higher on {{out:metric-choice-on-train:metrics won by 
 
 So the choice should follow the shopper, not the result. The store shows a page of products and its judgments are graded, so nDCG@10 with linear gains stays the headline, as [chapter 1](#score-one-ranking) chose, with precision@10 and MRR beside it.
 
-**What to do:** choose one headline metric, its gains and its cutoff before you compare rankers, and write them down. We recommend nDCG@10 with linear gains when judgments are graded and shoppers browse a page. Switch to exponential gains when an exact match is worth far more than a near one, as for a spare part that must fit, and to MRR when most queries have one right answer. Report the other metrics beside the headline, and never change the headline after you've seen which ranker it favours.
+**Working rule:** Choose one headline metric, its gains and its cutoff before you compare rankers, and write them down. We recommend nDCG@10 with linear gains when judgments are graded and shoppers browse a page. Switch to exponential gains when an exact match is worth far more than a near one, as for a spare part that must fit, and to MRR when most queries have one right answer. Report the other metrics beside the headline, and never change the headline after you've seen which ranker it favours.
 
 ## Read per-query differences, not only the mean {#read-per-query-differences}
 
@@ -105,7 +105,7 @@ The mean gain is {{out:per-query-hybrid-versus-bm25:mean difference}}, but the m
 
 Report the difference as an absolute number. The relative gain of the means is {{out:per-query-hybrid-versus-bm25:relative gain of the means}}, but the mean of the per-query relative gains is {{out:per-query-hybrid-versus-bm25:mean of per-query relative gains}}, because a mean of per-query ratios gives most weight to the queries where BM25 scores low. `{{out:per-query-hybrid-versus-bm25:largest gain}}`, where BM25 scores {{out:per-query-hybrid-versus-bm25:its bm25 ndcg@10}}, contributes a relative gain of {{out:per-query-hybrid-versus-bm25:its relative gain}} on its own; without it, the mean of relative gains is {{out:per-query-hybrid-versus-bm25:mean of per-query relative gains without it}}. Fuhr shows that the relative change in a mean says nothing reliable about the change per query, and that "for arithmetic mean, only absolute improvements are meaningful" ([Fuhr, 2017, section 2.4](https://sigir.org/wp-content/uploads/2018/01/p032.pdf)).
 
-**What to do:** for every comparison, print the mean and median difference, the counts of wins, losses and ties, and the queries with the largest losses, then read those queries. Check judged@10 on the queries that move most before you credit the ranker. Report absolute differences of means, not percentages.
+**Working rule:** For every comparison, print the mean and median difference, the counts of wins, losses and ties, and the queries with the largest losses, then read those queries. Check judged@10 on the queries that move most before you credit the ranker. Report absolute differences of means, not percentages.
 
 ## Test a gap with a permutation test {#permutation-test-on-queries}
 
@@ -121,7 +121,7 @@ The observed mean difference is {{out:permutation-test-by-hand:observed mean dif
 
 SciPy's resampling functions take their random generator through `rng`, which replaces the `random_state` argument. At {{version:scipy}} both work, but the documentation says that "only the rng keyword should be used in new code", because calls that use `random_state` will emit warnings after a transition period (SciPy documentation). Every example in this book passes `rng` with a fixed seed.
 
-**What to do:** test every gap you intend to act on with a paired permutation test on the per-query differences. The book decides on this test, as [its rule](#when-a-difference-is-established) sets out. Read a p-value above the threshold as "no evidence of a difference", never as "no difference": with this few queries, a test can miss a real gap, and McKechnie et al. argue for measuring such misses alongside false positives ([McKechnie et al., 2025](https://arxiv.org/abs/2507.07924)). Never explain a gap the test can't tell from chance.
+**Working rule:** Test every gap you intend to act on with a paired permutation test on the per-query differences. The book decides on this test, as [its rule](#when-a-difference-is-established) sets out. Read a p-value above the threshold as "no evidence of a difference", never as "no difference": with this few queries, a test can miss a real gap, and McKechnie et al. argue for measuring such misses alongside false positives ([McKechnie et al., 2025](https://arxiv.org/abs/2507.07924)). Never explain a gap the test can't tell from chance.
 
 ## Get the p-value from a paired t-test {#paired-t-test-on-queries}
 
@@ -139,7 +139,7 @@ Compute t by hand for two of the store's gaps from chapter 1, [semantic retrieva
 
 For semantic retrieval against BM25, the mean difference of {{out:paired-t-test-by-hand:semantic minus bm25}} gives t = {{out:paired-t-test-by-hand:semantic minus bm25 t by hand}} and a p-value of {{out:paired-t-test-by-hand:semantic minus bm25 p by hand}}, the same as `ttest_rel` gives: a gap that chance would rarely produce. For the hybrid against semantic retrieval, t = {{out:paired-t-test-by-hand:hybrid minus semantic t by hand}} and the p-value is {{out:paired-t-test-by-hand:hybrid minus semantic p by hand}}, close to the permutation test's {{out:permutation-test-by-hand:p-value from scipy}} for the [same gap](#permutation-test-on-queries).
 
-**What to do:** report the paired t-test, `scipy.stats.ttest_rel`, beside the permutation test, as a check that needs no resampling. When the two fall on different sides of the threshold, say so, and let the permutation test decide. Don't use the Wilcoxon or sign test to compare mean scores.
+**Working rule:** Report the paired t-test, `scipy.stats.ttest_rel`, beside the permutation test, as a check that needs no resampling. When the two fall on different sides of the threshold, say so, and let the permutation test decide. Don't use the Wilcoxon or sign test to compare mean scores.
 
 ## Report how big the gap is {#report-the-size-of-a-gap}
 
@@ -159,7 +159,7 @@ At a nominal 95%, BCa covers the true gap {{out:interval-coverage-check:bca cove
 
 Whether a gap matters is a judgment no test makes for you. For precision@10, Fuhr notes, "a difference of 0.02 translates into one more relevant document per five queries" (Fuhr, 2017, section 2.8). For nDCG@10, decide before you test what gap would justify the cost of a change.
 
-**What to do:** report every comparison as the mean difference, with its bootstrap interval, its effect size and its p-value. If the interval includes 0, the comparison shows no improvement. If it excludes 0 but lies below the smallest gap worth the change's cost, the difference may be real and still not worth shipping. Use the interval to describe a gap's size, not to decide whether it exists.
+**Working rule:** Report every comparison as the mean difference, with its bootstrap interval, its effect size and its p-value. If the interval includes 0, the comparison shows no improvement. If it excludes 0 but lies below the smallest gap worth the change's cost, the difference may be real and still not worth shipping. Use the interval to describe a gap's size, not to decide whether it exists.
 
 ## Decide in advance what counts as established {#when-a-difference-is-established}
 
@@ -177,7 +177,7 @@ We let the permutation test decide because it assumes nothing about the shape of
 
 Chapter 1 builds the store's pipeline one stage at a time, and that order alone fixes its planned comparisons: each stage against the one before it. That gives semantic retrieval against BM25, the hybrid against semantic retrieval, and the reranked hybrid against the hybrid, {{out:compare-chapter-one-rankers:planned comparisons}} in all. The threshold is {{out:compare-chapter-one-rankers:p-value threshold}}, and the intervals use a level of {{out:compare-chapter-one-rankers:interval level}}. Comparing the reranked hybrid with semantic retrieval is exploratory, because semantic retrieval became the ranker to beat by scoring highest on these same test queries.
 
-**What to do:** write the list of planned comparisons before you score anything on the test queries, and keep it short, since each one raises the bar for the others. When you need to compare many rankers at once, Bonferroni gets very strict. Sakai recommends an analysis of variance, which tests whether any of the rankers differ at all, followed by the randomised Tukey HSD test, which compares every pair while holding the chance of any false positive at the level (Sakai, 2014).
+**Working rule:** Write the list of planned comparisons before you score anything on the test queries, and keep it short, since each one raises the bar for the others. When you need to compare many rankers at once, Bonferroni gets very strict. Sakai recommends an analysis of variance, which tests whether any of the rankers differ at all, followed by the randomised Tukey HSD test, which compares every pair while holding the chance of any false positive at the level (Sakai, 2014).
 
 ## Compare runs in an evaluation harness {#compare-runs-in-a-harness}
 
@@ -206,7 +206,7 @@ The exploratory column is where the methods part. Its permutation p-value is {{o
 
 Chapter 1's decision stands, by a rule that doesn't depend on which ranker scored highest: the ranker to beat is the simplest pipeline that no planned comparison has shown to be beaten. Semantic retrieval beat BM25, and neither later stage beat the stage before it.
 
-**What to do:** for every change, report the mean nDCG@10 and judged@10 of each run, then a table like this one, with a column for each comparison and the exploratory ones labelled. A change ships only when it is established against the ranker to beat.
+**Working rule:** For every change, report the mean nDCG@10 and judged@10 of each run, then a table like this one, with a column for each comparison and the exploratory ones labelled. A change ships only when it is established against the ranker to beat.
 
 ## What goes wrong in production {#measuring-search-in-production}
 
@@ -222,7 +222,7 @@ On the {{out:split-changes-the-verdict:test queries}} test queries, the reranked
 
 **Unjudged products lower a ranker's score.** A ranker that surfaces products nobody judged loses nDCG for them, even when they're good. Check [judged@10](#score-every-test-query) before you test, and have new products judged when it falls.
 
-**What to do:** log every comparison you run on the test queries, treat a borderline or exploratory result as a question for new queries, break score ties in a fixed order, and report judged@10 next to every nDCG@10.
+**Working rule:** Log every comparison you run on the test queries, treat a borderline or exploratory result as a question for new queries, break score ties in a fixed order, and report judged@10 next to every nDCG@10.
 
 ## Decisions this chapter made {#measuring-search-decisions}
 

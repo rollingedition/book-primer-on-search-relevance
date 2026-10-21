@@ -40,7 +40,7 @@ The train queries have {{out:ranking-features-by-grade:train candidates}} candid
 
 Across the train candidates, the mean cross-encoder score falls from {{out:ranking-features-by-grade:mean cross_encoder, exact}} for exact products to {{out:ranking-features-by-grade:mean cross_encoder, partial}} for partial and {{out:ranking-features-by-grade:mean cross_encoder, irrelevant}} for irrelevant ones, and `bm25`, `similarity` and `name_match` fall the same way. `average_rating` and `attribute_match` barely move. The mean `rating_count` falls from {{out:ranking-features-by-grade:rating_count, exact, mean}} to {{out:ranking-features-by-grade:rating_count, partial, mean}} and {{out:ranking-features-by-grade:rating_count, irrelevant, mean}}, but the medians are {{out:ranking-features-by-grade:rating_count, exact, median}}, {{out:ranking-features-by-grade:rating_count, partial, median}} and {{out:ranking-features-by-grade:rating_count, irrelevant, median}}: a few heavily rated products set the means. Unjudged candidates average a cross-encoder score of {{out:ranking-features-by-grade:mean cross_encoder, unjudged}}, and on {{out:ranking-features-by-grade:relevance features where unjudged sits nearer irrelevant than partial}} features that fall with the grade, their mean sits nearer the irrelevant products' than the partial ones'. That matters for what an unjudged candidate should teach a model.
 
-**What to do:** start with the features you already compute: each retriever's score, a reranker's score if you have one, matches on fields such as the name, and popularity signals. Compare each feature by grade on train queries before you train, with means for scores and medians for skewed counts. A feature that doesn't move with the grade has little to teach the model. Compute features with the same code when you train and when you serve.
+**Working rule:** Start with the features you already compute: each retriever's score, a reranker's score if you have one, matches on fields such as the name, and popularity signals. Compare each feature by grade on train queries before you train, with means for scores and medians for skewed counts. A feature that doesn't move with the grade has little to teach the model. Compute features with the same code when you train and when you serve.
 
 ## Learn a ranking from pairs of products {#learn-from-pairs}
 
@@ -67,7 +67,7 @@ That example simplifies: it takes the ideal DCG from every judged product, as `l
 
 Over the query's {{out:lambdas-match-lightgbm:candidates}} candidates, LightGBM without normalization or truncation scores every product within {{out:lambdas-match-lightgbm:lightgbm, no normalization or truncation, largest difference from the lambdas by hand after 5 trees}} of the custom objective's scores. The gap is rounding, since LightGBM reads its sigmoid from a precomputed table (`rank_objective.hpp`). At its defaults, scores differ by up to {{out:lambdas-match-lightgbm:lightgbm at its defaults, largest difference from the lambdas by hand after 5 trees}}.
 
-**What to do:** train rankers with a gradient that weighs each pair by the metric you report, as LambdaMART does, rather than regressing on grades. Know which defaults of your library change that gradient, and check on train queries that it beats a pointwise model on your data, because the families' order in a benchmark doesn't transfer by itself.
+**Working rule:** Train rankers with a gradient that weighs each pair by the metric you report, as LambdaMART does, rather than regressing on grades. Know which defaults of your library change that gradient, and check on train queries that it beats a pointwise model on your data, because the families' order in a benchmark doesn't transfer by itself.
 
 ## Train LambdaMART with LightGBM {#train-lambdamart}
 
@@ -94,7 +94,7 @@ One choice depends on the store's judgments. Nobody judged a share of {{out:rank
 
 Counting unjudged candidates as 0 scores {{out:lambdamart-choices-on-train:lambdarank, unjudged as 0, cross-validated ndcg@10}}. Leaving them out scores {{out:lambdamart-choices-on-train:lambdarank, unjudged left out, cross-validated ndcg@10}}, a difference of {{out:lambdamart-choices-on-train:lambdarank, unjudged left out, minus the first}} with a permutation p-value of {{out:lambdamart-choices-on-train:lambdarank, unjudged left out, minus the first, permutation p}}. A model that never sees an unjudged candidate in training still has to rank them, and [the features](#ranking-features) say they look like irrelevant products. Pointwise regression scores {{out:lambdamart-choices-on-train:pointwise regression, unjudged as 0, cross-validated ndcg@10}}, a difference of {{out:lambdamart-choices-on-train:pointwise regression, unjudged as 0, minus the first}} (p = {{out:lambdamart-choices-on-train:pointwise regression, unjudged as 0, minus the first, permutation p}}), so on the store's train queries the [check against a pointwise model](#learn-from-pairs) favours LambdaMART. These are tuning checks on train queries, not evidence. Against semantic retrieval's {{out:lambdamart-choices-on-train:semantic, train ndcg@10}}, the chosen setup differs by {{out:lambdamart-choices-on-train:first setup minus semantic}}, with a permutation p-value of {{out:lambdamart-choices-on-train:first setup minus semantic, permutation p}}: even on the queries that chose it, it shows no gain the train queries can tell from chance.
 
-**What to do:** sort rows by query and pass `group`, set `label_gain` to the gains your metric uses, stop early on held-out train queries through `eval_X` and `eval_y`, and fix the seed and thread count. Put each query's candidates in an order that carries no information, such as by product ID, and break score ties the same way. Count unjudged candidates as grade 0 unless cross-validation on train queries says otherwise. With few judged queries, try small trees.
+**Working rule:** Sort rows by query and pass `group`, set `label_gain` to the gains your metric uses, stop early on held-out train queries through `eval_X` and `eval_y`, and fix the seed and thread count. Put each query's candidates in an order that carries no information, such as by product ID, and break score ties the same way. Count unjudged candidates as grade 0 unless cross-validation on train queries says otherwise. With few judged queries, try small trees.
 
 ## Report LambdaMART on the test queries {#lambdamart-on-test-queries}
 
@@ -108,7 +108,7 @@ Of {{out:lambdamart-on-test:trees tried}} trees tried, early stopping keeps {{ou
 
 On test, [judged@10](#score-every-test-query), the share of the top 10 that has a judgment, is {{out:lambdamart-on-test:lambdamart, test judged@10}} for LambdaMART and {{out:lambdamart-on-test:semantic, test judged@10}} for semantic retrieval. LambdaMART scores {{out:lambdamart-on-test:lambdamart, test ndcg@10}} against semantic retrieval's {{out:lambdamart-on-test:semantic, test ndcg@10}}. No improvement shown, with a permutation p-value of {{out:lambdamart-on-test:lambdamart, permutation p}} ([all five comparisons](#ranking-decisions)).
 
-**What to do:** adopt a learned ranker only when its planned test comparison is established. Read its gain importance before you trust it, because the features it leans on are the ones you'll pay for at query time. Early stopping on a few held-out queries keeps very different numbers of trees from one split to the next, from {{out:lambdamart-tree-size-on-train:3 leaves, learning rate 0.1, trees kept per fold}} across the cross-validation folds to {{out:lambdamart-on-test:trees kept by early stopping}} here. A rule of thumb, not a measurement: with this few queries, judge more queries before you tune further, and treat any one stopping point as noise.
+**Working rule:** Adopt a learned ranker only when its planned test comparison is established. Read its gain importance before you trust it, because the features it leans on are the ones you'll pay for at query time. Early stopping on a few held-out queries keeps very different numbers of trees from one split to the next, from {{out:lambdamart-tree-size-on-train:3 leaves, learning rate 0.1, trees kept per fold}} across the cross-validation folds to {{out:lambdamart-on-test:trees kept by early stopping}} here. A rule of thumb, not a measurement: with this few queries, judge more queries before you tune further, and treat any one stopping point as noise.
 
 ## Rerank semantic retrieval with a cross-encoder {#rerank-semantic-with-cross-encoder}
 
@@ -122,7 +122,7 @@ The top 20 holds the products the LLM rerankers saw for {{out:cross-encoder-on-s
 
 On the train queries, the same rerank scores {{out:rerank-depth-on-train:depth 20, train ndcg@10}} against semantic retrieval's {{out:rerank-depth-on-train:depth 0 (semantic alone), train ndcg@10}} ([depth sweep](#rerank-depth-from-budget)). That is another sample, not evidence, and it repeats what [chapter 3](#split-changes-the-verdict) found: two close rankers' order can flip between sets of queries.
 
-**What to do:** rerank your strongest retrieval, at a depth fixed before you look at test results, and adopt the reranker only on an established gain on held-out queries. For the store, the general-purpose cross-encoder stays out of the pipeline.
+**Working rule:** Rerank your strongest retrieval, at a depth fixed before you look at test results, and adopt the reranker only on an established gain on held-out queries. For the store, the general-purpose cross-encoder stays out of the pipeline.
 
 ## Score each product with an LLM {#llm-pointwise-reranking}
 
@@ -136,7 +136,7 @@ The recording made {{out:llm-pointwise-rerank:calls per query}} calls per query,
 
 On test, [judged@10](#score-every-test-query) falls from {{out:llm-pointwise-rerank:semantic, test judged@10}} to {{out:llm-pointwise-rerank:llm pointwise, test judged@10}}, with unjudged places in the top 10s going from {{out:llm-pointwise-rerank:semantic, unjudged places in the test top 10s}} to {{out:llm-pointwise-rerank:llm pointwise, unjudged places in the test top 10s}}. The pointwise rerank scores {{out:llm-pointwise-rerank:llm pointwise, test ndcg@10}} against {{out:llm-pointwise-rerank:semantic, test ndcg@10}}. No improvement shown with this LLM, prompt and these queries, at a permutation p-value of {{out:llm-pointwise-rerank:llm pointwise, permutation p}} ([all five comparisons](#ranking-decisions)).
 
-**What to do:** if you rerank pointwise with an LLM, ask for a graded label or a score, count the distinct scores it gives per query, and decide the tie-break in advance: retrieval's order is a safe default. Score the result with human judgments, never with the same LLM's grades.
+**Working rule:** If you rerank pointwise with an LLM, ask for a graded label or a score, count the distinct scores it gives per query, and decide the tie-break in advance: retrieval's order is a safe default. Score the result with human judgments, never with the same LLM's grades.
 
 ## Order the 20 products with one LLM prompt {#llm-listwise-reranking}
 
@@ -148,7 +148,7 @@ The store's LLM, the open model named in [the chapter's opening](#ranking), saw 
 
 The recording made {{out:llm-listwise-rerank:listwise calls, both orders}} listwise calls, two per test query, and the number of answers that needed repair is {{out:llm-listwise-rerank:answers that needed repair}}. The rerank changes the first product for {{out:llm-listwise-rerank:queries whose first product changes}} queries. [Judged@10](#score-every-test-query) falls from {{out:llm-listwise-rerank:semantic, test judged@10}} to {{out:llm-listwise-rerank:llm listwise, test judged@10}}, with unjudged places in the top 10s going from {{out:llm-listwise-rerank:semantic, unjudged places in the test top 10s}} to {{out:llm-listwise-rerank:llm listwise, unjudged places in the test top 10s}}. The rerank scores {{out:llm-listwise-rerank:llm listwise, test ndcg@10}} against {{out:llm-listwise-rerank:semantic, test ndcg@10}}. No improvement shown with this LLM, prompt and these queries, at a permutation p-value of {{out:llm-listwise-rerank:llm listwise, permutation p}} ([all five comparisons](#ranking-decisions)).
 
-**What to do:** check every listwise answer before you use it: count missing, repeated and unknown numbers, and log how many answers needed repair. Constrain the answer's shape with a schema when your runtime supports one. Fix the window, the step and the order you show the products in before you measure, because the order changes the answer, as the [next check](#llm-position-bias) shows.
+**Working rule:** Check every listwise answer before you use it: count missing, repeated and unknown numbers, and log how many answers needed repair. Constrain the answer's shape with a schema when your runtime supports one. Fix the window, the step and the order you show the products in before you measure, because the order changes the answer, as the [next check](#llm-position-bias) shows.
 
 ## Reverse the input to measure positional bias {#llm-position-bias}
 
@@ -164,7 +164,7 @@ If you predicted that a capable model reads the products and finds the same best
 
 Three remedies exist. Pairwise ranking prompting asks about each pair twice: "for each pair of documents, we will inquire the LLM twice by swapping their order", and it counts a disagreement as a tie ([Qin et al., 2024](https://arxiv.org/abs/2306.17563)). Permutation self-consistency reranks several shuffled orders and aggregates the answers, which improved scores "by up to 7-18% for GPT-3.5 and 8-16% for LLaMA v2 (70B)" (Tang et al., 2024). And rerankers fine-tuned for listwise ranking, such as the open RankZephyr, are reported to be "resilient against variations in initial document ordering" ([Pradeep et al., 2023](https://arxiv.org/abs/2312.02724)); the store didn't record one.
 
-**What to do:** before you trust a listwise LLM reranker, run each query in at least two orders and report how much the answers agree. When agreement is low, aggregate several orders or ask each pair in both orders, and count those calls against [your budget](#rerank-depth-from-budget). In production, show the products in retrieval's order every time, so that the same list at least gets the same answer.
+**Working rule:** Before you trust a listwise LLM reranker, run each query in at least two orders and report how much the answers agree. When agreement is low, aggregate several orders or ask each pair in both orders, and count those calls against [your budget](#rerank-depth-from-budget). In production, show the products in retrieval's order every time, so that the same list at least gets the same answer.
 
 ## Set the rerank depth from a budget {#rerank-depth-from-budget}
 
@@ -188,7 +188,7 @@ For the cross-encoder, cost grows in step with depth, so the question is where q
 
 From semantic retrieval's {{out:rerank-depth-on-train:depth 0 (semantic alone), train ndcg@10}}, reranking the top 5 gives {{out:rerank-depth-on-train:depth 5, train ndcg@10}} and the top 20 {{out:rerank-depth-on-train:depth 20, train ndcg@10}}. The top 30 adds {{out:rerank-depth-on-train:depth 30, change from the depth before}} for half as many pairs again. Deeper, it falls: {{out:rerank-depth-on-train:depth 50, train ndcg@10}} at 50 and {{out:rerank-depth-on-train:depth 75, train ndcg@10}} at 75. The curve flattens between 20 and 30, near the depth fixed to match the LLM recording. On test, [the depth-20 rerank](#rerank-semantic-with-cross-encoder) showed no improvement, so for the store the cheapest reranker, none, is also the one to keep.
 
-**What to do:** for each reranker you consider, count calls and characters per query at each depth, and set the depth on train queries. A rule of thumb, not a measurement: rerank only as deep as the depth where train nDCG@10 stops improving, because every product past it costs the same and adds nothing. Then time that configuration on your own hardware and traffic, and keep the stage only if it fits the latency budget.
+**Working rule:** For each reranker you consider, count calls and characters per query at each depth, and set the depth on train queries. A rule of thumb, not a measurement: rerank only as deep as the depth where train nDCG@10 stops improving, because every product past it costs the same and adds nothing. Then time that configuration on your own hardware and traffic, and keep the stage only if it fits the latency budget.
 
 ## Distill the cross-encoder into a small ranker {#distill-the-cross-encoder}
 
@@ -208,7 +208,7 @@ The teacher labels all {{out:distilled-ranker-on-test:train candidates the teach
 
 On test, [judged@10](#score-every-test-query) is {{out:distilled-ranker-on-test:distilled, test judged@10}} for the student and {{out:distilled-ranker-on-test:semantic, test judged@10}} for semantic retrieval, with {{out:distilled-ranker-on-test:distilled, unjudged places in the test top 10s}} and {{out:distilled-ranker-on-test:semantic, unjudged places in the test top 10s}} unjudged places in the top 10s. The distilled ranker scores {{out:distilled-ranker-on-test:distilled, test ndcg@10}} against semantic retrieval's {{out:distilled-ranker-on-test:semantic, test ndcg@10}}. No improvement shown, with a permutation p-value of {{out:distilled-ranker-on-test:distilled, permutation p}} ([all five comparisons](#ranking-decisions)). The teacher's own order of the test candidates scores {{out:distilled-ranker-on-test:teacher's own order of the candidates, test ndcg@10, not a planned comparison}}, which the chapter didn't plan to test.
 
-**What to do:** distil when a reranker earns an established gain but costs too much per query: label every candidate of your train queries with the teacher, train the student on features you can compute without the teacher, and test the student against your retrieval on held-out queries. Read the student's gain importance: when retrieval's own score dominates it, the student is mostly your retrieval. Use margins between pairs when the student can't match the teacher's scale. The store has no teacher that beats semantic retrieval yet, so it keeps the code and doesn't ship the student.
+**Working rule:** Distil when a reranker earns an established gain but costs too much per query: label every candidate of your train queries with the teacher, train the student on features you can compute without the teacher, and test the student against your retrieval on held-out queries. Read the student's gain importance: when retrieval's own score dominates it, the student is mostly your retrieval. Use margins between pairs when the student can't match the teacher's scale. The store has no teacher that beats semantic retrieval yet, so it keeps the code and doesn't ship the student.
 
 ## What goes wrong in production {#ranking-in-production}
 
@@ -228,7 +228,7 @@ A live ranker computes features and calls models while the shopper waits, with c
 
 **Every reranker adds a call on the shopper's path.** Count calls and text per query, as in [the budget](#rerank-depth-from-budget), set a timeout, and fall back to retrieval's order when the reranker doesn't answer in time.
 
-**What to do:** log features and model versions with every ranking, put candidates in an order that carries no information, score on human judgments, check judged@10, and give each reranking stage a time limit and a fallback.
+**Working rule:** Log features and model versions with every ranking, put candidates in an order that carries no information, score on human judgments, check judged@10, and give each reranking stage a time limit and a fallback.
 
 ## Decisions this chapter made {#ranking-decisions}
 

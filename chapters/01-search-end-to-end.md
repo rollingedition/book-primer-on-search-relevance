@@ -24,7 +24,7 @@ Each judgment is one of three labels, defined by the dataset's authors. Exact: "
 
 Three warnings come with the store's data. First, each query's `query_class` is WANDS's predicted class for it, not a judgment (Chen et al., Table 1): `foutains with brick look` is classed as `Wallpaper`. Treat it as a hint. Second, nobody judged every product for every query. That would have taken about 60 million judgments, so WANDS judged candidates gathered from products shoppers clicked or added to their carts and from several search systems, and stopped when few new exact matches turned up (Chen et al., sections 4.2 and 4.3). A product without a judgment for a query is **unjudged**: unknown, not irrelevant. Third, nearly every product in the sample, {{out:load-the-store:products judged for at least one query}} of {{out:load-the-store:products}}, is judged for at least one of its queries, so the sample holds fewer distractors than a full catalog would: products that compete for a query's top places without matching it.
 
-**What to do:** split your queries into train and test before you change anything. Read test results to understand a ranker, but choose and tune every change on train queries, and report on test. Treat unjudged products as unknown. If you have no judgments yet, collect some before you change the ranking.
+**Working rule:** Split your queries into train and test before you change anything. Read test results to understand a ranker, but choose and tune every change on train queries, and report on test. Treat unjudged products as unknown. If you have no judgments yet, collect some before you change the ranking.
 
 ## Rank products with BM25 {#rank-with-bm25}
 
@@ -40,7 +40,7 @@ In the store, take the test query `clear shower curtain`. A shopper who types it
 
 Most of the ten are shower curtains or liners, but the last few are shower curtain hooks. BM25 found the words "shower curtain" in the hooks' names and scored them almost as high as the curtains, because it matches words, not things: it has no idea that a hook isn't a curtain. Whether the curtains are clear, the output can't tell you. For that you need the store's judgments.
 
-**What to do:** start with BM25 at the library's defaults as your baseline. It needs no training data and no model, and when it goes wrong you can see which words caused it. Leave its parameters alone until you can measure a change on [train queries](#store-data). When shoppers and products use different words for the same thing, add semantic retrieval.
+**Working rule:** Start with BM25 at the library's defaults as your baseline. It needs no training data and no model, and when it goes wrong you can see which words caused it. Leave its parameters alone until you can measure a change on [train queries](#store-data). When shoppers and products use different words for the same thing, add semantic retrieval.
 
 ## Check the results against the judgments {#check-against-judgments}
 
@@ -56,7 +56,7 @@ The judgments also tell you what the best possible top 10 would hold. The judges
 
 Reading results this way shows you the kind of mistake a ranker makes. Here, BM25 matched the words of an accessory and missed a modifier. An average over many queries hides that, and the mistakes you see are the ones you can fix.
 
-**What to do:** before you compute any metric, read the top results of five or ten queries next to their judgments. Look for patterns: accessories, missed modifiers, wrong sizes. When several top results are unjudged, have them judged before you trust a score for that query.
+**Working rule:** Before you compute any metric, read the top results of five or ten queries next to their judgments. Look for patterns: accessories, missed modifiers, wrong sizes. When several top results are unjudged, have them judged before you trust a score for that query.
 
 ## Score one ranking with nDCG@10 {#score-one-ranking}
 
@@ -79,7 +79,7 @@ The ranking earns a DCG of {{out:ndcg-for-one-query:dcg@10}}. The best possible 
 
 That one number sums up what the judgments showed: a ranking that found the right kind of product and made two kinds of mistake. You can compute it for any ranking of any judged query, and compare.
 
-**What to do:** we recommend nDCG@10 as your headline metric when your judgments are graded and the first page of results matters most, as it does in a store's search. When you have only yes-or-no labels, or when shoppers look at one result only, another metric fits better. [Chapter 3](#choose-a-ranking-metric) builds the alternatives and says when to choose each.
+**Working rule:** We recommend nDCG@10 as your headline metric when your judgments are graded and the first page of results matters most, as it does in a store's search. When you have only yes-or-no labels, or when shoppers look at one result only, another metric fits better. [Chapter 3](#choose-a-ranking-metric) builds the alternatives and says when to choose each.
 
 ## Score every test query {#score-every-test-query}
 
@@ -95,7 +95,7 @@ Over {{out:bm25-test-scores:test queries}} test queries, BM25 averages an nDCG@1
 
 The average hides a wide spread. Scores run from {{out:bm25-test-scores:lowest ndcg@10}} to {{out:bm25-test-scores:highest ndcg@10}}, with a median of {{out:bm25-test-scores:median ndcg@10}}, and {{out:bm25-test-scores:queries with ndcg@10 of 1}} queries score a perfect 1. The lowest-scoring query, `{{out:bm25-test-scores:lowest query}}`, has a judged@10 of {{out:bm25-test-scores:judged@10 of the lowest query}}. Another low scorer, `outdoor light fixtures`, has a judged@10 of {{out:bm25-test-scores:judged@10 for outdoor light fixtures}}: BM25's top 5 holds an exact outdoor light, then light bulbs that share the query's words and that nobody judged for this query. A bulb isn't a light fixture, so here the grade of 0 is probably fair. But the metric can't know that, and for another ranker or another query, unjudged products may be good ones.
 
-**What to do:** report the mean nDCG@10 over the test queries with mean judged@10 beside it, and read the lowest-scoring queries every time you score a run. When one ranker's judged@10 is lower than another's, find out why before you compare their nDCG: the gap may come from missing judgments, not worse results.
+**Working rule:** Report the mean nDCG@10 over the test queries with mean judged@10 beside it, and read the lowest-scoring queries every time you score a run. When one ranker's judged@10 is lower than another's, find out why before you compare their nDCG: the gap may come from missing judgments, not worse results.
 
 ## Search by meaning with embeddings {#search-by-meaning}
 
@@ -119,7 +119,7 @@ Semantic retrieval averages {{out:compare-lexical-semantic:semantic ndcg@10}} ag
 
 BM25 is better on {{out:compare-lexical-semantic:of those, bm25 better}} of the {{out:compare-lexical-semantic:test queries with a size in inches}} test queries that give a size in inches. Exact tokens such as sizes and model numbers may favour matching words, but a count this small can't show a pattern. On the train queries that contain a digit, BM25 is better on {{out:bm25-semantic-wins-by-query:queries with a digit, bm25 better}} of {{out:bm25-semantic-wins-by-query:queries with a digit}} ([Find the queries each retriever wins](#queries-each-retriever-wins)), and the embedding model matches digits too, as text ([Check queries that contain digits](#embeddings-match-digits)). A theoretical result shows a limit of single vectors: Weller et al. prove that an embedding's dimension limits which combinations of top results a single vector can return. On LIMIT, a dataset they built to test that limit, BM25 finds 93.6% of the relevant items in its top 100, and the best single-vector model 18.9%. On a variant of LIMIT with words replaced by synonyms, BM25's score drops by more than 89% ([Weller et al., 2025](https://arxiv.org/abs/2508.21038)). Lexical and semantic retrieval fail in different places.
 
-**What to do:** add semantic retrieval when shoppers describe what they want in their own words. Don't assume lexical retrieval wins on exact terms such as sizes, brands and model numbers: before you rely on it there, count which retriever wins the train queries that contain them. On this data, semantic retrieval alone scores highest so far, so it is the ranker to beat.
+**Working rule:** Add semantic retrieval when shoppers describe what they want in their own words. Don't assume lexical retrieval wins on exact terms such as sizes, brands and model numbers: before you rely on it there, count which retriever wins the train queries that contain them. On this data, semantic retrieval alone scores highest so far, so it is the ranker to beat.
 
 ## Fuse two rankings with reciprocal rank fusion {#fuse-with-rrf}
 
@@ -143,7 +143,7 @@ The hybrid run scores {{out:hybrid-rrf:hybrid ndcg@10}}: above BM25, and below s
 
 If you predicted "above semantic retrieval", notice that combining two rankings doesn't guarantee a gain. Fusion is a change like any other, and it has to be measured.
 
-**What to do:** measure each retriever alone before you fuse them. Use RRF with k = 60 as an untuned default, and keep the fused ranking only if it beats the best single retriever on held-out queries. When one retriever is much weaker, try weighting the rankings or tuning k on train queries instead of accepting equal votes. Chapter 7 tries both on the store's data, and none of the tuned blends it reports on the test queries beats semantic retrieval ([Report the tuned blends on test queries](#report-blends-on-test)).
+**Working rule:** Measure each retriever alone before you fuse them. Use RRF with k = 60 as an untuned default, and keep the fused ranking only if it beats the best single retriever on held-out queries. When one retriever is much weaker, try weighting the rankings or tuning k on train queries instead of accepting equal votes. Chapter 7 tries both on the store's data, and none of the tuned blends it reports on the test queries beats semantic retrieval ([Report the tuned blends on test queries](#report-blends-on-test)).
 
 ## Rerank the top 50 with a cross-encoder {#rerank-with-cross-encoder}
 
@@ -174,7 +174,7 @@ For this query, the reranked top 5 are refrigerators whose names say `ice maker`
 
 The judges marked that refrigerator exact, so by the dataset's definition it fully matches the query. Yet its text says nothing about ice or water, so no model that reads only the text could rank it on that modifier. WANDS's judges saw each product's image and web page as well as its name ([annotation guidelines](https://github.com/wayfair/WANDS/raw/main/Product%20Search%20Relevance%20Annotation%20Guidelines.pdf)), which probably let them see what the text doesn't say. A general-purpose reranker has never seen this store's judgments. [Chapter 9](#train-lambdamart) trains rankers on the train queries' judgments.
 
-**What to do:** rerank a shortlist, here 50 products, because the cost grows with every pair. Adopt a reranker only when it beats the best retrieval alone on held-out queries. This one didn't improve on the hybrid run or on semantic retrieval, so the store's best pipeline so far is semantic retrieval alone. Before you give up on reranking, try a different depth, or a ranker trained on your own judgments. Chapter 9 tries both on the store's data, and neither shows an improvement over semantic retrieval on the test queries ([Set the rerank depth from a budget](#rerank-depth-from-budget), [Report LambdaMART on the test queries](#lambdamart-on-test-queries)).
+**Working rule:** Rerank a shortlist, here 50 products, because the cost grows with every pair. Adopt a reranker only when it beats the best retrieval alone on held-out queries. This one didn't improve on the hybrid run or on semantic retrieval, so the store's best pipeline so far is semantic retrieval alone. Before you give up on reranking, try a different depth, or a ranker trained on your own judgments. Chapter 9 tries both on the store's data, and neither shows an improvement over semantic retrieval on the test queries ([Set the rerank depth from a budget](#rerank-depth-from-budget), [Report LambdaMART on the test queries](#lambdamart-on-test-queries)).
 
 ## What goes wrong in production {#search-end-to-end-in-production}
 
@@ -192,7 +192,7 @@ The `4.5` in `ge top loading washer 4.5` disappears, because `4` and `5` are one
 
 **Reranking costs time on every query.** Product embeddings are computed once. A cross-encoder runs on every pair, for every query, while the shopper waits. In this chapter, a recording script computes the scores ahead of time on a GPU, which hides that cost. Chapter 9 counts what each rerank depth costs ([Set the rerank depth from a budget](#rerank-depth-from-budget)).
 
-**What to do:** check the tokens your queries become, track judged@10, and record the model version next to every vector you store.
+**Working rule:** Check the tokens your queries become, track judged@10, and record the model version next to every vector you store.
 
 ## Decisions this chapter made {#search-end-to-end-decisions}
 

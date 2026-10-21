@@ -24,7 +24,7 @@ Of the {{out:word-match-versus-judgment:judged pairs whose text has every query 
 
 The other direction is more striking. Of the {{out:word-match-versus-judgment:exact pairs}} exact pairs, {{out:word-match-versus-judgment:exact pairs whose text misses a query word}} have a product text that misses at least one word of the query. Some misses are word forms and spelling, such as `chairs` against `chair` ([chapter 1](#search-end-to-end-in-production)), or the query `ligth bulb`; [chapter 5](#stem-word-forms) and [chapter 8](#correct-spelling-from-catalog) take those up. Others are attributes the text doesn't state. WANDS records attributes such as color, material and size apart from the text ([Chen et al., 2022, Table 1](https://easychair.org/publications/preprint/wm4R)), and the store keeps a few of them in an `attributes` column, for example `color: clear; material: vinyl` ([data card](../examples/data/wands/README.md)). The text that the store's search reads, `lib.store.product_text`, leaves that column out. Adding the attributes to the text leaves {{out:word-match-versus-judgment:of them, still missing one with attributes added}} of those exact pairs still missing a query word, so attributes explain few misses overall. For some queries, though, the attributes hold the answer. For `clear shower curtain`, {{out:word-match-versus-judgment:of them without the word clear in their text}} of the {{out:word-match-versus-judgment:exact products for clear shower curtain}} exact products never say `clear` in their text, and {{out:word-match-versus-judgment:of those, with clear in their attributes}} of those carry `clear` in their attributes, where the store's text search never looks. Chapter 5 tests adding them to lexical search ([Index product attributes as a field](#index-attributes-as-a-field)). For the other exact curtains, neither the text nor the attributes say `clear`. The judges had more to go on: WANDS's annotation guidelines show them each product's name, image and web page ([guidelines](https://github.com/wayfair/WANDS/raw/3b74dcf4ba29ab8ff3e6a50b5b09fc627cb882b5/Product%20Search%20Relevance%20Annotation%20Guidelines.pdf)). The photo or the page may be what told them, but that is our guess: the data doesn't record which evidence a judge used.
 
-**What to do:** treat a judgment as a person's verdict about a need, not a property of the product. Before you blame a ranker for missing an exact product, check whether any field the ranker reads says what the judges saw, and look at the fields it doesn't read, such as attributes. When your judges see more than your ranker does, give the ranker the same evidence where you can, or accept that some exact products will rank low for reasons no change to the ranking can fix.
+**Working rule:** Treat a judgment as a person's verdict about a need, not a property of the product. Before you blame a ranker for missing an exact product, check whether any field the ranker reads says what the judges saw, and look at the fields it doesn't read, such as attributes. When your judges see more than your ranker does, give the ranker the same evidence where you can, or accept that some exact products will rank low for reasons no change to the ranking can fix.
 
 ## Expect judges to disagree on some pairs {#judges-disagree-on-some-pairs}
 
@@ -36,7 +36,7 @@ WANDS's file lists some of the store's pairs more than once, each row a majority
 
 Of the judged pairs, {{out:conflicting-judgments:pairs with conflicting labels}} conflict: {{out:conflicting-judgments:exact against partial}} are exact against partial and {{out:conflicting-judgments:partial against irrelevant}} partial against irrelevant. Of those conflicts, {{out:conflicting-judgments:conflicts between neighbouring grades}} sit between neighbouring grades. Whether a `counter height dining table` fully matches `breakfast bar table` is a fair question about a modifier, not a sign that one vote misread the task. Conflicts like these show where the line between grades is soft.
 
-**What to do:** keep one grade per pair and write down the rule that chose it. We recommend the lower grade, as the sample does: it errs against the ranker that ranks the product, not in its favour. When judges disagree across two grades, exact against irrelevant, reread the guidelines with them, because they don't share a definition.
+**Working rule:** Keep one grade per pair and write down the rule that chose it. We recommend the lower grade, as the sample does: it errs against the ranker that ranks the product, not in its favour. When judges disagree across two grades, exact against irrelevant, reread the guidelines with them, because they don't share a definition.
 
 ## Read intent as a product and its modifiers {#intent-in-product-search}
 
@@ -50,7 +50,7 @@ The store's queries cover the range. `ines shag rug w003096809` and `kohler whit
 
 For {{out:predicted-class-check:queries where most exact products have the query_class}} of the {{out:predicted-class-check:queries}} queries, most exact products carry the predicted class. For {{out:predicted-class-check:queries where no exact product has the query_class}}, none does, and {{out:predicted-class-check:queries without a query_class}} query has no class at all. Read the queries the example lists before you count them as errors. `foutains with brick look` is classed as `Wallpaper`, while its exact products are fountains: the classifier went wrong. `7qt slow cooker` is a naming mismatch instead: the query classes and the product classes use different names for the same thing.
 
-**What to do:** read each query as an entity plus modifiers, and check that your ranker gets the entity right before you tune it for modifiers. Use `query_class` as a hint, for a feature or a filter you check against the judgments, and never as a label. When intent is ambiguous, as with `cooktop`, judge against the guidelines' reading and write that reading down.
+**Working rule:** Read each query as an entity plus modifiers, and check that your ranker gets the entity right before you tune it for modifiers. Use `query_class` as a hint, for a feature or a filter you check against the judgments, and never as a label. When intent is ambiguous, as with `cooktop`, judge against the guidelines' reading and write that reading down.
 
 ## Grade relevance instead of yes or no {#graded-relevance}
 
@@ -62,7 +62,7 @@ Show both failures on the store's query `clear shower curtain`. The example buil
 
 With exact-only labels, the other curtains and the hooks score the same, {{out:binary-labels-hide-partial:other curtains, exact only}} and {{out:binary-labels-hide-partial:hooks, exact only}}. With exact-or-partial labels, the other curtains score {{out:binary-labels-hide-partial:other curtains, exact or partial}}, the same as the clear ones at {{out:binary-labels-hide-partial:clear curtains, exact or partial}}. Only the grades separate all three: {{out:binary-labels-hide-partial:clear curtains, grades}}, {{out:binary-labels-hide-partial:other curtains, grades}} and {{out:binary-labels-hide-partial:hooks, grades}}. When the ideal top 10 is all exact, as it is here with {{out:binary-labels-hide-partial:exact products in the ideal top 10}} exact products in it, a ranking of ten partial products scores the ratio of the partial gain to the exact gain.
 
-**What to do:** we recommend graded judgments for product search, so a metric can credit a near miss without mistaking it for a match. Collect grades even if you report a binary metric too: you can always collapse grades to yes or no, but not the reverse. Use binary labels when a near miss is worthless to the user, as when the query is a model number and only that model will do.
+**Working rule:** We recommend graded judgments for product search, so a metric can credit a near miss without mistaking it for a match. Collect grades even if you report a binary metric too: you can always collapse grades to yes or no, but not the reverse. Use binary labels when a near miss is worthless to the user, as when the query is a model number and only that model will do.
 
 ### Choose the gains on purpose {#gains-are-a-choice}
 
@@ -74,7 +74,7 @@ Score the store's two test runs from chapter 1, [BM25](#rank-with-bm25)'s and se
 
 Partial products fill {{out:gain-choice-changes-ndcg:partial share of the bm25 top 10}} of BM25's top-10 places and {{out:gain-choice-changes-ndcg:partial share of the semantic top 10}} of semantic retrieval's, so the partial gain moves both scores a long way. BM25 scores {{out:gain-choice-changes-ndcg:bm25, exact only}} with exact-only labels and {{out:gain-choice-changes-ndcg:bm25, exact or partial}} with exact-or-partial labels. With the ESCI-like partial gain of 0.1, BM25 scores {{out:gain-choice-changes-ndcg:bm25, partial gain 0.1}} and semantic retrieval {{out:gain-choice-changes-ndcg:semantic, partial gain 0.1}}. Semantic retrieval leads under {{out:gain-choice-changes-ndcg:schemes where semantic leads}} schemes, but the size of the lead changes with the choice: {{out:gain-choice-changes-ndcg:semantic minus bm25, exact only}} with exact-only labels, {{out:gain-choice-changes-ndcg:semantic minus bm25, partial gain 0.1}} with ESCI-like gains, {{out:gain-choice-changes-ndcg:semantic minus bm25, grades 2, 1, 0}} with the grades and {{out:gain-choice-changes-ndcg:semantic minus bm25, exact or partial}} with exact-or-partial labels. The example doesn't test the differences between those leads, so on {{out:load-the-store:test queries}} test queries treat them as possibly noise. Exact-or-partial labels also saturate, so they separate the rankers on fewer queries: {{out:gain-choice-changes-ndcg:tied queries, exact or partial}} test queries tie under them, against {{out:gain-choice-changes-ndcg:tied queries, grades 2, 1, 0}} under the grades.
 
-**What to do:** we recommend linear gains, the grades 2, 1 and 0, as a default for product search. Choose a lower partial gain when a near miss is worth little to your shoppers. Whatever you choose, fix it before you compare rankers, report it with every score, and never compare nDCG computed with different gains.
+**Working rule:** We recommend linear gains, the grades 2, 1 and 0, as a default for product search. Choose a lower partial gain when a near miss is worth little to your shoppers. Whatever you choose, fix it before you compare rankers, report it with every score, and never compare nDCG computed with different gains.
 
 ## Read the label mix of each query {#label-mix-per-query}
 
@@ -88,7 +88,7 @@ Partial is the commonest label: {{out:count-labels-per-query:partial share of al
 
 That spread changes what nDCG@10 ([Score one ranking](#score-one-ranking)) measures. Of the queries, {{out:count-labels-per-query:queries with fewer than 10 exact products}} have fewer than 10 exact products, {{out:count-labels-per-query:test queries with fewer than 10 exact products}} of them test queries. For those, the ideal top 10 includes partial products, so a ranking can reach a perfect 1 with partial products in its top 10. For a broad query such as `outdoor light fixtures`, a perfect score needs ten exact products. The same nDCG@10 means a different thing for each.
 
-**What to do:** print the label mix per query before you average any metric, and look at both ends. Read a low score on a query with few exact products as a different problem from a low score on a broad query. Keep per-query scores next to every mean; [chapter 3](#read-per-query-differences) shows what averages hide.
+**Working rule:** Print the label mix per query before you average any metric, and look at both ends. Read a low score on a query with few exact products as a different problem from a low score on a broad query. Keep per-query scores next to every mean; [chapter 3](#read-per-query-differences) shows what averages hide.
 
 ## Treat clicks as biased evidence {#clicks-are-not-judgments}
 
@@ -104,7 +104,7 @@ Under [BM25](#rank-with-bm25)'s ranking, the shopper clicks rank {{out:cascade-c
 
 Correcting clicks for bias is a research field of its own, unbiased learning to rank. On a large search dataset released by Baidu, those methods improved click prediction but "struggle to consistently improve ranking performance" as judged by experts ([Hager et al., 2024](https://arxiv.org/abs/2404.02543)).
 
-**What to do:** use judgments, not clicks, as the reference for offline evaluation. Use clicks as relative evidence, a clicked product over a skipped one ranked above it, and never read a missing click as a sign that a product is irrelevant. If you train on clicks, check the result against judgments.
+**Working rule:** Use judgments, not clicks, as the reference for offline evaluation. Use clicks as relative evidence, a clicked product over a skipped one ranked above it, and never read a missing click as a sign that a product is irrelevant. If you train on clicks, check the result against judgments.
 
 ## Know where the judgments came from {#pooled-judgments}
 
@@ -120,7 +120,7 @@ Of the {{out:trundle-daybeds-unjudged:exact for trundle daybed}} products judged
 
 Zobel warns that pooled judgments can "underestimate the performance of systems that did not contribute to the pool" (Zobel, 1998). That makes judgments fairest to rankers like the systems that built the pool: for WANDS, shoppers' clicks, a lexical engine, a neural retriever and a query classifier. It is a tendency, not a law. In the store, BM25, the ranker most like WANDS's lexical engine, has the lower judged@10 of the two rankers ([Count unjudged products](#unjudged-results)). Our guess is that the store's BM25 reads different fields than the pool's engine did, so it ranks different products high.
 
-**What to do:** find out where your pool came from before you trust a comparison. When you evaluate a ranker unlike the systems that built it, expect it to surface products nobody judged, and plan to judge them.
+**Working rule:** Find out where your pool came from before you trust a comparison. When you evaluate a ranker unlike the systems that built it, expect it to surface products nobody judged, and plan to judge them.
 
 ## Count unjudged products before you compare scores {#unjudged-results}
 
@@ -144,7 +144,7 @@ Condensed, BM25 goes from {{out:condensed-ndcg:bm25 ndcg@10}} to {{out:condensed
 
 Whether the change in the lead is more than noise is unsettled, and both checks here are exploratory, so neither establishes anything ([the book's rule](#when-a-difference-is-established)). For the change, [chapter 3's paired t-test](#paired-t-test-on-queries) gives p = {{out:condensed-ndcg:t-test p for the change}}, its [permutation test](#permutation-test-on-queries) gives {{out:condensed-ndcg:permutation p for the change}}, and the 95% [bootstrap interval](#report-the-size-of-a-gap) runs from {{out:condensed-ndcg:95% interval for the change}}. With the change carried by a few queries, treat it as possibly noise. For the condensed lead itself, the permutation test gives p = {{out:condensed-ndcg:permutation p for the condensed lead}} and the t-test {{out:condensed-ndcg:t-test p for the condensed lead}}. Neither score is the truth. The standard score punishes unjudged products that may be good, and the condensed score hides unjudged products that are bad.
 
-**What to do:** report judged@10 next to every nDCG@10, and compute condensed scores as a diagnostic, never as the headline. When two rankers' judged@10 differ, have the unjudged products in their top 10s judged before you compare them. That is the dependable cure, and on this sample it is a small job: {{out:unjudged-in-bm25-top-10:unjudged products in the top 10s}} judgments for BM25's test run. On a full catalog, expect more.
+**Working rule:** Report judged@10 next to every nDCG@10, and compute condensed scores as a diagnostic, never as the headline. When two rankers' judged@10 differ, have the unjudged products in their top 10s judged before you compare them. That is the dependable cure, and on this sample it is a small job: {{out:unjudged-in-bm25-top-10:unjudged products in the top 10s}} judgments for BM25's test run. On a full catalog, expect more.
 
 ## What goes wrong in production {#what-relevance-means-in-production}
 
@@ -158,7 +158,7 @@ Whether the change in the lead is more than noise is unsettled, and both checks 
 
 **Filling holes with a model still needs human judgments.** Gienapp et al. fine-tune a small classifier for each query on that query's human judgments and use it to judge the unjudged products. On TREC Robust04 and the TREC Deep Learning collections of 2019 and 2020, they report that "As little as 128 initial human judgments per topic suffice to improve the comparability of models", with more reliability than prompted LLM judges ([Gienapp et al., 2025](https://arxiv.org/abs/2510.04633)). Soboroff's advice on LLMs is blunter: "don't use LLMs to create relevance judgments for TREC-style evaluations" ([Soboroff, 2025](https://arxiv.org/abs/2409.15133)). [Chapter 4](#read-llm-error-direction) measures LLM judgments against the store's human ones before trusting them.
 
-**What to do:** date your judgments, track judged@10 in production, and budget for judging again.
+**Working rule:** Date your judgments, track judged@10 in production, and budget for judging again.
 
 ## Decisions this chapter made {#what-relevance-means-decisions}
 
