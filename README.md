@@ -42,7 +42,7 @@ uv pip install -r examples/requirements.txt
 cd examples && ../.venv/bin/python load-the-store.py
 ```
 
-Model outputs, such as embeddings and LLM judgments, are recorded once in `examples/data/recorded/`, each with a `manifest.json` naming the exact model and prompts, so the examples never call a model. `recordings/` holds the scripts that record them again.
+Model outputs are recorded once in `examples/data/recorded/`, each folder with a `manifest.json` that names the model, its exact version and the script that recorded it, so the examples never call a model. `recordings/` holds the scripts that record them again.
 
 Where the data comes from, and its licence: [`examples/data/wands/README.md`](examples/data/wands/README.md).
 
