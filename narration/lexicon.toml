@@ -23,8 +23,14 @@
 "V100" = "V one hundred"
 "Snowflake/snowflake-arctic-embed-m-v1.5" = "Snowflake's arctic embed M, version one point five"
 "Alibaba-NLP/gte-reranker-modernbert-base" = "Alibaba N L P's G T E reranker, modern Bert base"
+"gemma4:12b-it-q4_K_M" = "Gemma four, twelve B, I T, Q four K M"
+"GPT-4" = "G P T four"
+"GPT-4o" = "G P T four oh"
+"UMBRELA" = "umbrella"
+"RAG" = "rag"
 # Words and queries
 "eCommerce" = "e-commerce"
+"vs" = "versus"
 "3.7qt" = "three point seven quart"
 # Measures and formulas
 "MAP" = "M A P"
@@ -35,6 +41,8 @@
 "log(1 + rank)" = "log of one plus rank"
 "grade(i)" = "grade of i"
 "bpref" = "B pref"
+"κ" = "kappa"
+"τ_b" = "tau B"
 "BCa" = "B C A"
 "HSD" = "H S D"
 "IR" = "I R"
@@ -48,14 +56,17 @@
 "lib.store.qrels" = "lib dot store dot Q rels"
 "bm25s.tokenize" = "B M twenty-five S dot tokenize"
 "ttest_rel" = "t-test rel"
+"kendalltau" = "kendall tau"
 "scipy.stats.ttest_rel" = "sigh pie dot stats dot t-test rel"
 "scipy.stats.power" = "sigh pie dot stats dot power"
-# File extensions in code, as in recordings/embeddings.py. Each reading starts with a space, because the extension
-# follows the file's name with none.
+# File extensions and folders in code, as in recordings/llm_judgments.py. Each reading starts with a space, because
+# the text has none before the term.
 ".py" = " dot pie"
 ".md" = " dot M D"
 ".csv" = " dot C S V"
 ".json" = " dot Jason"
+"/llm" = " slash L L M"
+".llm" = " dot L L M"
 "LexicalSearch" = "lexical search"
 "SemanticSearch" = "semantic search"
 
