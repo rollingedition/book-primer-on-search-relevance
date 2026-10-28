@@ -1,0 +1,54 @@
+# Spoken descriptions for chapter 6, Semantic retrieval: what narration reads in place of each example, block and table.
+
+[examples.inspect-recorded-embeddings]
+say = "The code reads the recorded embeddings and their manifest, and prints the model, its query prompt, how many products it embedded and at what dimension, how the numbers are stored, and the longest product text against the model's input limit. It checks the vectors' lengths before and after the book's module rescales them. Then it compares every query with every other: the nearest query to whimsical solar lights is {{out:inspect-recorded-embeddings:whimsical solar lights, nearest other query}}, with {{out:inspect-recorded-embeddings:whimsical solar lights, words in common}} words in common."
+
+[examples.cosine-by-hand]
+say = "For the product most similar to clear shower curtain, the code computes the dot product and the cosine by hand and checks the cosine with scikit-learn: all three come to {{out:cosine-by-hand:cosine by hand}}. Then it keeps the first 256 numbers of every vector without rescaling, and ranks every query's products both by dot product and by cosine. The top 10 changes for {{out:cosine-by-hand:queries whose top 10 changes}} of the {{out:cosine-by-hand:queries}} queries."
+
+[examples.exact-search-numpy]
+say = "The code multiplies the test queries' vectors by every product's vector in one matrix product, takes the top 10 of each row with NumPy's partial sort, and checks the result against the book's semantic search and against faiss's exact index. The hand-built top 10 matches the book's module on {{out:exact-search-numpy:same top 10 as lib.semantic}} test queries and faiss on {{out:exact-search-numpy:same top 10 as faiss IndexFlatIP}}, and its run scores {{out:exact-search-numpy:ndcg@10 of the exact run}}."
+
+[examples.exact-search-memory]
+say = "The code measures how much memory exact search needs: the bytes of one product's vector as 32-bit floats, the store's whole catalog of vectors, and the same for a catalog of a million products."
+
+[examples.hnsw-efsearch-sweep]
+say = "The code builds an HNSW index over the product vectors with 32 links per node, prints how many products each layer holds, and sweeps efSearch from 16 to 256 on the train queries. For each setting it prints the mean and the worst recall@10 against exact search, the queries left at 0, and the similarities computed per query. At the default of 16, {{out:hnsw-efsearch-sweep:efSearch 16, train queries with recall@10 of 0}} train queries lose their whole top 10. The smallest setting at which every query keeps 9 of its true top 10 is {{out:hnsw-efsearch-sweep:smallest efSearch with every query at 0.9 or more}}. Last, it sets HNSW's top 3 for foutains with brick look beside exact search's."
+
+[examples.hnsw-test-recall]
+say = "On the test queries, the code compares HNSW at faiss's default efSearch, and at the setting chosen on the train queries, {{out:hnsw-test-recall:efSearch chosen on train queries}}, with exact search. For each it prints recall@10 and recall@100 against exact search, the queries that lose their whole top 10, the mean nDCG@10, and the planned paired tests. At the chosen setting, recall@10 is {{out:hnsw-test-recall:chosen, recall@10 against exact}}. Asked whether the default's fall in nDCG@10 is established, the code answers {{out:hnsw-test-recall:default, established}}."
+
+[examples.hnsw-index-memory]
+say = "The code builds an exact index and an HNSW index over the same vectors, and prints how many links each product has on the upper layers and on the bottom one, faiss's own estimate of the memory per product, and the bytes per product that each saved index takes. The graph's links add to the memory the vectors take."
+
+[examples.digits-in-queries]
+say = "The code finds the store's queries that contain a digit, from both splits, {{out:digits-in-queries:queries with a digit}} in all, and prints a table of each one's split, its BM25 and semantic scores, and its text. It counts the queries each ranker wins and the gaps under 0.03. Then it counts the products whose text has the word 7qt, and those that write 7 qt."
+
+[examples.hood-query-digits]
+say = "The code lists semantic retrieval's top 10 for the test query 48 inch kitchen hood, each product with its judgment, its width from the attributes column, and its name. Then it counts, in each ranker's top 10, the hoods that are 48 wide and the exact products. BM25's top 10 holds {{out:hood-query-digits:bm25, width 48 in the top 10}} hoods of that width."
+
+[examples.probe-pair-overlap]
+say = "The code searches with pairs of probe queries that differ only in a size: two kitchen hoods, two slow cookers, two beds and two sofas. For each pair it prints how similar the two queries are and how many products their top 10s share, and counts the products of the right size, from the width attribute for the hoods and from the name for the rest. It also counts the catalog's product names that give a seat count, {{out:probe-pair-overlap:catalog names that give a seat count}}, and its loveseats."
+
+[examples.code-probes]
+say = "The code tests two pairs of probe queries built on codes. For a code no product holds, it changes the last digits and compares the two queries: their similarity is {{out:code-probes:code, similarity of the two queries}}, and their top 10s share {{out:code-probes:code, products in both top 10s}} products. For a screen resolution that one product's text holds, the {{out:code-probes:that product}}, it prints that product's semantic rank, its similarity against the next product's, and its BM25 rank, first with its own resolution in the query and then with another."
+
+[examples.negation-probes]
+say = "The code counts the store's queries with a negation, {{out:negation-probes:store queries with no, not, without or non}}, and shows the terms BM25 searches for rug that is not round: {{out:negation-probes:bm25 terms of rug that is not round}}. Then it runs three pairs of probe queries, each a query and its negation, through both rankers, and counts the products in each top 10 that are named armless, mention glass, or are named round. Semantic retrieval's top 10 for rug that is not round holds {{out:negation-probes:rug that is not round, semantic top 10 with round}} products named round."
+
+[examples.truncate-embeddings]
+say = "On the train queries, the code scores semantic retrieval with every vector cut to its first 768, 256 or 128 numbers and rescaled, and prints each length's bytes per product, mean nDCG@10 and judged@10. The score falls a little at 256 numbers, and much more at 128."
+
+[examples.truncation-paired-test]
+say = "The code compares 256 and 128 dimensions with the full 768 on the train queries, through the book's paired tests: the mean difference, the queries that get worse, both p-values, the 95% interval and the effect size. At 128, every check shows a loss. At 256, the permutation and t-test p-values are {{out:truncation-paired-test:256 vs 768, permutation test p}} and {{out:truncation-paired-test:256 vs 768, paired t-test p}}, while the interval only just excludes 0."
+
+[examples.similarity-scale]
+say = "On the test queries, the code finds the query whose best match is least similar, {{out:similarity-scale:first query, lowest best similarity}}, though its top 10 holds {{out:similarity-scale:exact products in its top 10}} exact products, and the query whose tenth match is most similar, {{out:similarity-scale:second query, highest 10th similarity}}. Then it counts the products each would keep above a fixed similarity of 0.5, and the test queries that would keep none."
+
+[examples.spelling-probes]
+say = "For each of the {{out:spelling-probes:spelling probes}} store queries with a typo, the code compares the query as typed with its correct spelling: how similar the two are, how many products their semantic top 10s share, and both rankers' nDCG@10 for each spelling, scored with the query's judgments. For foutains with brick look, the two semantic top 10s share {{out:spelling-probes:foutains, products in both semantic top 10s}} products. Last, it prints the smallest p-value a test on so few queries could give, {{out:spelling-probes:smallest two-sided permutation p-value possible with 4 queries}}."
+
+[[blocks]]
+section = "compare-with-cosine-similarity"
+starts = "dot(q, d)    = q1 × d1"
+say = "The dot product of a query vector and a product vector multiplies them number by number and adds up the results. A vector's length is the square root of the sum of its squared numbers. Their cosine is the dot product divided by the product of the two lengths."
