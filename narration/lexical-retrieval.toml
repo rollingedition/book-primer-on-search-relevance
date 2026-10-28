@@ -1,43 +1,43 @@
 # Spoken descriptions for chapter 5, Lexical retrieval: what narration reads in place of each example, block and table.
 
 [examples.tokenize-product-text]
-say = "The code writes bm25s's tokenizer by hand: lowercase, keep runs of two or more word characters, and drop its 33 stop words. It splits {{out:tokenize-product-text:products tokenized differently}} products differently from bm25s. Then it prints what the train query 7qt slow cooker and the name of product 1, a 7 qt slow cooker, become, and counts the products with the term 7qt, {{out:tokenize-product-text:products with the term 7qt}}, against those whose text says 7 qt. Last, it counts the queries that a pattern keeping digits apart would change, and shows the probe query rug not wool losing its not."
+say = "The code writes bm25s's tokenizer by hand, lowercasing, keeping runs of two or more word characters and dropping its 33 stop words, and checks it against bm25s on every product. Then it prints what the train query 7qt slow cooker and the name of product 1, a 7 qt slow cooker, become, and counts the products with the term 7qt against those whose text says 7 qt. Last, it counts the queries that a pattern keeping digits apart would change, and shows the probe query rug not wool losing its not."
 
 [examples.inverted-index-by-hand]
-say = "The code builds an inverted index from every product's text: for each term, the products that contain it and how often. It prints the vocabulary's size, the average product length and the first postings for cooker, then how many products hold each term of 7qt slow cooker. No product contains 7qt, so the products with every query term number {{out:inverted-index-by-hand:products with every query term}}, while {{out:inverted-index-by-hand:products with any query term}} hold at least one."
+say = "The code builds an inverted index from every product's text: for each term, the products that contain it and how often, and for each product, its length. It prints the vocabulary's size, the average product length and the first postings for cooker, then, for 7qt slow cooker, how many products hold each term, any term and every term."
 
 [examples.tf-idf-by-hand]
-say = "The code computes TF-IDF over the inverted index, prints the IDF of furniture and of each term of laundry basket with wheels, and shows TF-IDF's top 3 for that query with each product's term counts. A partial basket that repeats basket comes first, above the exact product, which alone of the three says wheels. Then it scores TF-IDF and BM25 on the train queries: {{out:tf-idf-by-hand:tf-idf train ndcg@10}} against {{out:tf-idf-by-hand:bm25 train ndcg@10}}."
+say = "The code computes TF-IDF over the inverted index, prints the IDF of furniture and of each term of laundry basket with wheels, and lists TF-IDF's top 3 for that query with each product's score, grade and term counts. Then it compares TF-IDF with BM25 on the train queries, by mean nDCG@10 and judged@10."
 
 [examples.bm25-by-hand]
-say = "The code writes BM25 as bm25s computes it, over the inverted index with k1 set to 1.5 and b to 0.75, and compares every product's score for every query with bm25s's: the largest difference is {{out:bm25-by-hand:largest score difference from bm25s}}. It also prints Robertson's and Lucene's IDF for the common word your, and a term's weight at 1, 2, 4 and 9 occurrences. Asked whether both give the same top 100 for every query, it answers {{out:bm25-by-hand:same top 100 for every query}}."
+say = "The code writes BM25 as bm25s computes it, over the inverted index with k1 set to 1.5 and b to 0.75. It prints Robertson's and Lucene's IDF for the common word your, and a term's weight at 1, 2, 4 and 9 occurrences in a product of average length. Then it reports the largest score difference from bm25s over every product and query, whether both give the same top 100 for every query, and the mean nDCG@10 of each on the train and test queries."
 
 [examples.stemmer-merges-word-forms]
-say = "The code stems eight words two ways, with a stemmer written by hand that cuts a few common endings, and with Snowball English from PyStemmer. The two agree on every word but moldings. Then it counts the products whose text contains floats and molding, against those that contain their stems, and compares the vocabulary with and without stemming: it shrinks by {{out:stemmer-merges-word-forms:vocabulary reduction}}."
+say = "The code stems eight words two ways, with a stemmer written by hand that cuts a few common endings, and with Snowball English from PyStemmer, and prints both stems of each. Then, for floats and for molding, it counts the products whose text contains the word against those that contain its stem, and compares the vocabulary's size with and without stemming."
 
 [examples.bm25s-with-a-stemmer]
-say = "The code indexes the products with bm25s and the Snowball stemmer, tokenizes every query the same way, and compares bm25s's scores with those of the hand-built stemmed index. The query pool floats becomes pool and float, and the largest score difference is {{out:bm25s-with-a-stemmer:largest score difference from bm25s with a stemmer}}."
+say = "The code indexes the products with bm25s and the Snowball stemmer, tokenizes every query the same way, and compares bm25s's scores with those of the hand-built stemmed index for every product and query. It prints the terms that pool floats becomes, and the largest score difference."
 
 [examples.measure-stemming]
-say = "The code scores BM25 with and without stemming on the train and test queries, prints both scores for pool floats and french molding, then runs the planned test comparison at a threshold of 0.01. Stemming gains {{out:measure-stemming:mean difference}} on the test queries. Asked whether the gain is established, the code answers {{out:measure-stemming:established at 0.01}}, and whether the t-test agrees, {{out:measure-stemming:t-test agrees}}. One test query gains {{out:measure-stemming:its gain}} on its own."
+say = "The code scores BM25 with and without stemming on the train and test queries, by mean nDCG@10 and judged@10, and prints both scores for the train queries pool floats and french molding. Then it runs the planned test comparison at a threshold of 0.01, and finds the test query with the largest gain, its gain, and the mean gain without it."
 
 [examples.sweep-k1-and-b]
-say = "The code sweeps a grid of {{out:sweep-k1-and-b:settings in the grid}} settings of k1 and b over the stemmed index on the train queries, prints the grid, and picks the best: k1 of {{out:sweep-k1-and-b:best k1 on train}} and b of {{out:sweep-k1-and-b:best b on train}}. Asked whether that setting lies on the grid's edge, it answers {{out:sweep-k1-and-b:best setting on the grid's edge}}. Then it compares the setting with the defaults on the test queries, a mean difference of {{out:sweep-k1-and-b:mean difference}}."
+say = "The code scores BM25 over the stemmed index on the train queries at five values of k1, from 0.5 to 2, and five of b, from 0 to 1, prints each setting's mean nDCG@10, picks the best and reports whether it lies on the grid's edge. Then it compares the best with the defaults on the test queries, a mean difference of {{out:sweep-k1-and-b:mean difference}}."
 
 [examples.fields-scored-apart]
-say = "On the train queries, the code indexes the product name and the other three fields apart, scores each with BM25, adds the two scores, and compares the result with one combined field: {{out:fields-scored-apart:fields scored apart, train ndcg@10}} against {{out:fields-scored-apart:one field, train ndcg@10}}."
+say = "On the train queries, the code indexes the product name and the other three fields apart, scores each with BM25 and adds the two scores. It compares the result with one combined field by mean nDCG@10 and judged@10, and counts the queries that get better and worse."
 
 [examples.repeat-the-name-field]
-say = "The code repeats the product name 1, 2, 3 or 5 times in the indexed text, scores each version on the train queries, and picks the best, a name weight of {{out:repeat-the-name-field:best name weight on train}}. Then it compares that weight with one field on the test queries, a mean difference of {{out:repeat-the-name-field:mean difference}}. Asked whether the gain is established, it answers {{out:repeat-the-name-field:established at 0.01}}."
+say = "The code repeats the product name 1, 2, 3 or 5 times in the indexed text, scores each version on the train queries, and picks the best. Then it compares that weight with one field on the test queries, a mean difference of {{out:repeat-the-name-field:mean difference}}."
 
 [examples.add-attributes-field]
-say = "The code adds each product's attributes, names and values, to its indexed text, and counts the exact products for clear shower curtain that say clear: {{out:add-attributes-field:exact, with clear in their text}} in their text, and {{out:add-attributes-field:exact, with clear in text or attributes}} once attributes count. It also counts the products whose attributes name a size. Then it scores both indexes on the train and test queries, prints two test queries, clear shower curtain and medium size chandelier, and runs the planned test comparison."
+say = "The code adds each product's attributes, names and values, to its indexed text, and counts the exact products for clear shower curtain that say clear, with and without attributes. It also counts the queries that contain an attribute name and the products whose attributes name a size. Then it scores both indexes on the train and test queries, prints the scores of two test queries, clear shower curtain and medium size chandelier, and runs the planned test comparison."
 
 [examples.phrase-positions-by-hand]
-say = "The code builds a positional index over the product names, checks that BM25 gives barn door and door barn the same scores, and counts the names with both words, {{out:phrase-positions-by-hand:names with barn and door}}, and those with the phrase, {{out:phrase-positions-by-hand:names with the phrase barn door}}. Then it lists the names that have both words but not the phrase: two door mats, a duvet cover, a hardware kit for barn doors, and a glass shower door."
+say = "The code builds a positional index over the product names, checks that BM25 gives barn door and door barn the same scores, and counts the names with both words against those with the phrase. Then it lists the names that have both words but not the phrase."
 
 [examples.phrase-bonus-train-and-test]
-say = "The code adds a bonus to a product's BM25 score for each pair of adjacent query terms that its name holds in order. It tries bonuses of 0, 0.5, 1 and 2 on the train queries and picks {{out:phrase-bonus-train-and-test:best bonus on train}}, then compares that bonus with none on the test queries, a mean difference of {{out:phrase-bonus-train-and-test:mean difference}}."
+say = "The code takes BM25's top 100 for each query and adds a bonus to a product's score for each pair of adjacent query terms that its name holds in order. It tries bonuses of 0, 0.5, 1 and 2 on the train queries and picks the best, then compares that bonus with none on the test queries, a mean difference of {{out:phrase-bonus-train-and-test:mean difference}}."
 
 [[blocks]]
 section = "weight-terms-with-tf-idf"
