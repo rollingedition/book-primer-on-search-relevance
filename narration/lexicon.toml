@@ -1,0 +1,48 @@
+# How narration says this book's own terms. They add to the shared rules in the standards' data/narration.toml, and
+# win where both have one. [terms] match exactly, as written; [words] match whole words in any case, such as the
+# words of an example's ID.
+
+[terms]
+# Datasets, benchmarks and venues
+"WANDS" = "wands"
+"ECIR" = "E C I R"
+"TREC" = "trek"
+"REtrieval" = "Retrieval"
+"MS MARCO" = "M S Marco"
+# Models and their names
+"BERT" = "Bert"
+"V100" = "V one hundred"
+"Snowflake/snowflake-arctic-embed-m-v1.5" = "Snowflake's arctic embed M, version one point five"
+"Alibaba-NLP/gte-reranker-modernbert-base" = "Alibaba N L P's G T E reranker, modern Bert base"
+# Measures and formulas
+"MAP" = "M A P"
+"MRR" = "M R R"
+"log2" = "log base two"
+# Code read as what it holds
+"{query_id: {product_id: grade}}" = "a mapping from query ID to product ID to grade"
+"{query_id: [product_id, ...]}" = "a mapping from query ID to a list of product IDs"
+"lib.lexical.LexicalSearch" = "lib dot lexical dot lexical search"
+"lib.semantic.SemanticSearch" = "lib dot semantic dot semantic search"
+"examples/data/wands/README.md" = "examples slash data slash wands slash read me dot M D"
+"lib.store.qrels" = "lib dot store dot Q rels"
+"bm25s.tokenize" = "B M twenty-five S dot tokenize"
+# File extensions in code, as in recordings/embeddings.py. Each reading starts with a space, because the extension
+# follows the file's name with none.
+".py" = " dot pie"
+".md" = " dot M D"
+".csv" = " dot C S V"
+".json" = " dot Jason"
+"LexicalSearch" = "lexical search"
+"SemanticSearch" = "semantic search"
+
+[words]
+"bm25" = "B M twenty-five"
+"bm25s" = "B M twenty-five S"
+"ndcg" = "N D C G"
+"dcg" = "D C G"
+"rrf" = "R R F"
+"k1" = "k one"
+"id" = "I D"
+"ids" = "I Ds"
+"ge" = "G E"
+"llm" = "L L M"
