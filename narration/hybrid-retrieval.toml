@@ -1,45 +1,45 @@
 # Spoken descriptions for chapter 7, Hybrid retrieval: what narration reads in place of each example, block and table.
 
 [examples.bm25-semantic-wins-by-query]
-say = "The code scores BM25 and semantic retrieval on every train query, counts the queries each one wins and the ties, and computes the mean you'd get by taking the better of the two rankings for each query: {{out:bm25-semantic-wins-by-query:better of the two, chosen per query}}. It also counts the train queries with a digit that BM25 wins, and lists the queries where BM25 leads by 0.1 or more, such as butcher block island and french molding."
+say = "The code scores BM25 and semantic retrieval on every train query, counts the queries each one wins and the ties, and computes the mean you'd get by taking the better of the two rankings for each query: {{out:bm25-semantic-wins-by-query:better of the two, chosen per query}}. It also counts the train queries that contain a digit and the ones among them that BM25 wins, and lists the queries where BM25 leads by 0.1 or more, such as butcher block island and french molding."
 
 [examples.overlap-and-union-recall]
 say = "On the train queries, the code counts the products that BM25's and semantic retrieval's top 10s share, then measures what share of each query's exact products each top 100 holds, and their union: {{out:overlap-and-union-recall:union top 100, share of exact products retrieved}}. It repeats the shares for lists cut to 20."
 
 [examples.two-queries-two-winners]
-say = "For two train queries, the code counts the exact products in each retriever's top 10 and lists its top 5 with their judgments. For butcher block island, BM25's list is mostly kitchen islands with butcher-block tops, while semantic retrieval's opens with prep tables, a cart and a butcher block, all partial. For 7qt slow cooker it's the other way round, and the code counts the products that write 7qt, {{out:two-queries-two-winners:products containing 7qt}}, and 7 qt, {{out:two-queries-two-winners:products containing 7 qt}}."
+say = "For two train queries, the code counts the exact products in each retriever's top 10 and lists its top 5 with their judgments. For butcher block island, BM25's list is mostly kitchen islands with butcher-block tops, while semantic retrieval's opens with prep tables, a cart and a butcher block, all partial. For 7qt slow cooker it's the other way round, and the code also counts the products that write the size with no space, as the query does, and those that write it with a space."
 
 [examples.fusion-gain-by-winning-retriever]
-say = "On the train queries, the code compares semantic retrieval with BM25, and chapter 1's unweighted fusion with semantic retrieval, with judged@10 and paired tests. Then it splits the train queries by which retriever wins, and counts in each group where the fusion beats or loses to semantic retrieval. Fusion helps on the queries BM25 wins and hurts on those semantic retrieval wins, and over all the train queries it differs from semantic retrieval by {{out:fusion-gain-by-winning-retriever:hybrid minus semantic, mean ndcg@10}}."
+say = "On the train queries, the code prints both retrievers' judged@10, then compares semantic retrieval with BM25, and chapter 1's unweighted fusion with semantic retrieval, with paired tests. Next it splits the train queries by which retriever wins, and in each group counts the queries where fusion beats semantic retrieval and those where it loses: fusion helps on the queries BM25 wins and hurts on those semantic retrieval wins."
 
 [examples.raw-scores-versus-min-max]
-say = "The code looks up both scores for every candidate of each train query, prints the two ranges for laundry basket with wheels, BM25's far wider than the similarity's, and adds the scores with equal weights, first raw and then after min-max scaling. The raw sum's top 10 shares {{out:raw-scores-versus-min-max:raw sum, products shared with the bm25 top 10}} products with BM25's top 10 on average, and the scaled sum's {{out:raw-scores-versus-min-max:min-max sum, products shared with the bm25 top 10}}. The scaled sum scores {{out:raw-scores-versus-min-max:min-max sum ndcg@10}}, and matches the book's blend module on every train query."
+say = "The code looks up both scores for every candidate of each train query, prints the two ranges for laundry basket with wheels, BM25's far wider than the similarity's, and adds the scores with equal weights, first raw and then after min-max scaling. For each sum it prints nDCG@10 and how many products its top 10 shares on average with each retriever's top 10, and it checks the scaled sum against the book's blend module."
 
 [examples.rrf-k-on-train]
-say = "The code compares how much rank 1 earns over rank 10 with k set to 1 and to 60, then fuses BM25 and semantic retrieval with six values of k on the train queries, from 1 to 300. The best, k of {{out:rrf-k-on-train:best k on train}}, leads k of 60 by {{out:rrf-k-on-train:best k minus k=60}}, with a permutation p-value of {{out:rrf-k-on-train:best k minus k=60, permutation p}}."
+say = "The code compares how much rank 1 earns over rank 10 with k set to 1 and to 60, then fuses BM25 and semantic retrieval with six values of k on the train queries, from 1 to 300. It prints each setting's nDCG@10, finds the best at k of {{out:rrf-k-on-train:best k on train}}, and tests it against k of 60 with both paired tests and a bootstrap interval."
 
 [examples.weighted-rrf-one-product]
-say = "With an illustrative weight of 0.75 for semantic retrieval, the code scores every candidate for laundry basket with wheels by weighted RRF. It prints the first product, the {{out:weighted-rrf-one-product:first product}}, with its rank in each ranking and its score, {{out:weighted-rrf-one-product:its weighted rrf score}}, and its ranking matches the book's blend module in {{out:weighted-rrf-one-product:places that match lib.blend.weighted_rrf}} places."
+say = "With an illustrative weight of 0.75 for semantic retrieval, the code scores every candidate for laundry basket with wheels by weighted RRF. It prints the top product with its rank in each ranking and its score, then checks the ranking it built, place by place, against the book's blend module."
 
 [examples.tune-blend-weights-on-train]
-say = "On the train queries, the code tunes α from 0 to 1 in steps of 0.1, for the weighted sum under three normalizations and for weighted RRF. It prints the min-max blend's score at every α, and each blend's best α and score. Then it compares the other normalizations and weighted RRF with tuned min-max, and the two blends that go to test with semantic retrieval: the weighted sum gains {{out:tune-blend-weights-on-train:min-max gain over semantic}}, with a permutation p-value of {{out:tune-blend-weights-on-train:min-max gain over semantic, permutation p}}."
+say = "On the train queries, the code tunes α from 0 to 1 in steps of 0.1, for the weighted sum under three normalizations and for weighted RRF. It prints the min-max blend's score at every α, and each blend's best α and score. Then it compares the other normalizations and weighted RRF with tuned min-max, and tests the two blends that go to the test queries against semantic retrieval: the weighted sum gains {{out:tune-blend-weights-on-train:min-max gain over semantic}}, with a permutation p-value of {{out:tune-blend-weights-on-train:min-max gain over semantic, permutation p}}."
 
 [examples.blend-weight-bootstrap]
-say = "The code resamples the train queries {{out:blend-weight-bootstrap:resamples}} times with a fixed seed, tunes α on each sample for both blends, and counts how often each α wins. For the weighted sum, the α tuned on all the train queries, {{out:blend-weight-bootstrap:weighted sum alpha tuned on all train queries}}, wins {{out:blend-weight-bootstrap:weighted sum resamples choosing alpha 0.7}} of them. For weighted RRF, the α tuned on all the train queries, {{out:blend-weight-bootstrap:weighted rrf alpha tuned on all train queries}}, wins only {{out:blend-weight-bootstrap:weighted rrf resamples choosing alpha 0.6}}."
+say = "The code resamples the train queries {{out:blend-weight-bootstrap:resamples}} times with a fixed seed and tunes α on each sample for both blends. For each blend it prints the α tuned on all the train queries, then the number of resamples that choose each α."
 
 [examples.tuning-with-ties-reversed]
 say = "The code lists BM25's tied products in descending product ID order instead of ascending, and tunes RRF's k and both blends' α again on the train queries. Both of RRF's settings move, while the weighted sum's α stays at {{out:tuning-with-ties-reversed:weighted sum alpha, ties reversed}}."
 
 [examples.tuned-blends-on-test]
-say = "The code chooses each blend's α on the train queries, runs both blends once on the test queries, and compares each with semantic retrieval at the corrected threshold of {{out:tuned-blends-on-test:p-value threshold for each comparison}}. For each it prints the score, the mean difference, both p-values, the interval, and whether the difference is established. The weighted sum scores {{out:tuned-blends-on-test:weighted sum ndcg@10}} and weighted RRF {{out:tuned-blends-on-test:weighted rrf ndcg@10}}, against {{out:tuned-blends-on-test:semantic ndcg@10}} for semantic retrieval."
+say = "The code chooses each blend's α on the train queries, runs both blends once on the test queries, and compares each with semantic retrieval at the corrected threshold of {{out:tuned-blends-on-test:p-value threshold for each comparison}}. For each it prints the score, the mean difference, both p-values, the interval, and whether the difference is established."
 
 [examples.exact-products-missing-query-words]
-say = "The code splits the train queries and products into words as BM25 does, counts the exact pairs whose product lacks at least one query word, a share of {{out:exact-products-missing-query-words:share missing a query word}}, and lists the words missed most often, led by ligth. Then, for midcentury tv unit, it counts the exact products that contain midcentury, unit and stand, and those whose text says mid-century."
+say = "The code splits the train queries and products into words as BM25 does, counts the exact pairs whose product lacks at least one query word, a share of {{out:exact-products-missing-query-words:share missing a query word}}, and lists the words missed most often, led by the typo ligth. Then, for midcentury tv unit, it counts the exact products that contain each of midcentury, unit and stand, and those whose text writes mid-century with a hyphen."
 
 [[blocks]]
 section = "normalize-scores-before-adding"
 starts = "min-max(s) = (s − lowest score"
-say = "Min-max scaling takes the lowest score among the query's candidates from a score, and divides by the gap between the highest and the lowest. The blend is α times the scaled similarity, plus 1 minus α times the scaled BM25 score."
+say = "Min-max scaling subtracts the lowest score among the query's candidates from a score, and divides by the gap between the highest and the lowest. The blend is α times the scaled similarity, plus 1 minus α times the scaled BM25 score."
 
 [[blocks]]
 section = "learned-sparse-splade"
