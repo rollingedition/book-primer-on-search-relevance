@@ -1,47 +1,47 @@
 # Spoken descriptions for chapter 11, Testing changes: what narration reads in place of each example, block and table.
 
 [examples.diff-semantic-against-bm25]
-say = "The code scores BM25 and semantic retrieval on every test query, builds a table with one row per query and the change between the two, and runs the chapter's one planned comparison through the book's paired tests. Asked whether the change of {{out:diff-semantic-against-bm25:mean change}} is established, it answers {{out:diff-semantic-against-bm25:established}}. It counts the wins, losses and ties, and lists the {{out:diff-semantic-against-bm25:losses}} queries semantic retrieval loses, led by decorative white pillow."
+say = "The code scores BM25 and semantic retrieval on every test query, builds a table with one row per query and the change between the two, and runs the chapter's one planned comparison through the book's paired tests, printing whether the change is established. Then it counts the wins, losses and ties, and lists every query semantic retrieval loses, worst first, starting with decorative white pillow."
 
 [examples.urisk-of-two-candidates]
-say = "The code writes URisk as a short function, and computes it with α set to 1, so each loss counts double, for two candidates against BM25 on the test queries: full semantic retrieval, and semantic retrieval with only the first 128 numbers of each embedding. Full semantic retrieval's URisk is {{out:urisk-of-two-candidates:semantic urisk with alpha 1}}, while the cheaper ranker's mean change of {{out:urisk-of-two-candidates:semantic 128 mean change}} becomes a URisk of {{out:urisk-of-two-candidates:semantic 128 urisk with alpha 1}}."
+say = "The code prints each ranker's judged@10, then, for each candidate against BM25 on the test queries, its mean change, wins, losses, largest loss and URisk, with each loss counted double. It ends with the cheaper ranker's p-values and interval."
 
 [examples.unjudged-score-range]
-say = "The code counts the unjudged products in the top 10s of BM25 and of the cheaper semantic ranker, then rescores the runs under three scenarios: as judged, with BM25's unjudged products counted exact, and with the cheaper ranker's counted exact, each time for every run alike. Asked whether the leader changes between the scenarios, it answers {{out:unjudged-score-range:leader changes, semantic 128 against bm25}} for the cheaper ranker and {{out:unjudged-score-range:leader changes, semantic against bm25}} for full semantic retrieval."
+say = "The code counts the unjudged products in the top 10s of BM25 and of the cheaper semantic ranker. Then it scores those two runs and full semantic retrieval as judged, and again with each run's unjudged products counted exact in turn, applying each scenario to every run alike. Asked whether the leader against BM25 changes between these scenarios, it answers {{out:unjudged-score-range:leader changes, semantic 128 against bm25}} for the cheaper ranker and {{out:unjudged-score-range:leader changes, semantic against bm25}} for full semantic retrieval."
 
 [examples.tuning-on-test-inflates]
-say = "The code chooses the semantic weight of a weighted RRF blend two ways, on the train queries and on the test queries themselves, and reports both on test: the weight chosen on test scores {{out:tuning-on-test-inflates:test ndcg@10, weight chosen on test}}, against {{out:tuning-on-test-inflates:test ndcg@10, weight chosen on train}} for the weight chosen on train. Then it splits the train queries at random 1,000 times, 30 to choose on and 20 to report on, and finds that choosing on the reported queries inflates their score by {{out:tuning-on-test-inflates:average inflation, 20 reported queries}} on average."
+say = "The code scores the blend on every query at each of the {{out:tuning-on-test-inflates:settings tried}} semantic weights, and prints the weight chosen on train and the weight chosen on test, each with its score on the test queries, beside semantic retrieval alone. From the 1,000 random splits of the train queries, it prints how much choosing on the 20 reported queries inflates their score on average."
 
 [examples.aa-tests-with-peeking]
-say = "The code simulates {{out:aa-tests-with-peeking:simulated A/A tests}} A/A tests, in which both groups get the same search, with 2,000 shoppers a day in each group and 5% of them buying, over 14 days. Read once at the end, a share of {{out:aa-tests-with-peeking:significant at the planned end}} come out significant; checked every day, {{out:aa-tests-with-peeking:significant on some day, checked daily}} look significant on some day. Then it tests a split planned as even that came out 28,000 to 27,100, and gets a p-value {{out:aa-tests-with-peeking:sample ratio mismatch p}}."
+say = "The code simulates the A/A tests under those assumptions, applies the two-proportion test to each one after every day, and prints the share that comes out significant at the planned end and the share that looks significant on some day when checked daily. Then it tests a split planned as even that came out uneven, and prints its p-value."
 
 [examples.sample-size-from-power]
-say = "The code computes the rule of thumb's coefficient with SciPy, {{out:sample-size-from-power:coefficient for two groups}}, then applies the rule to Kohavi et al.'s two worked examples, revenue per user and a 5% conversion rate, and to the store's assumed conversion rate with a 2% and a 1% change to detect. Halving the change takes the users per group from {{out:sample-size-from-power:users per group for a 2% change}} to {{out:sample-size-from-power:users per group for a 1% change}}."
+say = "The code prints the coefficient the normal distribution gives, then the users per group the rule of thumb asks for in each of Kohavi et al.'s two worked examples, and for the store's assumed conversion rate with a 2% and a 1% change to detect."
 
 [examples.queries-needed-for-power]
-say = "The code takes the spread of the per-query differences between the hybrid and semantic retrieval on the test queries, {{out:queries-needed-for-power:spread of per-query changes}}, and works out the smallest change that 30 queries detect with 80% power, {{out:queries-needed-for-power:smallest change 30 queries detect}}, and the queries a change of 0.01 would need, {{out:queries-needed-for-power:queries needed for a change of 0.01}}. Then it checks the arithmetic by simulation with SciPy's power function: the simulated power at that change is {{out:queries-needed-for-power:simulated power at that change}}."
+say = "The code prints the spread of the per-query differences between the hybrid and semantic retrieval on the test queries, and from it the smallest change 30 queries detect with 80% power and the number of queries a change of 0.01 would need. Then a simulation with SciPy estimates the paired t-test's power at that smallest change, and says whether it falls below the planned 0.8."
 
 [examples.team-draft-one-query]
-say = "The code writes team draft by hand, with a seeded coin, and interleaves semantic retrieval's and BM25's rankings for clear shower curtain into one ten-place list, printing each place's team, judgment and product. Each ranker picks half the places, and the list ends with one of BM25's shower curtain hooks, judged irrelevant. The book's experiments module builds the same list."
+say = "The code writes team draft by hand, with a seeded coin, and interleaves semantic retrieval's and BM25's rankings for clear shower curtain into one ten-place list, printing each place's team, judgment and product. BM25 takes the first place with a partial curtain, and exact and partial curtains fill every place but the last. The book's experiments module builds the same list."
 
 [examples.one-simulated-shopper]
-say = "The code sends one simulated navigational shopper down that list. At the first place, a partial product from BM25, the shopper clicks and stays; at the second, an exact product from semantic retrieval, the shopper clicks and leaves. With {{out:one-simulated-shopper:clicks for semantic}} click for semantic retrieval and {{out:one-simulated-shopper:clicks for bm25}} for BM25, the search goes to {{out:one-simulated-shopper:this search goes to}}."
+say = "The code sends one simulated navigational shopper down that list, crediting each click to the team that picked the product. At the first place, a partial product from BM25, the shopper clicks and stays; at the second, an exact product from semantic retrieval, the shopper clicks and leaves."
 
 [examples.simulated-interleaving-verdict]
 say = "The code prints the shopper model's click and stop probabilities, then simulates 10,000 interleaved searches with a fixed seed for three pairs: semantic retrieval against BM25, the hybrid against semantic retrieval, and the hybrid with BM25's ties reversed against semantic retrieval. For each pair it reads the sign test's verdict at 100, 1,000 and 10,000 searches. Asked whether reversing BM25's ties changes the hybrid's verdict at 100 searches, it answers {{out:simulated-interleaving-verdict:hybrid against semantic, verdict at 100 searches changes with bm25 ties reversed}}."
 
 [examples.clicks-per-search-misleads]
-say = "The code simulates 5,000 searches on each ranker, BM25 and semantic retrieval, for two kinds of shopper: the navigational one, and a perfect one who reads all ten results and clicks every exact product. It compares clicks per search and the share of searches with an exact click. Clicks per search favours BM25 for the navigational shopper and semantic retrieval for the perfect one. Asked whether it reverses between shoppers, the code answers {{out:clicks-per-search-misleads:clicks per search reverses between shoppers}}."
+say = "The code simulates 5,000 searches on each ranker, BM25 and semantic retrieval, for two kinds of shopper: the navigational one, and a perfect one who reads all ten results and clicks every exact product. For each shopper it prints both rankers' clicks per search and share of searches with an exact click, each difference with its p-value, then says for each metric whether the ranker it favours reverses between shoppers."
 
 [[blocks]]
 section = "weigh-losses-with-urisk"
 starts = "URisk = (1 / N)"
-say = "URisk is 1 over the number of queries, times the sum of the changes on the queries that improved, minus α plus 1 times the sum of the sizes of the changes on the queries that got worse."
+say = "URisk adds up the changes on the queries that improved, subtracts the sizes of the changes on the queries that got worse, each counted α plus 1 times, and divides the result by the number of queries."
 
 [[blocks]]
 section = "run-an-ab-test"
 starts = "z = (p_B − p_A)"
-say = "z is the difference between the two groups' conversion rates, divided by the square root of their average rate, times 1 minus that average, times 2 over n. The p-value is twice the probability that a standard normal value exceeds the size of z."
+say = "z is group B's conversion rate minus group A's, divided by the square root of the product of their average rate, 1 minus that average, and 2 over n. The p-value is twice the probability that a standard normal value exceeds the size of z."
 
 [[blocks]]
 section = "size-tests-with-power"
