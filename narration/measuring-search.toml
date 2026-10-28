@@ -7,39 +7,39 @@ say = "The code counts the exact products in BM25's top 10 for clear shower curt
 say = "The code writes reciprocal rank by hand and scores BM25's ranking for clear shower curtain twice, first counting only exact products as relevant, then partial ones too. Then it computes the mean reciprocal rank of BM25 and semantic retrieval over the test queries, checks each against the book's metrics module, and counts the queries where each ranker puts an exact product first."
 
 [examples.ndcg-from-scratch]
-say = "The code writes DCG and nDCG from scratch, with the ideal ranking built from every judged product, and checks them against the book's metrics module on all {{out:ndcg-from-scratch:rankings checked}} rankings of the BM25, semantic and hybrid runs. Then it prints the grades of BM25's top 10 for luau string lights beside the best possible grades: the two lists are the same, so the score is {{out:ndcg-from-scratch:ndcg@10}}."
+say = "The code writes DCG and nDCG from scratch, with the ideal ranking built from every judged product, and checks them against the book's metrics module on every test query of the BM25, semantic and hybrid runs. Then it prints the grades of BM25's top 10 for luau string lights beside the best possible grades: the two lists are the same."
 
 [examples.ndcg-matches-scikit-learn]
-say = "The code first passes scikit-learn's nDCG function only the grades of BM25's top 10 for clear shower curtain, and gets {{out:ndcg-matches-scikit-learn:ndcg@10, only the top 10 passed}}, against {{out:ndcg-matches-scikit-learn:ndcg@10 from lib.metrics}} from the book's metrics. Then it builds each query's row from every judged product, scored by rank, and the two agree on all {{out:ndcg-matches-scikit-learn:rankings compared}} rankings of the three runs. A ranking cut to 5 products still gets different scores from the two."
+say = "The code first passes scikit-learn's nDCG function only the grades of BM25's top 10 for clear shower curtain, and prints that score beside the one from the book's metrics module. Then it builds each query's row from every judged product, scored by rank, and compares the two again: on every test query of the three runs, and on that ranking cut to 5 products."
 
 [examples.metric-choice-on-train]
-say = "On the train queries, the code scores semantic retrieval and the hybrid with four metrics: precision@10, MRR, nDCG@10, and nDCG@10 with exponential gains. It prints both means for each metric and the ranker that scores higher. Semantic retrieval wins {{out:metric-choice-on-train:metrics won by semantic}} of the four metrics, and the hybrid {{out:metric-choice-on-train:metrics won by hybrid}}."
+say = "On the train queries, the code scores semantic retrieval and the hybrid with four metrics: precision@10, MRR, nDCG@10, and nDCG@10 with exponential gains. It prints both means for each metric and the ranker that scores higher, then how many metrics each ranker wins and the largest of the four gaps."
 
 [examples.per-query-hybrid-versus-bm25]
 say = "The code takes the hybrid's nDCG@10 minus BM25's on each test query, and prints the mean and median difference, the wins, losses and ties, and the hybrid's three largest losses. Then it finds the query with the largest gain, {{out:per-query-hybrid-versus-bm25:largest gain}}, and compares the relative gain of the means with the mean of the per-query relative gains, with and without that query."
 
 [examples.permutation-test-by-hand]
-say = "The code takes the hybrid's per-query differences from semantic retrieval on the test queries, flips their signs at random 9,999 times, and counts how often the flipped mean lands at least as far from 0 as the observed one, {{out:permutation-test-by-hand:observed mean difference}}. That share is the p-value. SciPy's permutation test gives a close one, so at the 0.05 level the difference is {{out:permutation-test-by-hand:difference at the 0.05 level}}."
+say = "The code takes the hybrid's per-query differences from semantic retrieval on the test queries, flips their signs at random 9,999 times, and counts how often the flipped mean lands at least as far from 0 as the observed mean. That share is the p-value. The code checks it against SciPy's permutation test, and prints whether the difference is larger than chance at the 0.05 level."
 
 [examples.paired-t-test-by-hand]
-say = "For semantic retrieval against BM25, and for the hybrid against semantic retrieval, the code divides the mean per-query difference by its standard error to get t, and reads the two-sided p-value off the t distribution. Both p-values match SciPy's paired t-test: {{out:paired-t-test-by-hand:semantic minus bm25 p by hand}} for the first gap, and {{out:paired-t-test-by-hand:hybrid minus semantic p by hand}} for the second."
+say = "For semantic retrieval against BM25, and for the hybrid against semantic retrieval, the code divides the mean per-query difference by its standard error to get t, and reads the two-sided p-value off the t distribution. Both p-values match SciPy's paired t-test to three decimals."
 
 [examples.bootstrap-interval-by-hand]
 say = "For the same two gaps, the code resamples the test queries with replacement 9,999 times, takes the middle 95% of the resampled means, and checks that interval against SciPy's percentile bootstrap. Then it runs SciPy's default method, BCa, and prints each interval and the effect size. The interval for semantic retrieval's lead over BM25 {{out:bootstrap-interval-by-hand:semantic minus bm25 bca interval and 0}}, and the one for the hybrid's gap {{out:bootstrap-interval-by-hand:hybrid minus semantic bca interval and 0}}."
 
 [examples.interval-coverage-check]
-say = "The code treats the hybrid's per-query differences from semantic retrieval as every query there is, so the true gap is known, and draws {{out:interval-coverage-check:trials}} new sets of the same size from them. On each it builds a BCa interval and a t-test interval at two levels, and counts how often each covers the true gap. At a nominal 95%, BCa covers it {{out:interval-coverage-check:bca coverage at 0.95}} of the time."
+say = "From the hybrid's differences, the code draws {{out:interval-coverage-check:trials}} new sets of queries and builds a BCa interval and a t-test interval on each, at 95% and at the level for three planned comparisons. It prints how often each kind covers the true gap at each level, and the standard error of a coverage near 95%."
 
 [examples.compare-chapter-one-rankers]
 say = "The code runs chapter 1's four rankers through the harness on the test queries and prints each one's mean nDCG@10 and judged@10. Then it sets the Bonferroni threshold for the {{out:compare-chapter-one-rankers:planned comparisons}} planned comparisons, {{out:compare-chapter-one-rankers:p-value threshold}}, and for each planned comparison and the exploratory one prints the mean difference, the interval, both p-values, the effect size, the wins, losses and ties, and whether the difference is established."
 
 [examples.split-changes-the-verdict]
-say = "The code runs the exploratory comparison, the reranked hybrid minus semantic retrieval, on the test queries and again on the train queries, and prints the gap and the higher-scoring run for each. The higher-scoring run is {{out:split-changes-the-verdict:test higher-scoring run}} on the test queries, and {{out:split-changes-the-verdict:train higher-scoring run}} on the train queries."
+say = "The code runs the exploratory comparison, the reranked hybrid minus semantic retrieval, on the test queries and again on the train queries, and prints the gap and the higher-scoring run for each, with the permutation p-value on the test queries."
 
 [[blocks]]
 section = "build-ndcg-from-dcg"
 starts = "DCG@k  = sum over positions"
-say = "DCG@k is the sum, over positions 1 to k, of each product's grade divided by log base 2 of its position plus 1. nDCG@k is DCG@k divided by the DCG@k of the ideal ranking."
+say = "DCG@k is the sum, over positions 1 to k, of each product's grade divided by log base 2 of one more than its position. nDCG@k is DCG@k divided by the DCG@k of the ideal ranking."
 
 [[blocks]]
 section = "paired-t-test-on-queries"
@@ -49,4 +49,4 @@ say = "t is the mean of the per-query differences divided by their standard erro
 [[tables]]
 section = "compare-runs-in-a-harness"
 starts = "| Measure | Semantic minus BM25 |"
-say = "A table of the harness's results on nDCG@10, one comparison per column: semantic retrieval minus BM25, the hybrid minus semantic retrieval, and the reranked hybrid minus the hybrid, which are planned, and the reranked hybrid minus semantic retrieval, which is exploratory. Its rows give each comparison's kind, mean difference, interval, permutation and t-test p-values, effect size, wins, losses and ties, and whether it is established. Only the first, semantic retrieval's lead of {{out:compare-chapter-one-rankers:semantic minus bm25}} over BM25, is established."
+say = "A table of the harness's results on nDCG@10, one comparison per column: semantic retrieval minus BM25, the hybrid minus semantic retrieval, and the reranked hybrid minus the hybrid, which are planned, and the reranked hybrid minus semantic retrieval, which is exploratory. Its rows give each comparison's kind, mean difference, interval, permutation and t-test p-values, effect size, wins, losses and ties, and whether it is established. Semantic retrieval leads BM25 by {{out:compare-chapter-one-rankers:semantic minus bm25}}, and the other three comparisons all have a mean difference below zero."
