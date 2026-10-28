@@ -1,0 +1,58 @@
+# Spoken descriptions for chapter 8, Understanding queries: what narration reads in place of each example, block and
+# table.
+
+[examples.catalog-spelling-corrector]
+say = "The code counts every word in the catalog's text as the lexicon, and corrects each query word the catalog doesn't use to the commonest catalog word one edit away, or else two. It changes {{out:catalog-spelling-corrector:queries changed}} queries, {{out:catalog-spelling-corrector:of them, train queries}} of them train queries, and turns the test query tye dye duvet cover into {{out:catalog-spelling-corrector:tye dye duvet cover (test), corrected}}. It ends with how often the catalog uses a few words, among them the brands kohler and whitehaven."
+
+[examples.spelling-context-counts]
+say = "For the typo tye before dye, and the word an before water, the code counts how often each catalog word within one edit of it comes right before the query's next word. The word tie comes before dye {{out:spelling-context-counts:catalog count of tie dye}} times, and the word and before water {{out:spelling-context-counts:catalog count of and water}} times, while the corrector's choices come there {{out:spelling-context-counts:catalog count of the dye, the corrector's choice}} and {{out:spelling-context-counts:catalog count of an water, the corrector's choice}} times."
+
+[examples.measure-spelling-corrections]
+say = "For each of the store's {{out:measure-spelling-corrections:typo queries}} typo queries, and for tye dye duvet cover, the code corrects the query and scores BM25 on both spellings, and semantic retrieval where the recordings hold an embedding of the correct spelling. Correcting foutains with brick look raises both retrievers, ligth bulb doesn't move, and for the two test queries the corrector either changes nothing or can't be scored for semantic retrieval."
+
+[examples.normalize-units-both-sides]
+say = "The code counts how the catalog writes inches after a number, with two apostrophes, a double quote or the word inch, and prints the terms the tokenizer makes of a few normalized texts. Then it builds BM25 over the text as written, under a first rule written from the queries, and under the full rule, and scores each of the {{out:normalize-units-both-sides:queries with a unit}} queries with a unit all three ways. Normalizing lifts 7qt slow cooker from {{out:normalize-units-both-sides:62 (train), bm25 ndcg@10 as written}} to {{out:normalize-units-both-sides:62 (train), bm25 ndcg@10 normalized}}, while the first rule drops 48 inch kitchen hood to {{out:normalize-units-both-sides:482 (test), bm25 ndcg@10 first try}}."
+
+[examples.synonym-expansion-train-and-test]
+say = "The code expands each query with the book's {{out:synonym-expansion-train-and-test:synonym groups}} synonym groups, and scores BM25 on the queries as typed and as expanded, on train and on test. On train it finds the largest gain, {{out:synonym-expansion-train-and-test:largest train gain}}, and the largest loss, {{out:synonym-expansion-train-and-test:largest train loss}}, which gets {{out:synonym-expansion-train-and-test:largest train loss, words added}} added and pulls unjudged hampers into its top 10. On test, the list changes {{out:synonym-expansion-train-and-test:test queries the list changes}} query, and the planned comparison follows."
+
+[examples.query-classes-by-hand]
+say = "The code trains naive Bayes by hand on word counts of the product text, one row per product and class, and predicts a class for every query: its predictions match scikit-learn's multinomial naive Bayes on {{out:query-classes-by-hand:same predictions as MultinomialNB}} queries. Then it compares them with WANDS's query class and with the classes of each query's exact products, and prints three predictions, such as Light Bulbs for outdoor light fixtures, and the one query class that no product has."
+
+[examples.class-boost-train-and-test]
+say = "The code predicts each query's class with the classifier trained on products, and counts the exact train products outside their query's predicted class: {{out:class-boost-train-and-test:exact train products outside the predicted class}}. On the train queries it tries a filter on the class and five boosts to semantic retrieval's similarities. The filter scores {{out:class-boost-train-and-test:train ndcg@10 filter}} against {{out:class-boost-train-and-test:train ndcg@10 semantic}}, and the best boost, {{out:class-boost-train-and-test:best boost on train}}, goes to the planned test comparison."
+
+[examples.llm-rewrites-on-train]
+say = "The code reads the rewrite recording's manifest and prints the model, the embedding model and the prompt's first line, then three rewrites: a spelling fixed, a code kept, and malachi sled turned into a sofa, beside its exact products, which are tables. Then it scores BM25 on the rewritten text and semantic retrieval on the rewrite's embedding, over the train queries. Both fall, BM25 from {{out:llm-rewrites-on-train:train ndcg@10 bm25, typed}} to {{out:llm-rewrites-on-train:train ndcg@10 bm25, rewrite}}."
+
+[examples.llm-rewrites-on-test]
+say = "On the test queries, the code runs two planned comparisons, BM25 and semantic retrieval each on the rewrite against the query as typed, then repeats both on condensed lists as an exploratory check. Asked whether each difference is established, it answers {{out:llm-rewrites-on-test:llm rewrite, bm25, established at 0.01}} for BM25 and {{out:llm-rewrites-on-test:llm rewrite, semantic, established at 0.01}} for semantic retrieval, whose nDCG@10 falls from {{out:llm-rewrites-on-test:llm rewrite, semantic, test ndcg@10 typed}} to {{out:llm-rewrites-on-test:llm rewrite, semantic, test ndcg@10 rewrite}}."
+
+[examples.rewrite-largest-changes]
+say = "For each retriever, the code prints the test query whose score the rewrite lowers most and the one it raises most, each with the change, the rewrite and the unjudged products in the rewritten top 10. For BM25's largest gain, refrigerator with ice an water in door, it also scores the query with only its spelling fixed, and finds that bm25s treats both words, an and its correction, as stop words."
+
+[examples.hyde-train-and-test]
+say = "On the train queries, the code searches with the hypothetical product's embedding alone and averaged with the query's, and for BM25 with the hypothetical text alone and with the query repeated five times before it. The hypothetical product alone loses for both retrievers, and keeping the query brings each back to about its score on the query alone. Then it runs the planned test comparison of HyDE against semantic retrieval: a mean difference of {{out:hyde-train-and-test:hyde, semantic, mean difference}}."
+
+[examples.follow-up-refinements]
+say = "The code reads the {{out:follow-up-refinements:conversations}} conversations written for the book and prints one: {{out:follow-up-refinements:first query}}, followed by {{out:follow-up-refinements:follow-up}}. It searches each conversation five ways, the first query, the follow-up alone, the turns joined, the standalone rewrite, and that rewrite filtered on the refined value, and measures the share of each top 10 that keeps the refinement, is the right kind of product, or both. The follow-up alone keeps the refinement but loses the product: a share of only {{out:follow-up-refinements:follow-up alone, right kind}} of its top 10s is the right kind."
+
+[[blocks]]
+section = "correct-spelling-from-catalog"
+starts = "correction(t) = argmax over candidates"
+say = "The correction of a typed word t is the candidate c with the highest probability of c, times the probability of typing t when you mean c."
+
+[[blocks]]
+section = "classify-queries-from-products"
+starts = "predicted class = argmax over classes"
+say = "The predicted class is the one with the highest log probability of the class, plus the sum, over the query's words, of the log probability of each word given the class. That word probability is the word's count in the class's text plus 1, over the number of words in the class's text plus the vocabulary size."
+
+[[blocks]]
+section = "hyde-hypothetical-products"
+starts = "hyde(query) = (embedding(hypothetical"
+say = "HyDE's vector for a query is the average of the hypothetical product's embedding and the query's embedding, scaled back to length 1."
+
+[[tables]]
+section = "understanding-queries-decisions"
+starts = "| Measure | [BM25,"
+say = "A table of the chapter's five planned comparisons on the test queries, one per column: BM25 with synonyms, semantic retrieval with the class boost, BM25 and semantic retrieval each on the LLM's rewrite, and semantic retrieval with HyDE, each against the same retriever on the query as typed. Its rows give the mean difference, the wins, losses and ties, both p-values, whether the difference is established, the 99% interval, and whether the t-test and the interval agree. Only one difference is established: semantic retrieval's loss on the LLM's rewrite, {{out:llm-rewrites-on-test:llm rewrite, semantic, mean difference}}."
