@@ -4,20 +4,28 @@
 
 [terms]
 # Datasets, benchmarks and venues
-"WANDS" = "wands"
+"WANDS" = "Wands"
 "ECIR" = "E C I R"
 "TREC" = "trek"
 "REtrieval" = "Retrieval"
 "MS MARCO" = "M S Marco"
+"ESCI" = "E S C I"
+"Robust04" = "Robust oh four"
+"ir-measures" = "I R measures"
+"Solr" = "solar"
 # Models and their names
 "BERT" = "Bert"
 "V100" = "V one hundred"
 "Snowflake/snowflake-arctic-embed-m-v1.5" = "Snowflake's arctic embed M, version one point five"
 "Alibaba-NLP/gte-reranker-modernbert-base" = "Alibaba N L P's G T E reranker, modern Bert base"
+# Words and queries
+"eCommerce" = "e-commerce"
+"3.7qt" = "three point seven quart"
 # Measures and formulas
 "MAP" = "M A P"
 "MRR" = "M R R"
 "log2" = "log base two"
+"bpref" = "B pref"
 # Code read as what it holds
 "{query_id: {product_id: grade}}" = "a mapping from query ID to product ID to grade"
 "{query_id: [product_id, ...]}" = "a mapping from query ID to a list of product IDs"
@@ -46,3 +54,5 @@
 "ids" = "I Ds"
 "ge" = "G E"
 "llm" = "L L M"
+"7qt" = "seven quart"
+"w003096809" = "W zero zero three zero nine six eight zero nine"
