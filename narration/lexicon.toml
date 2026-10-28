@@ -13,6 +13,11 @@
 "Robust04" = "Robust oh four"
 "ir-measures" = "I R measures"
 "Solr" = "solar"
+"pytrec_eval" = "pie trek eval"
+"gdeval" = "G D eval"
+# People's names
+"McSherry" = "Mac Sherry"
+"McKechnie" = "Mac Keck-nee"
 # Models and their names
 "BERT" = "Bert"
 "V100" = "V one hundred"
@@ -25,7 +30,15 @@
 "MAP" = "M A P"
 "MRR" = "M R R"
 "log2" = "log base two"
+"log2(i + 1)" = "log base two of i plus one"
+"log2(rank + 1)" = "log base two of rank plus one"
+"log(1 + rank)" = "log of one plus rank"
+"grade(i)" = "grade of i"
 "bpref" = "B pref"
+"BCa" = "B C A"
+"HSD" = "H S D"
+"IR" = "I R"
+"training/validation/test" = "training, validation and test"
 # Code read as what it holds
 "{query_id: {product_id: grade}}" = "a mapping from query ID to product ID to grade"
 "{query_id: [product_id, ...]}" = "a mapping from query ID to a list of product IDs"
@@ -34,6 +47,9 @@
 "examples/data/wands/README.md" = "examples slash data slash wands slash read me dot M D"
 "lib.store.qrels" = "lib dot store dot Q rels"
 "bm25s.tokenize" = "B M twenty-five S dot tokenize"
+"ttest_rel" = "t-test rel"
+"scipy.stats.ttest_rel" = "sigh pie dot stats dot t-test rel"
+"scipy.stats.power" = "sigh pie dot stats dot power"
 # File extensions in code, as in recordings/embeddings.py. Each reading starts with a space, because the extension
 # follows the file's name with none.
 ".py" = " dot pie"
@@ -49,6 +65,9 @@
 "ndcg" = "N D C G"
 "dcg" = "D C G"
 "rrf" = "R R F"
+"rr" = "R R"
+"rng" = "R N G"
+"sklearn" = "S K learn"
 "k1" = "k one"
 "id" = "I D"
 "ids" = "I Ds"
