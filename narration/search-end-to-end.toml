@@ -13,7 +13,7 @@ say = "The code puts each of BM25's top 10 for clear shower curtain beside its j
 say = "The code takes BM25's top 10 for clear shower curtain, adds up each grade divided by a log discount, does the same for the best possible top 10, and prints their ratio: {{out:ndcg-for-one-query:ndcg@10}}. The book's shared metrics module gives the same value."
 
 [examples.bm25-test-scores]
-say = "The code runs BM25 on every test query, keeps the top 100 products for each, and scores the run against the judgments, one row per query. It prints the mean nDCG@10, {{out:bm25-test-scores:mean ndcg@10}}, with the lowest, median and highest scores, then the three lowest-scoring queries, and BM25's top 5 for outdoor light fixtures: one exact outdoor light, then light bulbs nobody judged for that query."
+say = "The code runs BM25 on every test query, keeps the top 100 products for each, and scores the run against the judgments, one row per query. It prints the mean nDCG@10, {{out:bm25-test-scores:mean ndcg@10}}, with the lowest, median and highest scores, then the three lowest-scoring queries, and BM25's top 5 for outdoor light fixtures: an exact outdoor light, then light bulbs nobody judged for that query."
 
 [examples.first-semantic-search]
 say = "The code reads the recorded embeddings, compares the query clear shower curtain with every product, and prints the ten most similar, each with its similarity and its judgment. Every one of the ten is a shower curtain, a liner or a curtain set, and their similarities lie within {{out:first-semantic-search:similarity spread in the top 10}} of each other."
