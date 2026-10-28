@@ -1,34 +1,34 @@
 # Spoken descriptions for chapter 2, What relevance means: what narration reads in place of each example, block and table.
 
 [examples.word-match-versus-judgment]
-say = "The code checks, for every judged pair, whether the product's text holds every word of its query, and checks again with the product's attributes added. It prints how the pairs with a full word match split by label, with a share of {{out:word-match-versus-judgment:of them exact}} exact, then counts the exact pairs whose text misses a query word, and the exact products for clear shower curtain that never say clear."
+say = "The code checks, for every judged pair, whether the product's text holds every word of its query, and checks again with the product's attributes added. It prints how the pairs with a full word match split by label, then counts the exact pairs whose text misses a query word, and the exact products for clear shower curtain whose text never says clear."
 
 [examples.conflicting-judgments]
 say = "The code lists every pair that WANDS labelled two ways, each with its query, the product's name, both labels and the grade the sample kept, which is the lower one every time. Then it counts the conflicts of each kind, and those between neighbouring grades."
 
 [examples.predicted-class-check]
-say = "For each query, the code measures what share of its exact products carry the query's predicted class. It counts the queries where most of them do and those where none does, and lists the second kind with the predicted class beside the commonest class of their exact products, such as Wallpaper against Fountains for foutains with brick look."
+say = "For each query, the code measures what share of its exact products carry the query's predicted class. It counts the queries where most of them do and those where none does, and lists the second kind with the predicted class beside the commonest class of their exact products, such as Crock Pots and Slow Cookers against Slow Cookers for 7qt slow cooker."
 
 [examples.binary-labels-hide-partial]
-say = "The code builds three rankings for clear shower curtain from its judgments, ten exact products, ten partial curtains and ten irrelevant hooks, and scores each with nDCG@10 under three labelings: exact only, exact or partial, and the book's grades. Only the grades give the three rankings three different scores, with the partial curtains at {{out:binary-labels-hide-partial:other curtains, grades}}."
+say = "The code builds the three rankings from the judgments for clear shower curtain, and prints the nDCG@10 of each under each labeling, nine scores in all. Before the scores, it prints how many exact products the query has, and how many of them fill the ideal top 10."
 
 [examples.gain-choice-changes-ndcg]
-say = "The code first prints the share of partial products in BM25's and semantic retrieval's top 10s on the test queries. Then it scores both runs under four gain schemes, exact only, exact or partial, the book's grades, and a partial gain of 0.1, and prints for each scheme both means, semantic retrieval's lead, two p-values and the tied queries. Semantic retrieval leads under {{out:gain-choice-changes-ndcg:schemes where semantic leads}} schemes, by an amount that changes with the scheme."
+say = "The code first prints the share of partial products in BM25's and semantic retrieval's top 10s on the test queries. Then it scores both runs under each of the four gain schemes, and prints for each scheme both mean scores, semantic retrieval's lead, two p-values and the number of tied queries."
 
 [examples.count-labels-per-query]
-say = "The code counts each query's exact, partial and irrelevant judgments, prints the shares at both ends and in the middle, and draws a histogram of how many queries fall in each tenth of the exact share, from 0 to 1. Partial is {{out:count-labels-per-query:partial share of all judgments}} of all judgments, and most queries have an exact share below one half."
+say = "The code counts each query's exact, partial and irrelevant judgments, prints the shares at both ends and in the middle, and draws a histogram of how many queries fall in each tenth of the exact share, from 0 to 1. Most queries fall below an exact share of one half."
 
 [examples.cascade-clicks]
 say = "The code applies the strictest cascade rule to BM25's and semantic retrieval's top 10 for clear shower curtain: read from the top, click the first exact product, and stop. For each ranker it prints the grades from rank 1 to 10, the rank and name of the clicked product, and how many exact products sit below the click, never seen."
 
 [examples.trundle-daybeds-unjudged]
-say = "The code takes the products judged exact for the train query trundle daybed and looks each one up in the judgments for the test query full bed with trundle. {{out:trundle-daybeds-unjudged:of them unjudged for full bed with trundle}} of the {{out:trundle-daybeds-unjudged:exact for trundle daybed}} have no judgment there. It tallies how the judges graded the rest, and names the first two unjudged daybeds."
+say = "The code takes the products judged exact for the train query trundle daybed and looks each one up in the judgments for the test query full bed with trundle. It counts those with no judgment there, tallies how the judges graded the rest, and names the first two unjudged daybeds."
 
 [examples.unjudged-in-bm25-top-10]
-say = "The code computes judged@10 by hand for BM25's run on every test query and checks it against the book's metrics module, which agrees on {{out:unjudged-in-bm25-top-10:queries where the hand-built judged@10 equals lib.metrics}} queries. Then it counts the unjudged products in BM25's top 10s, and lists each query that has any, with its judged@10, its number of unjudged products and the first of them."
+say = "The code computes judged@10 by hand for BM25's run on every test query and checks it against the book's metrics module. Then it counts the unjudged products in BM25's top 10s, and lists each query that has any, with its judged@10, its number of unjudged products and the first of them."
 
 [examples.condensed-ndcg]
-say = "The code scores BM25 and semantic retrieval on the test queries twice: as they are, and condensed, with every unjudged product dropped so the judged ones move up. BM25 gains more from condensing, so semantic retrieval's lead shrinks from {{out:condensed-ndcg:semantic minus bm25}} to {{out:condensed-ndcg:semantic minus bm25, condensed}}. The code also prints how much of BM25's gain comes from two queries, and tests the change in the lead and the condensed lead itself."
+say = "The code scores BM25 and semantic retrieval on the test queries twice: as they are, and condensed, with every unjudged product dropped so the judged ones move up. It prints each ranker's mean nDCG@10 and semantic retrieval's lead both ways, and how much of BM25's gain comes from two queries, then tests the change in the lead and the condensed lead itself."
 
 [[blocks]]
 section = "unjudged-results"
