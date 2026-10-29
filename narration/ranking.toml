@@ -1,0 +1,58 @@
+# Spoken descriptions for chapter 9, Ranking: what narration reads in place of each example, block and table.
+
+[examples.ranking-features-by-grade]
+say = "The code builds the feature table for the train queries' candidates and prints the six candidates for laundry basket with wheels that the cross-encoder scores highest, with their features and grades. Then it prints each feature's mean for exact, partial, irrelevant and unjudged candidates, and the rating count's median beside its mean. It also checks whether unjudged candidates sit nearer the irrelevant ones or the partial ones on BM25, similarity, the cross-encoder score and name match."
+
+[examples.lambdas-for-one-query]
+say = "For the train query outdoor waterproof chest, the code takes semantic retrieval's top 10 as the model's ranking so far, and computes the lambda of every pair with different grades by hand, checking each change in nDCG by swapping the pair. It prints the grades from the top, how many pairs the swap confirms, the total force on each position, and the lowest and highest values of RankNet's factor."
+
+[examples.lambdas-match-lightgbm]
+say = "The code grows five trees of 3 leaves on the candidates of outdoor waterproof chest, with unjudged products as grade 0, three times: with the chapter's lambdas as a custom objective, and with LightGBM's lambdarank, with and without its normalization and truncation. It prints the largest difference between each lambdarank model's scores and the custom objective's."
+
+[examples.lambdamart-tree-size-on-train]
+say = "The code cross-validates LambdaMART over five folds of the train queries, at 3, 7, 15 and 31 leaves and two learning rates, with unjudged candidates as grade 0, and prints each setting's nDCG@10 and the trees early stopping keeps in each fold. It also prints semantic retrieval's train score for reference, and picks the best setting."
+
+[examples.lambdamart-choices-on-train]
+say = "At the chosen tree size, the code cross-validates three setups on the train queries: LambdaMART with unjudged candidates as grade 0, LambdaMART on judged candidates only, and a pointwise regression on the grades with unjudged candidates as 0. It prints each setup's nDCG@10, tests the other two against the first with a paired permutation test, and tests the first against semantic retrieval the same way."
+
+[examples.lambdamart-on-test]
+say = "The code fits the chosen setup with early stopping, and prints the trees it keeps, LightGBM's own score on the stopping queries, and each feature's share of the gain. Then it ranks each test query's candidates, prints nDCG@10 and judged@10 for the model and for semantic retrieval, and makes the planned comparison."
+
+[examples.cross-encoder-on-semantic]
+say = "The code checks that semantic retrieval's top 20 for every test query holds the products the LLM rerankers saw, then reorders those 20 by the recorded cross-encoder scores. It counts the queries whose first product changes and the unjudged places in the top 10s, and makes the planned comparison with semantic retrieval."
+
+[examples.llm-pointwise-rerank]
+say = "The code reads the LLM's answers for semantic retrieval's top 20 on each test query, one call per product, and counts how coarse the scores are: how many distinct scores each query gets, and what share of products score 100. It counts the LLM's labels beside people's judgments of the same products, reranks by the score with semantic retrieval's order breaking ties, and makes the planned comparison."
+
+[examples.llm-listwise-rerank]
+say = "The code reads the LLM's listwise answers, one per test query and order shown, counts the calls and the answers that needed repair, and prints the prompt's last instruction. Then it reorders semantic retrieval's top 20 by the answer given for the semantic order, counts the queries whose first product changes, and makes the planned comparison with semantic retrieval."
+
+[examples.listwise-position-bias]
+say = "For each test query, the code compares the LLM's two listwise answers, one for the top 20 shown in semantic order and one for them reversed: Kendall's tau between the two answers, the products their top 10s share, and whether they put the same product first. It also measures how close each answer stays to the order it was shown, and scores the reversed answer, outside the planned comparisons."
+
+[examples.reranker-prompt-sizes]
+say = "For semantic retrieval's top 20 on each test query, the code measures the text each reranker reads: the query and each product's text for the cross-encoder, a full prompt per product for the pointwise LLM, and one prompt with a short line per product for the listwise LLM. It then works out the calls two designs the store didn't record would need: every pair in both orders, and a window of 20 sliding by 10 over the top 100."
+
+[examples.rerank-depth-on-train]
+say = "On the train queries, the code reranks semantic retrieval's top 5, 10, 20, 30, 50 and 75 by the cross-encoder, and prints each depth's nDCG@10 and its change from the depth before, starting from semantic retrieval alone. It also counts the pairs per query that scoring every candidate would take."
+
+[examples.distillation-on-train]
+say = "By cross-validation on the train queries, the code trains a student, a LightGBM regression on every feature but the cross-encoder's score, to predict that score, and a LambdaMART model on the same features with human grades, unjudged candidates as 0. It prints both models' nDCG@10 beside the teacher's own order and semantic retrieval's, and tests the student against the human-graded model with a permutation test."
+
+[examples.distilled-ranker-on-test]
+say = "The code fits the student on the teacher's scores for every train candidate, with early stopping, and prints the three features with the largest share of its gain. On each test query's candidates, it measures by Kendall's tau how closely the student's order follows semantic similarity and the cross-encoder, scores the teacher's own order outside the plan, and makes the planned comparison with semantic retrieval."
+
+[[blocks]]
+section = "learn-from-pairs"
+starts = "λ_ij    = σ / (1 + exp"
+say = "For a pair where product i should rank above product j, lambda is sigma over 1 plus e to the power of sigma times i's score minus j's, multiplied by the size of the change in nDCG if the two swapped places, with sigma set to 1. That change is the gap between their grades, times the gap between their discounts, 1 over log base 2 of 1 plus each one's position, divided by the ideal DCG."
+
+[[tables]]
+section = "rerank-depth-from-budget"
+starts = "| Reranker, top 20 |"
+say = "A table of what each reranker reads per query at depth 20. The cross-encoder makes {{out:reranker-prompt-sizes:cross-encoder, model calls per query}} model calls and reads about {{out:reranker-prompt-sizes:cross-encoder, characters read per query, mean}} characters, the pointwise LLM {{out:reranker-prompt-sizes:llm pointwise, model calls per query}} calls and about {{out:reranker-prompt-sizes:llm pointwise, characters read per query, mean}}, and the listwise LLM {{out:reranker-prompt-sizes:llm listwise, model calls per query}} call and about {{out:reranker-prompt-sizes:llm listwise, characters read per query, mean}}."
+
+[[tables]]
+section = "ranking-decisions"
+starts = "| Measure |"
+say = "A table of the planned comparisons, one per column: LambdaMART, the cross-encoder, the pointwise and listwise LLM rerankers, and the distilled ranker, each against semantic retrieval. Its rows give each one's nDCG@10, mean difference, wins, losses and ties, both p-values, whether the difference is established, the 99% interval, and whether the t-test and the interval agree. None of them is established."

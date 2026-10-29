@@ -1,0 +1,49 @@
+# Spoken descriptions for chapter 11, Testing changes: what narration reads in place of each example, block and table.
+
+[examples.diff-semantic-against-bm25]
+say = "The code scores BM25 and semantic retrieval on every test query, builds a table with one row per query and the change between the two, and runs the chapter's one planned comparison through the book's paired tests, printing whether the change is established. Then it counts the wins, losses and ties, and lists every query semantic retrieval loses, worst first, starting with decorative white pillow."
+
+[examples.urisk-of-two-candidates]
+say = "The code prints each ranker's judged@10, then, for each candidate against BM25 on the test queries, its mean change, wins, losses, largest loss and URisk, with each loss counted double. It ends with the cheaper ranker's p-values and interval."
+
+[examples.unjudged-score-range]
+say = "The code counts the unjudged products in the top 10s of BM25 and of the cheaper semantic ranker. Then it scores those two runs and full semantic retrieval as judged, and again with each run's unjudged products counted exact in turn, applying each scenario to every run alike. Asked whether the leader against BM25 changes between these scenarios, it answers {{out:unjudged-score-range:leader changes, semantic 128 against bm25}} for the cheaper ranker and {{out:unjudged-score-range:leader changes, semantic against bm25}} for full semantic retrieval."
+
+[examples.tuning-on-test-inflates]
+say = "The code scores the blend on every query at each of the {{out:tuning-on-test-inflates:settings tried}} semantic weights, and prints the weight chosen on train and the weight chosen on test, each with its score on the test queries, beside semantic retrieval alone. From the 1,000 random splits of the train queries, it prints how much choosing on the 20 reported queries inflates their score on average."
+
+[examples.aa-tests-with-peeking]
+say = "The code simulates the A/A tests under those assumptions, applies the two-proportion test to each one after every day, and prints the share that comes out significant at the planned end and the share that looks significant on some day when checked daily. Then it tests a split planned as even that came out uneven, and prints its p-value."
+
+[examples.sample-size-from-power]
+say = "The code prints the coefficient the normal distribution gives, then the users per group the rule of thumb asks for in each of Kohavi et al.'s two worked examples, and for the store's assumed conversion rate with a 2% and a 1% change to detect."
+
+[examples.queries-needed-for-power]
+say = "The code prints the spread of the per-query differences between the hybrid and semantic retrieval on the test queries, and from it the smallest change 30 queries detect with 80% power and the number of queries a change of 0.01 would need. Then a simulation with SciPy estimates the paired t-test's power at that smallest change, and says whether it falls below the planned 0.8."
+
+[examples.team-draft-one-query]
+say = "The code writes team draft by hand, with a seeded coin, and interleaves semantic retrieval's and BM25's rankings for clear shower curtain into one ten-place list, printing each place's team, judgment and product. BM25 takes the first place with a partial curtain, and exact and partial curtains fill every place but the last. The book's experiments module builds the same list."
+
+[examples.one-simulated-shopper]
+say = "The code sends one simulated navigational shopper down that list, crediting each click to the team that picked the product. At the first place, a partial product from BM25, the shopper clicks and stays; at the second, an exact product from semantic retrieval, the shopper clicks and leaves."
+
+[examples.simulated-interleaving-verdict]
+say = "The code prints the shopper model's click and stop probabilities, then simulates 10,000 interleaved searches with a fixed seed for three pairs: semantic retrieval against BM25, the hybrid against semantic retrieval, and the hybrid with BM25's ties reversed against semantic retrieval. For each pair it reads the sign test's verdict at 100, 1,000 and 10,000 searches. Asked whether reversing BM25's ties changes the hybrid's verdict at 100 searches, it answers {{out:simulated-interleaving-verdict:hybrid against semantic, verdict at 100 searches changes with bm25 ties reversed}}."
+
+[examples.clicks-per-search-misleads]
+say = "The code simulates 5,000 searches on each ranker, BM25 and semantic retrieval, for two kinds of shopper: the navigational one, and a perfect one who reads all ten results and clicks every exact product. For each shopper it prints both rankers' clicks per search and share of searches with an exact click, each difference with its p-value, then says for each metric whether the ranker it favours reverses between shoppers."
+
+[[blocks]]
+section = "weigh-losses-with-urisk"
+starts = "URisk = (1 / N)"
+say = "URisk adds up the changes on the queries that improved, subtracts the sizes of the changes on the queries that got worse, each counted α plus 1 times, and divides the result by the number of queries."
+
+[[blocks]]
+section = "run-an-ab-test"
+starts = "z = (p_B − p_A)"
+say = "z is group B's conversion rate minus group A's, divided by the square root of the product of their average rate, 1 minus that average, and 2 over n. The p-value is twice the probability that a standard normal value exceeds the size of z."
+
+[[blocks]]
+section = "size-tests-with-power"
+starts = "users per group ≈ 16"
+say = "The users needed in each group are about 16 times the metric's variance, divided by the square of the change to detect."

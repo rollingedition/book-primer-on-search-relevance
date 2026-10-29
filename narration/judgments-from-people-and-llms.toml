@@ -1,0 +1,55 @@
+# Spoken descriptions for chapter 4, Judgments from people and LLMs: what narration reads in place of each example,
+# block and table.
+
+[examples.print-judging-guidelines]
+say = "The code reads the recording's manifest and prints the model's name, what the model saw, and each prompt's length in words, then the guidelines prompt in full. That prompt gives WANDS's three definitions, then five rules: find the kind of product first, then the modifiers; require every modifier before calling a product exact; call the wrong kind of product irrelevant, even an accessory for the one asked for; read a misspelled query as the shopper meant it; and judge only from what is written."
+
+[examples.kappa-by-hand]
+say = "On the train pool, the code builds the three-by-three table of counts, the store's grades in its rows and the short prompt's in its columns. From it, it computes the observed agreement, the agreement expected by chance and kappa, and checks kappa against scikit-learn's. It ends with the observed agreement and kappa for the guidelines prompt."
+
+[examples.weighted-kappa-by-hand]
+say = "The code builds linear weights, 0 for agreement, one half for grades one apart and 1 for grades two apart, and computes linear weighted kappa by hand for both prompts on the train pool, checking each against scikit-learn. For each prompt it also prints plain kappa, the pairs two grades apart, and the share of disagreements one grade apart against the share chance would give."
+
+[examples.kappa-under-two-label-mixes]
+say = "The code prints each label's share in the train pool as drawn, in all the train queries' judgments, and among the judged pairs of the test pool. Then it weights each train-pool pair to match the train judgments' mix, and measures observed agreement and kappa again for both prompts, ending with the prompt that has the higher kappa in each mix."
+
+[examples.llm-confusion-matrix]
+say = "For both prompts on both pools, the code builds the confusion matrix, the store's grades in its rows and the LLM's in its columns. It prints kappa, the mean grades, how many pairs the LLM grades higher and lower than the judges, its largest error, and whether it is stricter than the judges, grading more pairs lower than higher."
+
+[examples.llm-grades-follow-written-words]
+say = "The code prints what the LLM saw for one exact train pair, the {{out:llm-grades-follow-written-words:Name}} for the query {{out:llm-grades-follow-written-words:query}}, with its grades from the judges and from both prompts. Then it splits the test-pool products for clear shower curtain by whether their text says clear, and counts the exact grades each judge gave in each group. Last, over both pools, it measures how often the LLM lowers exact pairs and raises partial ones, splitting each by whether the text has every query word."
+
+[examples.prompt-disagreement]
+say = "On each pool, the code counts the pairs where the two prompts give different grades, computes their kappa with each other, and cross-tabulates the short prompt's grades against the guidelines prompt's, naming the largest disagreement. Then it takes the train pairs that short calls partial and guidelines irrelevant, counts how the store's judges graded them, and lists a few, one per query. Last, it resamples whole train queries for a 95% interval on how far guidelines leads short in kappa with the judges: from {{out:prompt-disagreement:95% interval over resampled train queries}}."
+
+[examples.fill-unjudged-pairs]
+say = "The code counts the test pool's pairs, the unjudged ones among them, and the unjudged products in each ranker's top 10s. Then it fills the unjudged pairs with each prompt's grades and rescores the four rankers, printing how the prompt graded the unjudged pairs and the bulbs for outdoor light fixtures, the filled scores and order, and which rankers change place. The planned verdicts that change when filled: with the short prompt, {{out:fill-unjudged-pairs:verdicts that change when filled, short prompt}}; with the guidelines prompt, {{out:fill-unjudged-pairs:verdicts that change when filled, guidelines prompt}}."
+
+[examples.kendall-tau-four-rankers]
+say = "The code scores the four rankers under four sets of grades: human grades, human grades for the LLM's pairs only, and each prompt's LLM grades. For each set it prints the order and every score, then how far each prompt moves each ranker from the control, the pairs of rankers that swap places, and Kendall's tau by hand and from SciPy."
+
+[examples.planned-comparisons-llm-grades]
+say = "The code reruns chapter 3's three planned comparisons, and its exploratory one, under human grades and under each prompt's grades on the test pool, at chapter 3's threshold. For each it prints the mean difference and the permutation p-value, and for the planned ones the t-test p-value, the interval, whether the difference is established and which check disagrees with the permutation test. Last, it counts those disagreements and lists the verdicts that differ from the human ones."
+
+[examples.correct-llm-scores-with-humans]
+say = "For each of the two gaps, the code prints its value on human grades over all queries and how much the human sample alone spreads over the draws. Then, for each prompt, it prints the LLM's estimate alone, the corrected estimate's mean and spread over the draws, whether that spread is smaller than the human sample's, and how closely the LLM's per-query gaps correlate with the human ones."
+
+[[blocks]]
+section = "agreement-beyond-chance"
+starts = "kappa    = (observed - expected)"
+say = "Kappa is the observed agreement minus the agreement expected by chance, divided by 1 minus the expected agreement. The expected agreement is the sum, over the grades, of the share of pairs judge A gives that grade times the share judge B gives it."
+
+[[blocks]]
+section = "weighted-kappa-for-grades"
+starts = "weighted kappa = 1 - (sum of weight"
+say = "Weighted kappa is 1 minus a ratio: the sum of each cell's weight times its observed count, over the sum of each cell's weight times the count expected by chance."
+
+[[blocks]]
+section = "calibrate-on-a-human-sample"
+starts = "corrected = mean over all queries"
+say = "The corrected score is the LLM's mean score over all queries, plus the mean, over the human sample, of the human score minus the LLM score."
+
+[[tables]]
+section = "llm-graded-verdicts"
+starts = "| Measure | Grades | Semantic minus"
+say = "A table of chapter 3's three planned comparisons, one per column, under human grades and under each prompt's LLM grades: each comparison's mean difference, interval, permutation and t-test p-values, and whether it is established. Semantic retrieval's lead over BM25 is established under human grades and under the short prompt, but not under the guidelines prompt, and neither of the other two comparisons is established under any grades."

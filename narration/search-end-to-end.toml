@@ -1,0 +1,49 @@
+# Spoken descriptions for chapter 1, Search, end to end: what narration reads in place of each example, block and table.
+
+[examples.load-the-store]
+say = "The code loads the store's products, queries and judgments through the book's store module, and prints how many there are of each, how the queries split into train and test, and how many judged pairs carry each label. It ends with the first four queries, each with its predicted class and its split."
+
+[examples.first-bm25-search]
+say = "The code builds the book's BM25 ranker over every product's text, searches for the test query clear shower curtain, and prints the ten highest-scoring products. Each line gives a product's rank, its ID, its score and its name, and the scores fall steadily from first to tenth."
+
+[examples.judge-first-results]
+say = "The code puts each of BM25's top 10 for clear shower curtain beside its judgment for that query: exact, partial, irrelevant, or unjudged where nobody judged the pair. Curtains, exact and partial, fill the top of the list, and the hooks at the bottom are irrelevant. Then it counts each label, and the products the judges labelled for this query."
+
+[examples.ndcg-for-one-query]
+say = "The code takes BM25's top 10 for clear shower curtain, adds up each grade divided by a log discount, and does the same for the best possible top 10. It prints the grades of both lists, both sums and their ratio, then the ratio from the book's shared metrics module, to check that the two agree."
+
+[examples.bm25-test-scores]
+say = "The code runs BM25 on every test query and scores the run against the judgments, one row per query. It prints the mean nDCG@10 and judged@10, the lowest, median and highest nDCG@10, and the three lowest-scoring queries, then BM25's top 5 for one of them, outdoor light fixtures, each product with its judgment."
+
+[examples.first-semantic-search]
+say = "The code reads the recorded embeddings, compares the query clear shower curtain with every product, and prints the ten most similar, each with its similarity and its judgment. Every one of the ten is a shower curtain, a liner or a curtain set. It ends with a count of each label, the gap between the highest and lowest similarity, and the ranking's nDCG@10."
+
+[examples.compare-lexical-semantic]
+say = "The code scores BM25 and semantic retrieval on every test query, prints each one's mean nDCG@10 and judged@10, and counts the queries each one wins and the ties. It ends with the queries BM25 wins, among them 48 inch kitchen hood and monthly calendar."
+
+[examples.hybrid-rrf]
+say = "The code writes reciprocal rank fusion by hand, fuses BM25's and semantic retrieval's top 100 for every test query, and checks the fused scores of the first two products for clear shower curtain against the formula. Then it scores the hybrid run and counts the queries where it beats, loses to or ties with semantic retrieval."
+
+[examples.cross-encoder-rerank]
+say = "The code rebuilds the hybrid run, sorts each test query's top 50 by the recorded cross-encoder score, highest first, and leaves everything below the top 50 where it was. It prints the reranked run's mean nDCG@10 and judged@10, and how many queries reranking improves and how many it hurts, compared with the hybrid run."
+
+[examples.rerank-one-query]
+say = "The code reorders the hybrid's top 50 for refrigerator with ice an water in door by the cross-encoder's scores, and prints the top 5 before and after, each product with its cross-encoder score and its judgment. Then it checks whether the hybrid's first exact product, a French-door refrigerator, mentions ice or water anywhere in its text, and the answer is {{out:rerank-one-query:its text says ice or water}}."
+
+[examples.tokenizer-drops-terms]
+say = "The code runs bm25s's default tokenizer on two queries and prints the tokens each becomes: the washer query loses the number at its end, and the bistro query loses its stopword but keeps chairs in the plural. Then it counts the products whose tokens include chairs, and those that say chair but never chairs."
+
+[[blocks]]
+section = "score-one-ranking"
+starts = "DCG@10  = sum over positions"
+say = "DCG@10 is the sum, over positions 1 to 10, of each result's grade divided by log base 2 of one more than its position. nDCG@10 is that DCG divided by the ideal DCG@10."
+
+[[blocks]]
+section = "fuse-with-rrf"
+starts = "RRF(product) = sum over rankings"
+say = "A product's RRF score is the sum, over the rankings that contain it, of 1 divided by the sum of k and its rank in that ranking, with k set to 60."
+
+[[tables]]
+section = "rerank-with-cross-encoder"
+starts = "| Ranker | nDCG@10 | judged@10 |"
+say = "A table of the mean nDCG@10 and judged@10, on the test queries, of the chapter's four rankers: BM25, semantic retrieval, the hybrid, and the hybrid with its top 50 reranked. Semantic retrieval alone scores highest, at {{out:compare-lexical-semantic:semantic ndcg@10}}."

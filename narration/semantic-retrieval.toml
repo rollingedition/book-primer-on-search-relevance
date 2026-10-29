@@ -1,0 +1,54 @@
+# Spoken descriptions for chapter 6, Semantic retrieval: what narration reads in place of each example, block and table.
+
+[examples.inspect-recorded-embeddings]
+say = "The code reads the recorded embeddings and their manifest, and prints the model, its query prompt, how many products it embedded and at what dimension, how the numbers are stored, and the longest product text against the model's input limit. It checks the vectors' lengths before and after the book's module rescales them. Then it compares every query with every other, and prints the median similarity and, for two queries, the nearest other query, how similar it is and how many words they share."
+
+[examples.cosine-by-hand]
+say = "For the product most similar to clear shower curtain, the code computes the dot product and the cosine by hand and checks the cosine with scikit-learn. Then it keeps the first 256 numbers of every vector without rescaling, prints the range of the products' lengths, and counts the queries whose top 10 differs between ranking by dot product and ranking by cosine."
+
+[examples.exact-search-numpy]
+say = "The code multiplies the test queries' vectors by every product's vector in one matrix product, takes the top 10 of each row with NumPy's partial sort, and checks the result against the book's semantic search and against faiss's exact index. It prints how many similarities it computed, for how many test queries each check gives the same top 10, and the mean nDCG@10 of its run."
+
+[examples.exact-search-memory]
+say = "The code measures how much memory exact search needs: the bytes of one product's vector as 32-bit floats, the store's whole catalog of vectors, and the same for a catalog of a million products."
+
+[examples.hnsw-efsearch-sweep]
+say = "The code builds an HNSW index over the product vectors with 32 links per node, prints how many products each layer holds, and sweeps efSearch from 16 to 256 on the train queries. For each setting it prints the mean and the worst recall@10 against exact search, the queries whose recall is 0, and the similarities computed per query. Last, at the default of 16, it sets HNSW's top 3 for foutains with brick look beside exact search's."
+
+[examples.hnsw-test-recall]
+say = "On the test queries, the code compares HNSW with exact search at two settings: faiss's default efSearch, and the setting chosen on the train queries. For each it prints recall@10 and recall@100 against exact search, the queries that lose their whole top 10, the mean nDCG@10, and whether the planned paired tests establish a difference."
+
+[examples.hnsw-index-memory]
+say = "The code builds an exact index and an HNSW index over the same vectors, and prints how many links each product has on the upper layers and on the bottom one, the faiss documentation's estimate of the memory per product, and the bytes per product that each saved index takes."
+
+[examples.digits-in-queries]
+say = "The code finds the store's queries that contain a digit, from both splits, {{out:digits-in-queries:queries with a digit}} in all, and prints a table of each one's split, its BM25 and semantic scores, and its text. It counts the queries each ranker wins and the gaps under 0.03. Then it counts the products whose text has the word 7qt, and those that write 7 qt."
+
+[examples.hood-query-digits]
+say = "The code lists semantic retrieval's top 10 for the test query 48 inch kitchen hood, each product with its judgment, its width from the attributes column, and its name. Then it counts, in each ranker's top 10, the hoods that are 48 wide and the exact products."
+
+[examples.probe-pair-overlap]
+say = "The code searches with pairs of probe queries that differ only in a size: two kitchen hoods, two slow cookers, two beds and two sofas. For each pair it prints how similar the two queries are and how many products their top 10s share, and counts the products of the right size and, for the sofas, those that share only the digit. It also counts the catalog's product names that give a seat count, and its loveseats."
+
+[examples.code-probes]
+say = "The code tests two pairs of probe queries built on codes. For a code no product holds, it compares two queries that differ only in the code's last digits: how similar they are, and how many products their top 10s share. For a screen resolution that one product's text holds, the {{out:code-probes:that product}}, it prints that product's semantic rank, its similarity against the next product's, and its BM25 rank, first with its own resolution in the query and then with another."
+
+[examples.negation-probes]
+say = "The code counts the store's queries with a negation, and shows the terms BM25 keeps from the query rug that is not round. Then it runs three pairs of probe queries, each a query and its negation, through both rankers, and counts the products in each top 10 that are named armless, mention glass, or are named round."
+
+[examples.truncate-embeddings]
+say = "On the train queries, the code scores semantic retrieval with every vector cut to its first 768, 256 or 128 numbers and rescaled, and prints each length's bytes per product, mean nDCG@10 and judged@10. The score falls a little at 256 numbers, and much more at 128."
+
+[examples.truncation-paired-test]
+say = "The code compares 256 and 128 dimensions with the full 768 on the train queries, through the book's paired tests, and prints for each the mean difference, the queries that get worse, the permutation and t-test p-values, the 95% interval and whether it excludes 0, and the effect size."
+
+[examples.similarity-scale]
+say = "On the test queries, the code finds two queries: the one whose best match is least similar, with a count of the exact products in its top 10, and the one whose tenth match is most similar. Then it counts the products each would keep above a fixed similarity of 0.5, and the test queries that would keep none."
+
+[examples.spelling-probes]
+say = "For each store query with a typo, the code compares the query as typed with its correct spelling: how similar the two are, how many products their semantic top 10s share, and both rankers' nDCG@10 for each spelling, scored with the query's judgments. Last, it prints the smallest p-value a test on so few queries could give."
+
+[[blocks]]
+section = "compare-with-cosine-similarity"
+starts = "dot(q, d)    = q1 × d1"
+say = "The dot product of a query vector and a product vector multiplies them number by number and adds up the results. A vector's length is the square root of the sum of its squared numbers. Their cosine is the dot product divided by the two lengths multiplied together."

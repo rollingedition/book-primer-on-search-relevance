@@ -1,0 +1,55 @@
+# Spoken descriptions for chapter 5, Lexical retrieval: what narration reads in place of each example, block and table.
+
+[examples.tokenize-product-text]
+say = "The code writes bm25s's tokenizer by hand, lowercasing, keeping runs of two or more word characters and dropping its 33 stop words, and checks it against bm25s on every product. Then it prints what the train query 7qt slow cooker and the name of product 1, a 7 qt slow cooker, become, and counts the products with the term 7qt against those whose text says 7 qt. Last, it counts the queries that a pattern keeping digits apart would change, and shows the probe query rug not wool losing its not."
+
+[examples.inverted-index-by-hand]
+say = "The code builds an inverted index from every product's text: for each term, the products that contain it and how often, and for each product, its length. It prints the vocabulary's size, the average product length and the first postings for cooker, then, for 7qt slow cooker, how many products hold each term, any term and every term."
+
+[examples.tf-idf-by-hand]
+say = "The code computes TF-IDF over the inverted index, prints the IDF of furniture and of each term of laundry basket with wheels, and lists TF-IDF's top 3 for that query with each product's score, grade and term counts. Then it compares TF-IDF with BM25 on the train queries, by mean nDCG@10 and judged@10."
+
+[examples.bm25-by-hand]
+say = "The code writes BM25 as bm25s computes it, over the inverted index with k1 set to 1.5 and b to 0.75. It prints Robertson's and Lucene's IDF for the common word your, and a term's weight at 1, 2, 4 and 9 occurrences in a product of average length. Then it reports the largest score difference from bm25s over every product and query, whether both give the same top 100 for every query, and the mean nDCG@10 of each on the train and test queries."
+
+[examples.stemmer-merges-word-forms]
+say = "The code stems eight words two ways, with a stemmer written by hand that cuts a few common endings, and with Snowball English from PyStemmer, and prints both stems of each. Then, for floats and for molding, it counts the products whose text contains the word against those that contain its stem, and compares the vocabulary's size with and without stemming."
+
+[examples.bm25s-with-a-stemmer]
+say = "The code indexes the products with bm25s and the Snowball stemmer, tokenizes every query the same way, and compares bm25s's scores with those of the hand-built stemmed index for every product and query. It prints the terms that pool floats becomes, and the largest score difference."
+
+[examples.measure-stemming]
+say = "The code scores BM25 with and without stemming on the train and test queries, by mean nDCG@10 and judged@10, and prints both scores for the train queries pool floats and french molding. Then it runs the planned test comparison at a threshold of 0.01, and finds the test query with the largest gain, its gain, and the mean gain without it."
+
+[examples.sweep-k1-and-b]
+say = "The code scores BM25 over the stemmed index on the train queries at five values of k1, from 0.5 to 2, and five of b, from 0 to 1, prints each setting's mean nDCG@10, picks the best and reports whether it lies on the grid's edge. Then it compares the best with the defaults on the test queries, a mean difference of {{out:sweep-k1-and-b:mean difference}}."
+
+[examples.fields-scored-apart]
+say = "On the train queries, the code indexes the product name and the other three fields apart, scores each with BM25 and adds the two scores. It compares the result with one combined field by mean nDCG@10 and judged@10, and counts the queries that get better and worse."
+
+[examples.repeat-the-name-field]
+say = "The code repeats the product name 1, 2, 3 or 5 times in the indexed text, scores each version on the train queries, and picks the best. Then it compares that weight with one field on the test queries, a mean difference of {{out:repeat-the-name-field:mean difference}}."
+
+[examples.add-attributes-field]
+say = "The code adds each product's attributes, names and values, to its indexed text, and counts the exact products for clear shower curtain that say clear, with and without attributes. It also counts the queries that contain an attribute name and the products whose attributes name a size. Then it scores both indexes on the train and test queries, prints the scores of two test queries, clear shower curtain and medium size chandelier, and runs the planned test comparison."
+
+[examples.phrase-positions-by-hand]
+say = "The code builds a positional index over the product names, checks that BM25 gives barn door and door barn the same scores, and counts the names with both words against those with the phrase. Then it lists the names that have both words but not the phrase."
+
+[examples.phrase-bonus-train-and-test]
+say = "The code takes BM25's top 100 for each query and adds a bonus to a product's score for each pair of adjacent query terms that its name holds in order. It tries bonuses of 0, 0.5, 1 and 2 on the train queries and picks the best, then compares that bonus with none on the test queries, a mean difference of {{out:phrase-bonus-train-and-test:mean difference}}."
+
+[[blocks]]
+section = "weight-terms-with-tf-idf"
+starts = "idf(t)       = ln(N / df(t))"
+say = "A term's IDF is the natural log of the number of products, N, divided by the number of products that contain the term. A product's TF-IDF score for a query is the sum, over the query's terms, of each term's frequency in the product times its IDF."
+
+[[blocks]]
+section = "bm25-from-scratch"
+starts = "idf(t)     = ln(1 + (N"
+say = "Here a term's IDF is the natural log of 1 plus a ratio: the number of products that don't contain the term, plus one half, over the number that do, plus one half. A product's BM25 score is the sum, over the query's terms, of the IDF times the term's frequency divided by that frequency plus k1 times a length factor. The length factor is 1 minus b, plus b times the product's length over the average length."
+
+[[tables]]
+section = "lexical-retrieval-decisions"
+starts = "| Measure |"
+say = "A table of the chapter's five planned comparisons on the test queries, one per column: stemming, the best k1 and b, the best name weight, the attributes field and the best phrase bonus, each against the same search without it. Its rows give the mean difference, the 99% interval, both p-values, the wins, losses and ties, whether the difference is established, and whether the t-test and the interval agree. Only stemming is established."
