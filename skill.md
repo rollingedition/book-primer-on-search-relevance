@@ -11,9 +11,9 @@ description: "Use when evaluating or improving search ranking: grading relevance
 3. Collect graded judgments ([Grade relevance instead of yes or no](#graded-relevance)). Fix the gains before comparing rankers and report them with every score ([Choose the gains on purpose](#gains-are-a-choice)).
 4. Print each query's label mix before averaging any metric ([Read the label mix of each query](#label-mix-per-query)).
 5. Use judgments, not clicks, as the reference ([Treat clicks as biased evidence](#clicks-are-not-judgments)), and find out which systems built the judgment pool ([Know where the judgments came from](#pooled-judgments)).
-6. Report judged@10 next to every nDCG@10; when two rankers' judged@10 differ, have their unjudged top-10 products judged ([Count unjudged products before you compare scores](#unjudged-results)).
+6. Report judged@10 next to every nDCG@10, and compute condensed scores only as a diagnostic, never as the headline; when two rankers' judged@10 differ, have their unjudged top-10 products judged ([Count unjudged products before you compare scores](#unjudged-results)).
 
-**Check:** run [the example](examples/unjudged-in-bm25-top-10.py) and compare its `mean judged@10` line: {{out:unjudged-in-bm25-top-10:mean judged@10}}.
+**Check:** run [the example](examples/unjudged-in-bm25-top-10.py) and compare its `mean judged@10` line, {{out:unjudged-in-bm25-top-10:mean judged@10}}, and its check that the hand-built value matches the library: {{out:unjudged-in-bm25-top-10:queries where the hand-built judged@10 equals lib.metrics}}.
 
 **Pitfalls:** judgments go stale, so date them and track judged@10 in production; guidelines shape the whole set; judges may see more than the ranker ([What goes wrong in production](#what-relevance-means-in-production)).
 
@@ -24,7 +24,7 @@ description: "Use when evaluating or improving search ranking: grading relevance
 1. Use precision@10 for how much of the first page is right; don't make recall@10 a headline when queries have many relevant products ([Count the relevant products in the top k](#count-relevant-in-top-k)).
 2. Use MRR as the headline only when the user needs one right product ([Score the first relevant result with reciprocal rank](#score-the-first-relevant-result)).
 3. Compute nDCG@10 with linear gains, a log2(i + 1) discount and an ideal ranking from every judged product, and state the variant with every number ([Build nDCG from discounted gains](#build-ndcg-from-dcg)).
-4. Check it against scikit-learn's `ndcg_score` with every judged product in each row, after checking each run holds at least k products and breaking ties by product ID ([Match scikit-learn's `ndcg_score`](#match-scikit-learn-ndcg)).
+4. Check it against scikit-learn's `ndcg_score` with every judged product in each row, after checking each run holds at least k products and, when passing raw scores, breaking ties by product ID ([Match scikit-learn's `ndcg_score`](#match-scikit-learn-ndcg)).
 5. Write down the headline metric, gains and cutoff before comparing, and never change them after seeing which ranker they favour ([Choose a metric before you compare](#choose-a-ranking-metric)).
 
 **Check:** run [the example](examples/ndcg-matches-scikit-learn.py) and compare its `largest difference` line: {{out:ndcg-matches-scikit-learn:largest difference}}.
@@ -55,11 +55,12 @@ description: "Use when evaluating or improving search ranking: grading relevance
 3. Read the confusion matrix before kappa and name the errors' direction for that pool ([Read the direction of the LLM's errors](#read-llm-error-direction)); check whether the evidence was in what the LLM saw ([Compare what the LLM saw with what the judges saw](#what-the-llm-saw)).
 4. Record every prompt word for word with the model version, run two prompts, and trust a conclusion only when both give it ([Measure how much the prompt changes the labels](#prompt-sensitivity)).
 5. Fill unjudged pairs with LLM grades only as a diagnostic, beside the human-only score ([Fill unjudged pairs with LLM grades](#fill-unjudged-with-llm-grades)).
-6. Never ship on LLM grades alone ([Rerun the planned comparisons with LLM grades](#llm-graded-verdicts)); correct a score from LLM grades with a random human-judged sample of queries ([Correct LLM scores with a human sample](#calibrate-on-a-human-sample)).
+6. When checking whether LLM grades order rankers as people do, report Kendall's tau with the list of swapped pairs, never alone, then test whether the swapped pairs differ at all ([Check whether LLM grades order the rankers the same way](#system-order-human-versus-llm)).
+7. Never ship on LLM grades alone ([Rerun the planned comparisons with LLM grades](#llm-graded-verdicts)); correct a score from LLM grades with a random human-judged sample of queries ([Correct LLM scores with a human sample](#calibrate-on-a-human-sample)).
 
-**Check:** run [the example](examples/kappa-by-hand.py) and compare its `kappa by hand, short prompt` line: {{out:kappa-by-hand:kappa by hand, short prompt}}.
+**Check:** run [the example](examples/kappa-by-hand.py) and compare its `kappa by hand, short prompt` line, {{out:kappa-by-hand:kappa by hand, short prompt}}, with `kappa from scikit-learn, short prompt`: {{out:kappa-by-hand:kappa from scikit-learn, short prompt}}.
 
-**Pitfalls:** a new model version or prompt is a new judge; systems tuned to the judge score well on it; product text can steer it; choose prompts on train queries ([What goes wrong in production](#judgments-from-people-and-llms-in-production)).
+**Pitfalls:** a different model version or prompt is a different judge; systems tuned to the judge score well on it; product text can steer it; choose prompts on train queries ([What goes wrong in production](#judgments-from-people-and-llms-in-production)).
 
 ## Build and tune lexical retrieval with BM25
 
@@ -83,7 +84,7 @@ description: "Use when evaluating or improving search ranking: grading relevance
 2. Normalize vectors when stored and after any change, then rank by dot product ([Compare embeddings with cosine similarity](#compare-with-cosine-similarity)).
 3. Use exact search while it fits memory and latency; it is the ground truth for any index ([Find the exact nearest neighbours with NumPy](#exact-nearest-neighbours-numpy)).
 4. Tune an HNSW index's `efSearch` on train queries by recall against exact search, choosing by the worst query ([Trade recall for speed with HNSW](#hnsw-recall-for-speed)), then check it on held-out queries ([Check the index on the test queries](#hnsw-on-test-queries)).
-5. Compare both rankers on queries with sizes or codes, and match codes lexically ([Expect a code to carry little weight](#codes-carry-no-weight)); don't rely on retrieval for negation ([Test embeddings on negation](#embeddings-on-negation)).
+5. List the queries that hold sizes, quantities or codes and compare both rankers on them ([Check queries that contain digits](#embeddings-match-digits)); match codes lexically ([Expect a code to carry little weight](#codes-carry-no-weight)); don't rely on retrieval for negation ([Test embeddings on negation](#embeddings-on-negation)).
 6. Decide between models or vector sizes on your train queries with a paired test ([Truncate dimensions, then test the loss](#truncate-dimensions-test-loss)).
 
 **Check:** run [the example](examples/exact-search-numpy.py) and compare its `same top 10 as faiss IndexFlatIP` line: {{out:exact-search-numpy:same top 10 as faiss IndexFlatIP}}.
@@ -113,7 +114,7 @@ description: "Use when evaluating or improving search ranking: grading relevance
 2. Write unit rules from the catalog's text and apply them to products and queries together ([Normalize units the way the catalog writes them](#normalize-units)).
 3. Write each synonym from a failing query and keep it only on a held-out gain ([Expand queries with a synonym list](#expand-with-synonyms)).
 4. Check a query classifier against judged exact products' classes ([Train a query classifier on product text](#classify-queries-from-products)), and boost the predicted class instead of filtering ([Boost the predicted class instead of filtering](#boost-predicted-class)).
-5. Test an LLM rewrite or HyDE on held-out queries before using it, reading losses for dropped requirements ([Rewrite queries with an LLM](#rewrite-queries-with-llm), [Search with a hypothetical product (HyDE)](#hyde-hypothetical-products)).
+5. Test an LLM rewrite or HyDE on held-out queries before using it, reading losses for dropped requirements; with HyDE, always average the query's own embedding in ([Rewrite queries with an LLM](#rewrite-queries-with-llm), [Search with a hypothetical product (HyDE)](#hyde-hypothetical-products)).
 6. Never search a follow-up alone ([Turn a follow-up into a standalone query](#standalone-follow-ups)).
 
 **Check:** run [the example](examples/catalog-spelling-corrector.py) and compare its `same as lib.queries.correct_query` line: {{out:catalog-spelling-corrector:same as lib.queries.correct_query}}.
@@ -159,9 +160,9 @@ description: "Use when evaluating or improving search ranking: grading relevance
 3. Rescore both runs with each side's unjudged products as exact; if the leader changes, judge them ([Judge the products a new ranker surfaces](#judge-new-results)).
 4. Choose every setting on train queries and log each look at the test queries ([Keep the test queries out of every choice](#keep-test-queries-held-out)).
 5. Before an A/B test, fix the metric and guardrails, run an A/A test, check the sample ratio, and read once at the planned size ([Run an A/B test](#run-an-ab-test)), sized from power ([Size the test with power](#size-tests-with-power)).
-6. To learn which ranking users prefer, use team-draft interleaving with a sign test ([Interleave two rankings with team draft](#team-draft-interleaving)); simulated verdicts are never evidence ([Rehearse interleaving with simulated shoppers](#simulate-interleaving-with-clicks)).
+6. To learn which ranking users prefer, use team-draft interleaving ([Interleave two rankings with team draft](#team-draft-interleaving)); on real traffic, fix the number of searches in advance and decide with a sign test, and never treat simulated verdicts as evidence ([Rehearse interleaving with simulated shoppers](#simulate-interleaving-with-clicks)).
 7. When offline and online disagree, find the cause ([Find the cause when offline and online disagree](#offline-online-disagree)). Ship only when every checklist item passes ([Decide whether to ship](#decide-whether-to-ship)).
 
-**Check:** run [the example](examples/aa-tests-with-peeking.py) and compare its `significant on some day, checked daily` line: {{out:aa-tests-with-peeking:significant on some day, checked daily}}.
+**Check:** run [the example](examples/aa-tests-with-peeking.py) and compare its `significant on some day, checked daily` line, {{out:aa-tests-with-peeking:significant on some day, checked daily}}, with `significant at the planned end`: {{out:aa-tests-with-peeking:significant at the planned end}}.
 
 **Pitfalls:** the dashboard invites peeking; groups don't match the plan; the regression set wears out; ties move results ([What goes wrong in production](#testing-changes-in-production)).
