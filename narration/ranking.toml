@@ -59,15 +59,10 @@ say = "A table of the planned comparisons, one per column: LambdaMART, the cross
 
 [[tables]]
 section = "ranking-features"
-starts = "| Grade | Mean | Median |"
-say = "A table of the mean and median rating count for the exact, partial and irrelevant candidates. The means fall as the grade falls, while the medians don't: a few heavily rated products set the means."
-
-[[tables]]
-section = "lambdamart-on-test-queries"
-starts = "| Feature | Share of gain |"
-say = "A table of the share of the gain that LambdaMART's splits give the four features with the most of it. The cross-encoder takes by far the largest share."
+starts = "| Grade | Mean rating count | Median rating count |"
+say = "A table of the mean and median rating count for the exact, partial and irrelevant candidates. Exact products average {{out:ranking-features-by-grade:rating_count, exact, mean}} ratings with a median of {{out:ranking-features-by-grade:rating_count, exact, median}}, partial products {{out:ranking-features-by-grade:rating_count, partial, mean}} and {{out:ranking-features-by-grade:rating_count, partial, median}}, and irrelevant products {{out:ranking-features-by-grade:rating_count, irrelevant, mean}} and {{out:ranking-features-by-grade:rating_count, irrelevant, median}}. The means fall as the grade falls, while the medians don't: a few heavily rated products set the means."
 
 [[tables]]
 section = "llm-pointwise-reranking"
 starts = "| Label | LLM | People |"
-say = "A table of the labels the LLM gave the products it scored, beside the grades people gave the same products. Its last row counts the products nobody judged."
+say = "A table of the labels the LLM gave the products it scored, beside the grades people gave the same products: the LLM gives {{out:llm-pointwise-rerank:products the llm labels exact}} exact against people's {{out:llm-pointwise-rerank:products people judged exact}}, {{out:llm-pointwise-rerank:products the llm labels partial}} partial against {{out:llm-pointwise-rerank:products people judged partial}}, and {{out:llm-pointwise-rerank:products the llm labels irrelevant}} irrelevant against {{out:llm-pointwise-rerank:products people judged irrelevant}}. Its last row counts the {{out:llm-pointwise-rerank:products nobody judged}} products nobody judged."

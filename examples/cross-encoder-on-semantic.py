@@ -15,7 +15,7 @@ score = dict(zip(zip(recorded["query_id"], recorded["product_id"]), recorded["sc
 print("cross-encoder model:", manifest("cross-encoder")["model"])
 print("licence in the manifest:", manifest("cross-encoder")["model_licence"])
 
-# the products each LLM reranker saw, per query: the first 20 of semantic retrieval's list
+# the set of products the LLM was shown for each query, from the listwise recording
 shown = llm_listwise().groupby("query_id")["product_id"].apply(set)  # what the LLM rerankers saw
 same = sum(set(semantic[query_id][:DEPTH]) == shown[query_id] for query_id in queries.index)
 print(f"rerank depth: {DEPTH}")

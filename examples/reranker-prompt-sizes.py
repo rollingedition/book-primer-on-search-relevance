@@ -31,6 +31,6 @@ for name, calls, characters in [("cross-encoder", DEPTH, cross_encoder), ("llm p
     print(f"{name}, model calls per query: {calls}")
     print(f"{name}, characters read per query, mean: {np.mean(characters):,.0f}")
 print(f"llm pairwise, every pair in both orders, calls per query: {DEPTH * (DEPTH - 1)}")
-# a sliding window of 20 products, moved 10 at a time: its starts are list positions 0, 10, ..., 80, so nine calls
+# a sliding window of 20 products, moved 10 at a time: its starts are list positions 0, 10, ..., 80
 window, step, depth = 20, 10, 100                                # a sliding window over a deeper list
 print(f"llm listwise over the top {depth}, window {window}, step {step}, calls per query: {(depth - window) // step + 1}")
