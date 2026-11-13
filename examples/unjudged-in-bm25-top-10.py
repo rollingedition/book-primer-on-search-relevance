@@ -26,7 +26,7 @@ for query_id, ranking in run.items():
 table = pd.DataFrame(rows)
 
 print(f"mean judged@10: {table['judged@10'].mean():.3f}")
-# lib.metrics' judged@10 per query, in the same query order as run
+# lib.metrics' judged@10 per query, indexed by query_id
 library = evaluate(run, judgments)["judged@10"]
 # 1e-12 allows for floating-point rounding when the two judged@10 values are compared
 agree = sum(abs(row["judged@10"] - library[query_id]) < 1e-12 for query_id, row in zip(run, rows))
