@@ -1,3 +1,5 @@
+"""Writes reciprocal rank by hand, scores one query with two thresholds for relevant, and compares the mean over the
+test queries with `lib.metrics`. The prose rests on the two `rr` lines for one query and on the `queries with rr of 1` lines."""
 import pandas as pd
 
 from lib.lexical import LexicalSearch
@@ -6,16 +8,17 @@ from lib.semantic import SemanticSearch
 from lib.store import load_products, load_queries, qrels
 
 
-def reciprocal_rank(ranking, judgments, relevant=2):
+def reciprocal_rank(ranking, judgments, relevant=2):          # 2 is exact; pass 1 to count partial matches too
     """1 / the position of the first relevant product, or 0 if the ranking has none."""
     for position, product_id in enumerate(ranking, start=1):
-        if judgments.get(product_id, 0) >= relevant:
+        if judgments.get(product_id, 0) >= relevant:             # a product nobody judged has grade 0
             return 1 / position
     return 0.0
 
 
 queries, judgments = load_queries("test"), qrels("test")
-runs = {"bm25": LexicalSearch(load_products()).run(queries, k=100), "semantic": SemanticSearch().run(queries, k=100)}
+runs = {"bm25": LexicalSearch(load_products()).run(queries, k=100),  # 100 deep, so rr can find a first exact product below the top 10
+        "semantic": SemanticSearch().run(queries, k=100)}
 
 ranking = runs["bm25"][246]                                        # clear shower curtain
 print(f"rr, exact counts as relevant: {reciprocal_rank(ranking, judgments[246]):.3f}")

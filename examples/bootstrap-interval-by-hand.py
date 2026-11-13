@@ -1,3 +1,5 @@
+"""Builds a bootstrap interval for two gaps by resampling the test queries, checks the percentile interval against SciPy,
+then adds SciPy's default BCa interval and the effect size. The prose rests on the `bca low`, `bca high` and `bca interval and 0` lines."""
 import numpy as np
 from scipy.stats import bootstrap
 
@@ -19,10 +21,10 @@ for after, before in [("semantic", "bm25"), ("hybrid", "semantic")]:
     low, high = np.percentile(resampled.mean(axis=1), [2.5, 97.5])      # the middle 95% of their means
     print(f"{name}: {difference.mean():.3f}")
     print(f"{name} interval by hand: {low:.3f} to {high:.3f}")
-    percentile = bootstrap((difference,), np.mean, method="percentile", rng=np.random.default_rng(2026))
+    percentile = bootstrap((difference,), np.mean, method="percentile", rng=np.random.default_rng(2026))   # the data goes in as a tuple of samples; same seed, so the same resamples
     print(f"{name} percentile interval from scipy: "
           f"{percentile.confidence_interval.low:.3f} to {percentile.confidence_interval.high:.3f}")
     bca = bootstrap((difference,), np.mean, rng=np.random.default_rng(2026)).confidence_interval   # BCa, the default
     print(f"{name} bca low: {bca.low:.3f}\n{name} bca high: {bca.high:.3f}")
     print(f"{name} bca interval and 0: {'includes 0' if bca.low <= 0 <= bca.high else 'excludes 0'}")
-    print(f"{name} effect size: {difference.mean() / difference.std(ddof=1):.3f}")
+    print(f"{name} effect size: {difference.mean() / difference.std(ddof=1):.3f}")   # the mean over the sample standard deviation of the differences

@@ -1,3 +1,5 @@
+"""Writes DCG and nDCG from scratch and checks them against `lib.metrics` on every test query of three runs, then reads
+one query where BM25 scores a perfect 1. The prose rests on the `largest difference from lib.metrics` line and on the two grade lists for that query."""
 import math
 
 from lib.fusion import reciprocal_rank_fusion
@@ -9,19 +11,19 @@ from lib.store import load_products, load_queries, qrels
 
 def dcg(grades, k):
     """Each grade divided by log2 of its position plus one, added up over the top k."""
-    return sum(grade / math.log2(position + 1) for position, grade in enumerate(grades[:k], start=1))
+    return sum(grade / math.log2(position + 1) for position, grade in enumerate(grades[:k], start=1))   # positions count from 1, so the first is divided by log2(2) = 1
 
 
 def ndcg(ranking, judgments, k=10):
     """DCG of the ranking over DCG of the best order of every judged product (unjudged counts as 0)."""
-    ideal = dcg(sorted(judgments.values(), reverse=True), k)
+    ideal = dcg(sorted(judgments.values(), reverse=True), k)     # the ideal order holds every judged product, not only those the ranker returned
     return dcg([judgments.get(product_id, 0) for product_id in ranking], k) / ideal
 
 
 queries, judgments = load_queries("test"), qrels("test")
 bm25 = LexicalSearch(load_products()).run(queries, k=100)
 semantic = SemanticSearch().run(queries, k=100)
-runs = {"bm25": bm25, "semantic": semantic, "hybrid": reciprocal_rank_fusion([bm25, semantic])}
+runs = {"bm25": bm25, "semantic": semantic, "hybrid": reciprocal_rank_fusion([bm25, semantic])}   # the hybrid is chapter 1's fusion of the two
 
 gaps = [abs(ndcg(run[query_id], judgments[query_id]) - ndcg_at_k(run[query_id], judgments[query_id], 10))
         for run in runs.values() for query_id in judgments]

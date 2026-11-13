@@ -1,3 +1,5 @@
+"""Runs chapter 1's four rankers through the harness: each stage against the one before it, and one comparison chosen after
+the test means were seen. The prose rests on the `planned comparisons established` line and the `reranked minus semantic` lines."""
 from lib.fusion import reciprocal_rank_fusion
 from lib.lexical import LexicalSearch
 from lib.metrics import evaluate
@@ -10,9 +12,9 @@ queries, judgments = load_queries("test"), qrels("test")
 bm25 = LexicalSearch(load_products()).run(queries, k=100)
 semantic = SemanticSearch().run(queries, k=100)
 hybrid = reciprocal_rank_fusion([bm25, semantic])
-score = {(query_id, product_id): value for query_id, product_id, value in cross_encoder_scores().itertuples(index=False)}
+score = {(query_id, product_id): value for query_id, product_id, value in cross_encoder_scores().itertuples(index=False)}   # recorded cross-encoder scores, not computed here
 reranked = {query_id: sorted(ranking[:50], key=lambda product_id: score[(query_id, product_id)], reverse=True)
-            + ranking[50:] for query_id, ranking in hybrid.items()}          # chapter 1's rerank of the top 50
+            + ranking[50:] for query_id, ranking in hybrid.items()}          # chapter 1's rerank: reorder the top 50 by score, keep the rest in place
 
 runs = {"bm25": bm25, "semantic": semantic, "hybrid": hybrid, "reranked": reranked}
 scores = {name: evaluate(run, judgments) for name, run in runs.items()}       # one row per test query
@@ -27,7 +29,7 @@ print(f"chance of a false positive, all gaps noise, tests independent: {1 - 0.95
 established, disagreements = 0, 0
 for after, before in planned + exploratory:
     result, name = compare(scores[after]["ndcg@10"], scores[before]["ndcg@10"], confidence=1 - threshold), f"{after} minus {before}"
-    checks, kind = verdict(result, threshold), "planned" if (after, before) in planned else "exploratory"
+    checks, kind = verdict(result, threshold), "planned" if (after, before) in planned else "exploratory"   # verdict: is permutation p under the threshold, and do the t-test and interval agree
     print(f"\n{name}: {result['mean difference']:.3f}\n{name} kind: {kind}")
     print(f"{name} interval: {result['ci low']:.3f} to {result['ci high']:.3f}")
     print(f"{name} permutation p: {result['permutation p']:.3f}\n{name} t-test p: {result['t-test p']:.3f}")

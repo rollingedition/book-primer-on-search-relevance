@@ -1,3 +1,5 @@
+"""Compares scikit-learn's `ndcg_score` with `lib.metrics`: first on a top 10 passed alone, then on rows that hold every
+judged product, then on a ranking shorter than k. The prose rests on the two `ndcg@10` lines for one query and the two `5-product ranking` lines."""
 from sklearn.metrics import ndcg_score
 
 from lib.fusion import reciprocal_rank_fusion
@@ -9,10 +11,10 @@ from lib.store import load_products, load_queries, qrels
 
 def sklearn_ndcg(ranking, judgments, k=10):
     """One row for one query: every judged product, plus any retrieved product nobody judged."""
-    products = list(dict.fromkeys([*judgments, *ranking]))
+    products = list(dict.fromkeys([*judgments, *ranking]))   # each product once: the judged ones, then retrieved ones nobody judged
     position = {product_id: i for i, product_id in enumerate(ranking)}
-    grades = [[judgments.get(product_id, 0) for product_id in products]]
-    scores = [[-position.get(product_id, len(ranking)) for product_id in products]]  # not retrieved: below all
+    grades = [[judgments.get(product_id, 0) for product_id in products]]   # one row: ndcg_score wants one row per query
+    scores = [[-position.get(product_id, len(ranking)) for product_id in products]]  # minus the rank, so the first result scores highest; not retrieved: below all
     return ndcg_score(grades, scores, k=k)
 
 
@@ -22,7 +24,7 @@ semantic = SemanticSearch().run(queries, k=100)
 runs = {"bm25": bm25, "semantic": semantic, "hybrid": reciprocal_rank_fusion([bm25, semantic])}
 
 top = bm25[246][:10]                                                # clear shower curtain
-naive = ndcg_score([[judgments[246].get(product_id, 0) for product_id in top]], [list(range(10, 0, -1))], k=10)
+naive = ndcg_score([[judgments[246].get(product_id, 0) for product_id in top]], [list(range(10, 0, -1))], k=10)   # scores 10 down to 1: the top 10 in BM25's order
 print(f"ndcg@10, only the top 10 passed: {naive:.3f}")
 print(f"ndcg@10 from lib.metrics: {ndcg_at_k(top, judgments[246], 10):.3f}")
 print(f"ndcg@10, every judged product passed: {sklearn_ndcg(top, judgments[246]):.3f}")

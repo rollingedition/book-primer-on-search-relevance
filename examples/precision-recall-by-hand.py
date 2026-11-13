@@ -1,3 +1,5 @@
+"""Counts the exact products in BM25's top 10 for one query, then works out the best precision@10 and recall@10 each
+test query could reach. The prose rests on the `best precision@10 for those queries` and `its best recall@10` lines."""
 import pandas as pd
 
 from lib.lexical import LexicalSearch
@@ -6,7 +8,7 @@ from lib.store import load_products, load_queries, qrels
 
 queries, judgments = load_queries("test"), qrels("test")
 ranking = list(LexicalSearch(load_products()).search(queries.at[246, "query"], k=10).index)  # clear shower curtain
-exact = {product_id for product_id, grade in judgments[246].items() if grade == 2}
+exact = {product_id for product_id, grade in judgments[246].items() if grade == 2}  # grade 2 is exact; a product nobody judged isn't here, so it isn't relevant
 
 found = sum(product_id in exact for product_id in ranking[:10])
 print("exact in the top 10:", found)
@@ -19,8 +21,8 @@ print(f"recall@10 from lib.metrics: {recall_at_k(ranking, judgments[246], 10):.3
 # the best any ranking can do: a top 10 that holds as many exact products as the query has
 exact_counts = pd.Series({query_id: sum(grade == 2 for grade in per_query.values())
                           for query_id, per_query in judgments.items()})
-best_precision = exact_counts.clip(upper=10) / 10
-best_recall = exact_counts.clip(upper=10) / exact_counts
+best_precision = exact_counts.clip(upper=10) / 10          # a top 10 holds at most 10 exact products
+best_recall = exact_counts.clip(upper=10) / exact_counts   # so it finds at most 10 of a query's exact products
 print()
 print("queries where precision@10 can't reach 1:", (best_precision < 1).sum())
 print("fewest exact products for a query:", exact_counts.min())

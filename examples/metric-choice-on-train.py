@@ -1,3 +1,5 @@
+"""Scores semantic retrieval and the hybrid on the train queries with four metrics and prints which ranker each metric
+favours. The prose rests on the two `metrics won by` lines and the `largest gap` line."""
 from lib.fusion import reciprocal_rank_fusion
 from lib.lexical import LexicalSearch
 from lib.metrics import evaluate
@@ -14,7 +16,7 @@ exponential = {query_id: {product_id: 2 ** grade - 1 for product_id, grade in pe
 means = {}
 for name, run in runs.items():
     scores = evaluate(run, judgments)
-    means[name] = {"precision@10": scores["precision@10"].mean(), "mrr": scores["rr"].mean(),
+    means[name] = {"precision@10": scores["precision@10"].mean(), "mrr": scores["rr"].mean(),                                # the rr column is reciprocal rank, so its mean is MRR
                    "ndcg@10": scores["ndcg@10"].mean(),
                    "ndcg@10 with exponential gains": evaluate(run, exponential)["ndcg@10"].mean()}
 
@@ -23,7 +25,7 @@ winners = []
 for metric in means["semantic"]:
     for name in runs:
         print(f"{name} {metric}: {means[name][metric]:.3f}")
-    winners.append(max(runs, key=lambda name: means[name][metric]))
+    winners.append(max(runs, key=lambda name: means[name][metric]))   # an exact tie would go to semantic, the first in runs
     print(f"higher {metric}: {winners[-1]}")
 for name in runs:
     print(f"metrics won by {name}:", winners.count(name))
