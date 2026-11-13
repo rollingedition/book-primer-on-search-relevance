@@ -31,7 +31,7 @@ say = "The code resamples the train queries {{out:blend-weight-bootstrap:resampl
 say = "The code lists BM25's tied products in descending product ID order instead of ascending, and tunes RRF's k and both blends' α again on the train queries. Both of RRF's settings move, while the weighted sum's α stays at {{out:tuning-with-ties-reversed:weighted sum alpha, ties reversed}}."
 
 [examples.tuned-blends-on-test]
-say = "The code chooses each blend's α on the train queries, runs both blends once on the test queries, and compares each with semantic retrieval at the corrected threshold of {{out:tuned-blends-on-test:p-value threshold for each comparison}}. For each it prints the score, the mean difference, both p-values, the interval, and whether the difference is established."
+say = "The code chooses each blend's α on the train queries, runs both blends once on the test queries, and compares each with semantic retrieval at the corrected threshold of {{out:tuned-blends-on-test:p-value threshold for each comparison}}. For each it prints the score, the mean difference, both p-values and the interval, then checks that neither difference is established at that threshold."
 
 [examples.exact-products-missing-query-words]
 say = "The code splits the train queries and products into words as BM25 does, counts the exact pairs whose product lacks at least one query word, a share of {{out:exact-products-missing-query-words:share missing a query word}}, and lists the words missed most often, led by the typo ligth. Then, for midcentury tv unit, it counts the exact products that contain each of midcentury, unit and stand, and those whose text writes mid-century with a hyphen."
@@ -50,3 +50,23 @@ say = "The weight of a vocabulary term is the sum, over the text's tokens, of th
 section = "late-interaction-colbert"
 starts = "score(query, product) = sum over query"
 say = "The score of a query and a product is the sum, over the query's tokens, of each token's highest cosine with any of the product's tokens."
+
+[[tables]]
+section = "queries-each-retriever-wins"
+starts = "| Share of exact products retrieved |"
+say = "A table of the share of each query's exact products that BM25's list, semantic retrieval's list and their union hold, at two depths, cut to the top 20 and to the top 100. The union holds {{out:overlap-and-union-recall:union top 20, share of exact products retrieved}} at 20 and {{out:overlap-and-union-recall:union top 100, share of exact products retrieved}} at 100."
+
+[[tables]]
+section = "check-each-retriever-before-fusing"
+starts = "| Queries where |"
+say = "A table that splits the train queries by which retriever wins. Where BM25 wins, fusion beats semantic retrieval on {{out:fusion-gain-by-winning-retriever:bm25 wins, fusion better than semantic}} of {{out:fusion-gain-by-winning-retriever:bm25 wins, queries}} queries; where semantic retrieval wins, fusion is worse than semantic retrieval on {{out:fusion-gain-by-winning-retriever:semantic wins, fusion worse than semantic}} of {{out:fusion-gain-by-winning-retriever:semantic wins, queries}}."
+
+[[tables]]
+section = "tune-blend-on-train"
+starts = "| Setting | Best α |"
+say = "A table with one row for each tuned setting: the weighted sum under min-max, theoretical min-max and z-score, and weighted RRF at k of 60. Its columns give each setting's best α, its mean nDCG@10 on the train queries, and its permutation p-value against tuned min-max, which is a dash for min-max itself."
+
+[[tables]]
+section = "tuned-weight-stability"
+starts = "| Setting | Ties by product_id |"
+say = "A table that sets each setting tuned with BM25's ties by product ID beside the same setting with the ties reversed: RRF's best k goes from {{out:tuning-with-ties-reversed:best rrf k, ties by product_id}} to {{out:tuning-with-ties-reversed:best rrf k, ties reversed}}, weighted RRF's α from {{out:tuning-with-ties-reversed:weighted rrf alpha, ties by product_id}} to {{out:tuning-with-ties-reversed:weighted rrf alpha, ties reversed}}, and the weighted sum's α stays at {{out:tuning-with-ties-reversed:weighted sum alpha, ties reversed}}."

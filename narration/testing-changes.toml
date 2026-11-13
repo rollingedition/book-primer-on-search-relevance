@@ -47,3 +47,8 @@ say = "z is group B's conversion rate minus group A's, divided by the square roo
 section = "size-tests-with-power"
 starts = "users per group ≈ 16"
 say = "The users needed in each group are about 16 times the metric's variance, divided by the square of the change to detect."
+
+[[tables]]
+section = "simulate-interleaving-with-clicks"
+starts = "| Grade | Click | Stop after click |"
+say = "A table with one row for each grade, exact, partial and irrelevant, giving the shopper's chance of clicking a product of that grade and of leaving after a click."

@@ -102,7 +102,7 @@ description: "Use when evaluating or improving search ranking: grading relevance
 5. Tune one weight on a coarse grid ([Tune the blend's weight on train queries](#tune-blend-on-train)), then bootstrap and reverse ties to check it holds ([Check that the tuned weight is stable](#tuned-weight-stability)).
 6. Adopt a blend only when it beats the best single retriever on held-out queries ([Report the tuned blends on test queries](#report-blends-on-test)); start with weighted RRF when you have ranks only ([Decide when hybrid retrieval pays](#when-hybrid-helps)).
 
-**Check:** run [the example](examples/tuned-blends-on-test.py) and compare its `weighted sum established` line: {{out:tuned-blends-on-test:weighted sum established}}.
+**Check:** run [the example](examples/tuned-blends-on-test.py), which asserts that the weighted sum is not established, and compare its `weighted sum permutation p` line, {{out:tuned-blends-on-test:weighted sum permutation p}}, with the threshold, {{out:tuned-blends-on-test:p-value threshold for each comparison}}.
 
 **Pitfalls:** two retrievers cost two of everything; short lists drop candidates; min-max is relative; a tuned weight belongs to one pair of retrievers ([What goes wrong in production](#hybrid-retrieval-in-production)).
 
