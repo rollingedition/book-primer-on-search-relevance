@@ -1,3 +1,4 @@
+"""Prints the two judging prompts the recorded LLM was given, verbatim from the recording's manifest. The prose's point rests on the rules printed at the end of the guidelines prompt, after the word counts."""
 from lib.recorded import manifest
 
 recording = manifest("llm-judgments")             # the recording's model, settings and both prompts, verbatim
