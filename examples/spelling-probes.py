@@ -1,3 +1,4 @@
+"""Scores each correctly spelled probe with the judgments of the query it corrects, for semantic retrieval and BM25, as typed and as corrected. The prose's point rests on the semantic nDCG@10 lines for each spelling and on the smallest-p line."""
 from lib.lexical import LexicalSearch
 from lib.metrics import ndcg_at_k
 from lib.recorded import probes

@@ -1,3 +1,4 @@
+"""Counts, for each probe pair, the products the two top 10s share and the top-10 products of the right size, without scoring anything. The prose's point rests on the right-size lines for the hood and slow-cooker probes and on the seat-count lines for the sofa probe."""
 from lib.recorded import probes
 from lib.semantic import SemanticSearch
 from lib.store import load_products

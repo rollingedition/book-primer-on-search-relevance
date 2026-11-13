@@ -1,3 +1,4 @@
+"""Scores semantic retrieval on the train queries at 768, 256 and 128 dimensions, with each product's float32 size. The prose's point rests on the nDCG@10 line for each length, set against 768 dimensions."""
 from lib.metrics import evaluate
 from lib.semantic import SemanticSearch
 from lib.store import load_queries, qrels

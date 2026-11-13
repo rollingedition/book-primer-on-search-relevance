@@ -1,3 +1,4 @@
+"""Tests the change in nDCG@10 from shortening to 256 and 128 dimensions against the full vectors, on the train queries, with a permutation test, a paired t-test and a bootstrap interval. The prose's point rests on the permutation, interval and effect-size lines for each length."""
 from lib.metrics import evaluate
 from lib.semantic import SemanticSearch
 from lib.significance import compare

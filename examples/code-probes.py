@@ -1,3 +1,4 @@
+"""Compares the top 10s of two probe queries that differ only in a code no product holds, and shows where one product ranks for two resolutions, semantically and with BM25. The prose's point rests on the shared-top-10 line for the code and on the rank lines for the resolutions."""
 from lib.lexical import LexicalSearch
 from lib.recorded import probes
 from lib.semantic import SemanticSearch

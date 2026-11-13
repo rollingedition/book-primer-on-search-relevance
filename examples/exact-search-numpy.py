@@ -1,3 +1,4 @@
+"""Builds exact search from one matrix product, then checks its top 10 against lib.semantic and faiss's IndexFlatIP. The prose's point rests on the two 'same top 10' lines, which show the hand-built search matches both."""
 import faiss
 import numpy as np
 

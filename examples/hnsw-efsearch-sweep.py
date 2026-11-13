@@ -1,3 +1,4 @@
+"""Builds HNSW with M = 32 and sweeps efSearch on the train queries against exact search, printing recall, the worst query and the work per query. The prose's point rests on the efSearch 16 lines and the two smallest-efSearch lines printed after the table."""
 import faiss
 import numpy as np
 

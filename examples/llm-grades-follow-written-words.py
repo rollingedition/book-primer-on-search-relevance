@@ -30,7 +30,7 @@ for pool in ["train", "test"]:
     # subset: every query word appears in the text the LLM saw
     pairs["every word"] = [words(queries.at[query_id, "query"]) <= words(as_the_llm_saw(products.loc[product_id]))
                            for query_id, product_id in zip(pairs["query_id"], pairs["product_id"])]
-    # exact pairs should move down and partial pairs up; 'moved' counts the pairs that move the way the rule expects
+    # share of each group that the LLM grades below people (exact) or above them (partial), for each prompt
     for label, grade, every_word, direction in [("exact", 2, False, "lower"), ("exact", 2, True, "lower"),
                                                 ("partial", 1, True, "higher"), ("partial", 1, False, "higher")]:
         group = pairs[(pairs["human"] == grade) & (pairs["every word"] == every_word)]

@@ -1,3 +1,4 @@
+"""Finds the test query with the lowest best similarity and the one with the highest 10th similarity, and counts the products above a 0.5 cutoff. The prose's point rests on the two similarity lines and the cutoff counts."""
 import numpy as np
 
 from lib.recorded import embeddings

@@ -1,3 +1,4 @@
+"""Loads the recorded vectors and shows the lengths lib.recorded stores and rescales, and how close two shopper queries are. The prose's point about rounding rests on the rescaled-length line, and its point about nearby queries on the nearest-query lines."""
 import re
 
 import numpy as np

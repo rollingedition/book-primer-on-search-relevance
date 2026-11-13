@@ -1,3 +1,4 @@
+"""Computes the cosine of one test query and its best product by hand and with scikit-learn, then ranks every query's products by dot product and by cosine after the vectors are shortened. The prose's point rests on the line that counts queries whose top 10 changes."""
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 

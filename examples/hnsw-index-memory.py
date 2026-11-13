@@ -1,3 +1,4 @@
+"""Counts the links per product in the HNSW graph, and the bytes per product of the exact and the HNSW index. The prose's point rests on the two bytes-per-product lines, set against faiss's estimate."""
 import faiss
 
 from lib.recorded import embeddings

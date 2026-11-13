@@ -1,3 +1,4 @@
+"""Compares HNSW at faiss's default efSearch, and at the setting chosen on train queries, with exact search on the test queries, using paired tests at the planned threshold. The prose's point rests on the default setting's permutation and interval lines, and on the chosen setting's recall line."""
 import numpy as np
 
 from lib.metrics import evaluate

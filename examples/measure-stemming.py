@@ -1,3 +1,4 @@
+"""Compares the stemmed index with the unstemmed one on train and test queries, and runs the planned test comparison for stemming. The prose's point rests on the test permutation p and t-test p lines, and on the line that reports the query with the largest gain."""
 from lib.lexical_by_hand import THRESHOLD, InvertedIndex, report_test_comparison
 from lib.metrics import evaluate
 from lib.store import load_products, load_queries, product_text, qrels
@@ -19,8 +20,10 @@ for query_id in [410, 359]:                       # pool floats and french moldi
 
 print(f"\nthe planned test comparison, threshold {THRESHOLD:.2f}:")
 after, before = scores["test"]["with stemming"]["ndcg@10"], scores["test"]["without stemming"]["ndcg@10"]
+# the planned test comparison: permutation test, t-test and bootstrap interval
 report_test_comparison(after, before)
 gain = after - before
+# the query with the largest gain, and the mean gain without that query
 print("test query with the largest gain:", gain.idxmax())
 print(f"its gain: {gain.max():.3f}")
 print(f"mean test gain without it: {gain.drop(gain.idxmax()).mean():.3f}")

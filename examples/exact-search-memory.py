@@ -1,3 +1,4 @@
+"""Prints the bytes one product's float32 vector takes, and the memory the catalog's vectors use, for the store and for a million products. The prose's point rests on the MB line for the store's catalog and the GB line for a million products."""
 from lib.recorded import embeddings
 
 # Exact search keeps every product vector in memory, as 32-bit floats.

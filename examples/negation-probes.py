@@ -1,3 +1,4 @@
+"""Counts what each negation probe's top 10 holds for semantic retrieval and for BM25, without scoring it. The prose's point rests on the semantic top 10 lines for the rug, coffee-table and sofa probes."""
 import bm25s
 
 from lib.lexical import LexicalSearch

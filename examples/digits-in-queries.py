@@ -1,3 +1,4 @@
+"""Scores BM25 and semantic retrieval on each query with a digit, in both splits, and counts the products whose text writes 7qt or 7 qt. The prose's point rests on the three lines that count which ranker wins and the two product counts."""
 import pandas as pd
 
 from lib.lexical import LexicalSearch

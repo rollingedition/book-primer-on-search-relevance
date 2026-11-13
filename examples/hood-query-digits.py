@@ -1,3 +1,4 @@
+"""Lists semantic retrieval's top 10 for 48 inch kitchen hood with each hood's width, read from the attributes column the embeddings never saw. The prose's point rests on the two width-48 lines, one for each ranker."""
 from lib.lexical import LexicalSearch
 from lib.semantic import SemanticSearch
 from lib.store import load_products, load_queries, qrels
