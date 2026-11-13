@@ -55,13 +55,13 @@ nDCG@k = DCG@k / DCG@k of the ideal ranking
 
 This isn't the only version in use. Järvelin and Kekäläinen left the ranks below the log's base undiscounted, so with base 2 the first two positions count in full. Burges et al. used an exponential gain, 2^grade − 1, with a log(1 + rank) discount ([Burges et al., 2005](https://icml.cc/Conferences/2005/proceedings/papers/012_LearningToRank_BurgesEtAl.pdf)). Evaluation tools differ as well: the ir-measures documentation lists different nDCG options for pytrec_eval and for gdeval ([ir-measures](https://ir-measur.es/en/latest/measures.html)). So whenever you quote an nDCG, name the variant.
 
-One query looks wrong: BM25 scores `luau string lights` a perfect 1 with only {{out:ndcg-from-scratch:exact in the top 10}} exact products on its first page. The example checks hand-built DCG and nDCG against `lib.metrics` on the BM25, semantic and [hybrid](#fuse-with-rrf) runs from chapter 1, and explains that score:
+Write DCG and nDCG from scratch, and check them against `lib.metrics` on chapter 1's BM25, semantic and [hybrid](#fuse-with-rrf) runs. One score among them looks too good to be true:
 
 [Example: ndcg-from-scratch](../examples/ndcg-from-scratch.py)
 
 Across all {{out:ndcg-from-scratch:rankings checked}} rankings, the hand-written version never differs from `lib.metrics` by more than {{out:ndcg-from-scratch:largest difference from lib.metrics}}.
 
-For `luau string lights`, BM25's top 10 holds {{out:ndcg-from-scratch:exact in the top 10}} exact products and scores {{out:ndcg-from-scratch:ndcg@10}}, and that is correct. The query has only {{out:ndcg-from-scratch:exact products judged}} exact products judged, so the best possible top 10 holds those and then partial ones, and BM25 found that order. An nDCG@10 of 1 means "as good as the best order of the judged products", not "ten exact products".
+For `luau string lights`, BM25's top 10 holds {{out:ndcg-from-scratch:exact in the top 10}} exact products and scores {{out:ndcg-from-scratch:ndcg@10}}. That's not a mistake. The query has only {{out:ndcg-from-scratch:exact products judged}} exact products judged, so the best possible top 10 holds those and then partial ones, and BM25 found that order. An nDCG@10 of 1 means "as good as the best order of the judged products", not "ten exact products".
 
 **Working rule:** Use the linear-gain, log2(i + 1) form at a cutoff of 10, with the ideal ranking built from every judged product, and state that variant whenever you quote a number. Compare nDCG only between runs scored on the same judgments: new judgments change the ideal ranking, and with it every score.
 
@@ -159,7 +159,7 @@ A p-value says how surprising a gap is, not how big it is. On a large sample, ne
 
 The **bootstrap** builds one by resampling. Draw as many queries as you have from the queries you have, with replacement, so that some appear twice and others not at all. Compute the mean difference, repeat thousands of times, and take the middle 95% of those means: that's the **percentile interval**. The **effect size** of a paired comparison is the mean difference divided by the standard deviation of the differences ([Sakai, 2014, section 3.1.2](https://sigir.org/files/forum/2014J/2014J_sigirforum_Article_TetsuyaSakai.pdf)). It is how large the gap is next to how much it varies from query to query. It isn't Cohen's d, the effect size for unpaired samples, and Sakai warns against comparing the two directly.
 
-Can a hand-built percentile interval match SciPy's `bootstrap` with `method="percentile"`? Both gaps are covered, and then SciPy's default method is run:
+Can a hand-built percentile interval match SciPy's `bootstrap` with `method="percentile"`? Build one by hand for semantic retrieval against BM25 and for the hybrid against semantic retrieval, check each against SciPy, then run SciPy's default method:
 
 [Example: bootstrap-interval-by-hand](../examples/bootstrap-interval-by-hand.py)
 
@@ -167,7 +167,7 @@ SciPy's percentile interval matches the one built by hand: {{out:bootstrap-inter
 
 For semantic retrieval against BM25, BCa runs from {{out:bootstrap-interval-by-hand:semantic minus bm25 bca low}} to {{out:bootstrap-interval-by-hand:semantic minus bm25 bca high}}, so it {{out:bootstrap-interval-by-hand:semantic minus bm25 bca interval and 0}}, and the effect size is {{out:bootstrap-interval-by-hand:semantic minus bm25 effect size}}.
 
-For the hybrid against semantic retrieval, the interval runs from a loss of a few hundredths to a gain of at most {{out:bootstrap-interval-by-hand:hybrid minus semantic bca high}}. It {{out:bootstrap-interval-by-hand:hybrid minus semantic bca interval and 0}}, and the effect size is {{out:bootstrap-interval-by-hand:hybrid minus semantic effect size}}: no gain worth having.
+For the hybrid against semantic retrieval, the interval runs from {{out:bootstrap-interval-by-hand:hybrid minus semantic bca low}} to {{out:bootstrap-interval-by-hand:hybrid minus semantic bca high}}. It {{out:bootstrap-interval-by-hand:hybrid minus semantic bca interval and 0}}, and the effect size is {{out:bootstrap-interval-by-hand:hybrid minus semantic effect size}}: no gain worth having.
 
 A bootstrap interval only approximates its level, and on a few dozen queries it falls short. To check, treat the hybrid's {{out:permutation-test-by-hand:test queries}} per-query differences against semantic retrieval as if they were every query there is, so the true gap is known. Then draw {{out:interval-coverage-check:trials}} new sets of the same size from them, build an interval on each, and count how often it covers the true gap:
 
