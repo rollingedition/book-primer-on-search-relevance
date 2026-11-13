@@ -10,7 +10,7 @@ Every score in this book rests on judgments: people read a query typed into [the
 
 The LLM's grades come from a **recording**: `recordings/llm_judgments.py` ran the open model `{{out:print-judging-guidelines:model}}` once, locally, at temperature 0 with a fixed seed, and saved its answers, so the examples read them through `lib.recorded.llm_judgments()` without calling the model. We chose the model because it is open, under the Apache 2.0 licence, and runs locally, so anyone can rerun the recording. A JSON schema limits each answer to one of the three labels. The recording graded each pair with two prompts, `short` and `guidelines` ([Write judging guidelines](#write-judging-guidelines)), and took its pairs from two sets, which this chapter calls pools.
 
-The scores that decide between rankers stay on human grades. The chapter's planned comparisons on the test queries are [chapter 3's three](#when-a-difference-is-established), rescored with each prompt's LLM grades at chapter 3's threshold of {{out:planned-comparisons-llm-grades:p-value threshold}}: semantic retrieval against BM25, the hybrid against semantic retrieval, and the reranked hybrid against the hybrid.
+The scores that decide between rankers stay on human grades. The chapter's planned comparisons on the test queries are [chapter 3's three](#when-a-difference-is-established), rescored with each prompt's LLM grades at chapter 3's threshold of {{out:planned-comparisons-llm-grades:p-value threshold}} for the paired [permutation test](#permutation-test-on-queries): semantic retrieval against BM25, the hybrid against semantic retrieval, and the reranked hybrid against the hybrid.
 
 ## Write judging guidelines {#write-judging-guidelines}
 
@@ -63,7 +63,7 @@ weighted kappa = 1 - (sum of weight × observed count) / (sum of weight × count
 
 With every disagreement weighted 1, the formula gives plain kappa. scikit-learn's `cohen_kappa_score` computes all three kinds this way: weight 1 by default, the distance between grades with `weights="linear"`, and its square with `weights="quadratic"` ([scikit-learn source](https://raw.githubusercontent.com/scikit-learn/scikit-learn/1.9.1/sklearn/metrics/_classification.py)). Scaling the weights doesn't change the result.
 
-For both [prompts](#write-judging-guidelines), the example builds the linear weights and weighted sums by hand on the evenly drawn train pairs of [Measure agreement beyond chance](#agreement-beyond-chance), then checks each result against scikit-learn:
+For both [prompts](#write-judging-guidelines), the example builds the linear weights by hand on the evenly drawn train pairs of [Measure agreement beyond chance](#agreement-beyond-chance), then checks each result against scikit-learn:
 
 [Example: weighted-kappa-by-hand](../examples/weighted-kappa-by-hand.py)
 
@@ -171,7 +171,7 @@ The prompts disagree about the unjudged pairs. Counted as exact, partial and irr
 
 With the holes filled, BM25 scores {{out:fill-unjudged-pairs:bm25 ndcg@10, filled by the short prompt}} with `short` and {{out:fill-unjudged-pairs:bm25 ndcg@10, filled by the guidelines prompt}} with `guidelines`, against {{out:kendall-tau-four-rankers:bm25 ndcg@10 under people}} on human grades alone, and semantic retrieval scores {{out:fill-unjudged-pairs:semantic ndcg@10, filled by the short prompt}} and {{out:fill-unjudged-pairs:semantic ndcg@10, filled by the guidelines prompt}}, against {{out:kendall-tau-four-rankers:semantic ndcg@10 under people}}.
 
-The order on human grades alone is `{{out:fill-unjudged-pairs:order, people's grades only}}`, and filling leaves it as `{{out:fill-unjudged-pairs:order, filled by the short prompt}}` under `short` and `{{out:fill-unjudged-pairs:order, filled by the guidelines prompt}}` under `guidelines`. The planned comparisons' verdicts that change are {{out:fill-unjudged-pairs:verdicts that change when filled, short prompt}} under `short` and {{out:fill-unjudged-pairs:verdicts that change when filled, guidelines prompt}} under `guidelines`.
+The order on human grades alone is `{{out:fill-unjudged-pairs:order, people's grades only}}`. The rankers that change place when `short` fills the holes are {{out:fill-unjudged-pairs:rankers that change place when filled, short prompt}}, and when `guidelines` does, {{out:fill-unjudged-pairs:rankers that change place when filled, guidelines prompt}}. The planned comparisons' verdicts that change are {{out:fill-unjudged-pairs:verdicts that change when filled, short prompt}} under `short` and {{out:fill-unjudged-pairs:verdicts that change when filled, guidelines prompt}} under `guidelines`.
 
 Under human grades, the rankers' mean judged@10, the share of each top 10 that people judged, runs from {{out:compare-chapter-one-rankers:bm25 judged@10}} for BM25 to {{out:compare-chapter-one-rankers:semantic judged@10}} for semantic retrieval ([Compare runs in a harness](#compare-runs-in-a-harness)).
 
@@ -205,13 +205,13 @@ Tau also weighs a swap at the top the same as one at the bottom, a weakness Yilm
 
 The ranker that keeps its place under every set of grades is `{{out:kendall-tau-four-rankers:rankers in the same place under every set of grades}}`. The orders differ only among the three rankers that human grades score {{out:kendall-tau-four-rankers:semantic ndcg@10 under people}}, {{out:kendall-tau-four-rankers:hybrid ndcg@10 under people}} and {{out:kendall-tau-four-rankers:reranked ndcg@10 under people}}, and those gaps are ones that no planned comparison establishes ([Rerun the planned comparisons](#llm-graded-verdicts)).
 
-**Working rule:** Report tau with the list of swapped pairs, never alone. With a handful of rankers, where one swap moves tau by {{out:kendall-tau-four-rankers:change in tau from one swapped pair}}, don't read it against 0.9. Then test whether the swapped pairs differ at all, with [the planned comparisons under each set of grades](#llm-graded-verdicts).
+**Working rule:** Report tau with the list of swapped pairs, never alone. With a handful of rankers, where one swap moves tau by {{out:kendall-tau-four-rankers:change in tau from one swapped pair}}, don't read it against 0.9. Then test whether the swapped pairs differ, with [the planned comparisons under each set of grades](#llm-graded-verdicts).
 
 ## Rerun the planned comparisons with LLM grades {#llm-graded-verdicts}
 
 Decisions come from verdicts under [the book's rule](#when-a-difference-is-established), not from the [orderings that tau compares](#system-order-human-versus-llm). Would LLM grades have given the store the same verdicts? Expect trouble near the top: Otero et al. found that "LLM-based judgements are unfair at ranking top-performing systems", with "an exceedingly high rate of false positives regarding statistical differences" ([Otero et al., 2025](https://arxiv.org/abs/2411.13212)).
 
-The planned comparisons are chapter 3's three, at a p-value threshold of {{out:planned-comparisons-llm-grades:p-value threshold}}, with intervals at the {{out:planned-comparisons-llm-grades:interval level}} level. Rerunning them under human grades and under each [prompt's](#write-judging-guidelines) grades on the test pool, with chapter 3's exploratory comparison of the reranked hybrid with semantic retrieval added, shows whether the store would have shipped the same rankers:
+Chapter 3's three planned comparisons use a threshold of {{out:planned-comparisons-llm-grades:p-value threshold}} and intervals at the {{out:planned-comparisons-llm-grades:interval level}} level. Rerunning them under human grades and under each [prompt's](#write-judging-guidelines) grades on the test pool, with chapter 3's exploratory comparison of the reranked hybrid with semantic retrieval added, shows whether the store would have shipped the same rankers:
 
 [Example: planned-comparisons-llm-grades](../examples/planned-comparisons-llm-grades.py)
 
@@ -283,7 +283,7 @@ The correction fixes the level of a score, but narrows the uncertainty only wher
 
 ## Decisions this chapter made {#judgments-from-people-and-llms-decisions}
 
-The store keeps these until a chapter gives a reason to change one.
+The store keeps these unless a later chapter gives a reason.
 
 - **Human grades for every headline score.** LLM grades are a diagnostic: filling holes, screening candidates and checking verdicts. The LLM-based rankers of [chapter 8](#rewrite-queries-with-llm) and [chapter 9](#llm-pointwise-reranking) are scored on human grades.
 - **Every finding about the judge names its pool.** Kappa and linear weighted kappa, with observed agreement beside them, the far misses and the label mix are measured on train pairs people judged, and reported for the test pool's judged pairs too. The direction and the largest error are read on each pool, and only the rankers' top 10s speak to ranker scores.
@@ -292,4 +292,4 @@ The store keeps these until a chapter gives a reason to change one.
 - **Compare scores only under the same grades.** On the same pool, LLM grades don't move every ranker's nDCG@10 by the same amount, or in the same direction, so a score under LLM grades never meets one under human grades.
 - **Tau with its swapped pairs, then the planned comparisons at chapter 3's threshold.** With four rankers tau is crude, and the verdicts decide.
 - **A score from LLM grades comes with a human sample** of queries that corrects it, and the correlation that says whether the LLM's grades narrowed the uncertainty.
-- **What the chapter showed:** An LLM judge can fill holes and screen candidates, but its grades move rankers unevenly, so a verdict that matters is still read on human grades.
+- **What the chapter showed:** An LLM judge can fill holes and screen candidates, but its grades move rankers unevenly, so a verdict that matters still needs human grades.
