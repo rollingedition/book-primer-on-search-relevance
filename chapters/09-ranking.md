@@ -124,7 +124,7 @@ Against semantic retrieval's {{out:lambdamart-choices-on-train:semantic, train n
 
 A model tuned on train queries is reported once on the test queries, by a comparison planned before looking. **Feature importance** shows what it learned: LightGBM's `"gain"` importance is the "total gains of splits which use the feature" ([`Booster`](https://lightgbm.readthedocs.io/en/v4.7.0/pythonapi/lightgbm.Booster.html)), so a feature with no gain plays no part in the score.
 
-The first planned comparison starts from the setup [chosen on train](#train-lambdamart): [LambdaMART](#learn-from-pairs) on all the features, with 3 leaves at a learning rate of 0.1, unjudged candidates as grade 0, and candidates in `product_id` order. It fits on {{out:lambdamart-on-test:queries fitted}} train queries, stops early on {{out:lambdamart-on-test:queries held out for stopping}} others, and ranks each test query's candidates. A gain needs a permutation p-value below {{out:lambdamart-on-test:p-value threshold}}:
+The first [planned comparison](#ranking) uses the setup [chosen on train](#train-lambdamart): [LambdaMART](#learn-from-pairs) on all the [features](#ranking-features), with 3 leaves at a learning rate of 0.1, unjudged candidates as grade 0, and candidates in `product_id` order. It fits on {{out:lambdamart-on-test:queries fitted}} train queries, stops early on {{out:lambdamart-on-test:queries held out for stopping}} others, and ranks each test query's candidates. A gain needs a permutation p-value below {{out:lambdamart-on-test:p-value threshold}}:
 
 [Example: lambdamart-on-test](../examples/lambdamart-on-test.py)
 
