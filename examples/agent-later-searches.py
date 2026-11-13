@@ -11,14 +11,13 @@ for tool in ["bm25", "semantic"]:
         # words are lowercase runs of letters and digits, so case and punctuation don't count
         asked, seen = words(queries.at[trace["query_id"], "query"]), set()
         for number, search in enumerate(trace["searches"]):
-            # the first search has no earlier search to add words to
             if number > 0:                                    # a later search: the words it adds, and where from
                 added = words(search["query"]) - asked
                 later, new, from_results = later + 1, new + len(added), from_results + len(added & seen)
             # every word the agent has searched so far
             asked |= words(search["query"])
             # what the tool showed for that search: name, class and attributes, but no description
-            seen |= words(shown(search["results"], products))   # name, class and attributes, as the tool showed them
+            seen |= words(shown(search["results"], products))
     print(f"{tool}, later searches: {later}")
     print(f"{tool}, words that later searches add: {new}")
     print(f"{tool}, of those, words the tool had shown: {from_results}")

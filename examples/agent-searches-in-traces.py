@@ -17,7 +17,7 @@ print("first searches that keep the query as typed:", sum(first[("bm25", q)] == 
 for q in queries.index:
     if first[("bm25", q)] != queries.at[q, "query"]:
         print(f"first search for {queries.at[q, 'query']}: {first[('bm25', q)]}")
-# the five products each recorded answer read, keyed by retriever and query
+# the five products each recorded answer read, keyed by context (semantic, bm25 or random) and query
 context = {(a.context, a.query_id): a.context_ids for a in rag_answers().itertuples()}
 print("traces whose first search returns the answer recording's context:",
       # lists compared with ==: the same five products, in the same order
@@ -27,7 +27,7 @@ for tool in ["bm25", "semantic"]:
     print(f"{tool}, searches: {sum(len(t['searches']) for t in mine)}")
     print(f"{tool}, traces with one search: {sum(len(t['searches']) == 1 for t in mine)}")
 
-# the search tool returned this many products per search (its top 5)
+# `shown` is how many products the search tool returns per search (its top 5)
 lexical, shown = LexicalSearch(load_products()), recording["results_shown"]
 stored = [s for (tool, _), t in traces.items() if tool == "bm25" for s in t["searches"]]   # what the agent saw
 rerun = [lexical.search(s["query"], shown).index.tolist() for s in stored]                  # ties by product_id
