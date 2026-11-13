@@ -17,8 +17,8 @@ def reciprocal_rank(ranking, judgments, relevant=2):          # 2 is exact; pass
 
 
 queries, judgments = load_queries("test"), qrels("test")
-runs = {"bm25": LexicalSearch(load_products()).run(queries, k=100),  # 100 deep, so rr can find a first exact product below the top 10
-        "semantic": SemanticSearch().run(queries, k=100)}
+# 100 deep, so rr can find a first exact product below the top 10
+runs = {"bm25": LexicalSearch(load_products()).run(queries, k=100), "semantic": SemanticSearch().run(queries, k=100)}
 
 ranking = runs["bm25"][246]                                        # clear shower curtain
 print(f"rr, exact counts as relevant: {reciprocal_rank(ranking, judgments[246]):.3f}")

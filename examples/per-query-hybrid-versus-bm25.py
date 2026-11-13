@@ -20,7 +20,7 @@ print("tied:", (difference == 0).sum())
 
 print("\nhybrid's three largest losses:")
 print(queries.loc[difference.index[:3], "query"].to_frame().assign(difference=difference[:3]).to_string())
-largest = difference.index[-1]                                  # sorted ascending: the first three are the losses, the last is the gain
+largest = difference.index[-1]                                  # sorted ascending: the first three are the losses, the last is the largest gain
 print("\nlargest gain:", queries.at[largest, "query"])
 print(f"its gain: {difference[largest]:.3f}")
 print(f"its bm25 judged@10: {before.at[largest, 'judged@10']:.3f}")   # the share of BM25's top 10 that has a judgment

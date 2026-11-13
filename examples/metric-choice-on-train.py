@@ -1,5 +1,5 @@
 """Scores semantic retrieval and the hybrid on the train queries with four metrics and prints which ranker each metric
-favours. The prose rests on the two `metrics won by` lines and the `largest gap` line."""
+favours. The prose rests on the two `metrics won by` lines, the `largest gap` line and `higher ndcg@10`."""
 from lib.fusion import reciprocal_rank_fusion
 from lib.lexical import LexicalSearch
 from lib.metrics import evaluate

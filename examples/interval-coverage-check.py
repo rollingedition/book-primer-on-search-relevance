@@ -22,7 +22,7 @@ for level in [0.95, round(1 - 0.05 / 3, 4)]:          # the usual level, and the
     covered = {"bca": 0, "t": 0}
     for _ in range(trials):
         sample = rng.choice(population, size=len(population))      # another set of 30 queries like these
-        bca = bootstrap((sample,), np.mean, confidence_level=level, n_resamples=1999, rng=rng).confidence_interval   # SciPy's default is 9,999; this loop builds 2,000 of them
+        bca = bootstrap((sample,), np.mean, confidence_level=level, n_resamples=1999, rng=rng).confidence_interval   # fewer resamples than SciPy's default 9,999, because the loop builds 2,000 intervals
         t = ttest_1samp(sample, 0).confidence_interval(level)     # the interval that matches the t-test
         covered["bca"] += bca.low <= true_gap <= bca.high
         covered["t"] += t.low <= true_gap <= t.high
