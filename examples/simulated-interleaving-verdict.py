@@ -22,14 +22,13 @@ lexical = LexicalSearch(load_products())
 bm25 = lexical.run(queries, k=100)                                        # equal scores by product_id
 semantic = SemanticSearch().run(queries, k=100)
 hybrid = reciprocal_rank_fusion([bm25, semantic])
-# BM25's ranking, with its ties reversed, for the third pair
 bm25_reversed = {q: ties_reversed(lexical.search(query, k=100)) for q, query in queries["query"].items()}
 
 pairs = {"semantic against bm25": (semantic, bm25), "hybrid against semantic": (hybrid, semantic),
          "hybrid with bm25 ties reversed against semantic": (reciprocal_rank_fusion([bm25_reversed, semantic]), semantic)}
 below = {}
 for name, (run_a, run_b) in pairs.items():
-    # a fresh seed for each pair, so every pair's searches are drawn the same way
+    # a fresh seed for each pair, so every pair sees the same 10,000 queries
     outcomes = simulate_interleaving(run_a, run_b, judgments, 10_000, np.random.default_rng(2026))
     for searches in [100, 1_000, 10_000]:
         # the first 100, 1,000 or 10,000 of the same searches, so the three verdicts share data

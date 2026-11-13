@@ -13,7 +13,7 @@ shoppers = SHOPPERS_PER_DAY * np.arange(1, DAYS + 1)[None, :]                   
 rate_a, rate_b = buyers[..., 0] / shoppers, buyers[..., 1] / shoppers
 pooled = (rate_a + rate_b) / 2
 # two-proportion z for each day, using the pooled rate of the two groups
-z = (rate_b - rate_a) / np.sqrt(pooled * (1 - pooled) * 2 / shoppers)    # two-proportion z-test, every day
+z = (rate_b - rate_a) / np.sqrt(pooled * (1 - pooled) * 2 / shoppers)
 # two-sided: a gap in either direction counts
 p_value = 2 * stats.norm.sf(np.abs(z))
 
