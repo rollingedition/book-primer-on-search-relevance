@@ -31,7 +31,7 @@ say = "The code resamples the train queries {{out:blend-weight-bootstrap:resampl
 say = "The code lists BM25's tied products in descending product ID order instead of ascending, and tunes RRF's k and both blends' α again on the train queries. Both of RRF's settings move, while the weighted sum's α stays at {{out:tuning-with-ties-reversed:weighted sum alpha, ties reversed}}."
 
 [examples.tuned-blends-on-test]
-say = "The code chooses each blend's α on the train queries, runs both blends once on the test queries, and compares each with semantic retrieval at the corrected threshold of {{out:tuned-blends-on-test:p-value threshold for each comparison}}. For each it prints the score, the mean difference, both p-values, the interval, and whether the difference is established."
+say = "The code chooses each blend's α on the train queries, runs both blends once on the test queries, and compares each with semantic retrieval at the corrected threshold of {{out:tuned-blends-on-test:p-value threshold for each comparison}}. For each it prints the score, the mean difference, both p-values and the interval, then checks that neither difference is established at that threshold."
 
 [examples.exact-products-missing-query-words]
 say = "The code splits the train queries and products into words as BM25 does, counts the exact pairs whose product lacks at least one query word, a share of {{out:exact-products-missing-query-words:share missing a query word}}, and lists the words missed most often, led by the typo ligth. Then, for midcentury tv unit, it counts the exact products that contain each of midcentury, unit and stand, and those whose text writes mid-century with a hyphen."

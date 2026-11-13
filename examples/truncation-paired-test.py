@@ -18,6 +18,7 @@ def p_value(p):
 
 full = ndcg(768)
 for dims in [256, 128]:
+    # compare's default interval is 95%
     result = compare(ndcg(dims), full)                    # paired by train query: shortened minus full
     print(f"{dims} vs 768, mean difference in ndcg@10: {result['mean difference']:.3f}")
     print(f"{dims} vs 768, queries worse: {result['losses']}")

@@ -24,4 +24,5 @@ for row, probe in spelling.iterrows():
         print(f"{pair}, bm25 ndcg@10 {name}: {ndcg_at_k(list(bm25.search(text, k=10).index), judgments[query_id], 10):.3f}")
     print()
 print("spelling probes:", len(spelling))
+# a sign-flip test on n queries has 2 ** n outcomes, and its two most extreme give the smallest two-sided p
 print(f"smallest two-sided permutation p-value possible with {len(spelling)} queries: {2 / 2 ** len(spelling):.3f}")

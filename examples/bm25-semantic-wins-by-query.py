@@ -1,3 +1,5 @@
+"""Scores BM25 and semantic retrieval on each train query and counts the queries each one wins, ties included.
+The prose's point rests on the win counts and on the mean of the better score per query."""
 import numpy as np
 
 from lib.lexical import LexicalSearch
@@ -13,6 +15,7 @@ bm25_scores, semantic_scores = evaluate(bm25, judgments)["ndcg@10"], evaluate(se
 print("train queries:", len(queries))
 print(f"bm25 ndcg@10: {bm25_scores.mean():.3f}")
 print(f"semantic ndcg@10: {semantic_scores.mean():.3f}")
+# rounded to 3 places, so differences that are float noise count as ties
 lead = (bm25_scores - semantic_scores).round(3)              # per train query; above 0 means BM25 wins
 print("bm25 better:", (lead > 0).sum())
 print("semantic better:", (lead < 0).sum())
@@ -22,5 +25,6 @@ has_digit = queries["query"].str.contains(r"\d")
 print("queries with a digit:", has_digit.sum())
 print("queries with a digit, bm25 better:", (lead[has_digit] > 0).sum())
 print()
+# a lead of 0.1 nDCG@10 or more, the threshold the prose cites
 print("queries where bm25 leads by 0.1 or more:", (lead >= 0.1).sum())
 print(queries.loc[lead[lead >= 0.1].index, "query"].to_string())
