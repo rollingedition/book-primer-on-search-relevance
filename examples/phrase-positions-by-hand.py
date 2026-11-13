@@ -24,6 +24,5 @@ assert index.bm25("barn door") == index.bm25("door barn")
 both = set(positions["barn"]) & set(positions["door"])
 print("names with barn and door:", len(both))
 print("names with the phrase barn door:", sum(has_phrase(product_id, ["barn", "door"]) for product_id in both))
-# the names that have both words and not the phrase
 for product_id in sorted(product_id for product_id in both if not has_phrase(product_id, ["barn", "door"])):
     print("  ", products.at[product_id, "name"])

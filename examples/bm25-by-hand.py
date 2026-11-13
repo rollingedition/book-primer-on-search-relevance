@@ -38,7 +38,6 @@ for tf in [1, 2, 4, 9]:                                   # one term, in a produ
 gaps = [(bm25(query).reindex(products.index, fill_value=0) - library.retriever.get_scores(tokenize(query))).abs().max()
         for query in queries["query"]]
 print(f"\nlargest score difference from bm25s: {max(gaps):.0e}")
-# bm25s returns float32 scores, not float64
 print("bm25s score type:", library.retriever.get_scores(["chair"]).dtype)
 ranked = {query_id: list(bm25(query).sort_index().sort_values(ascending=False, kind="stable").index[:100])
           for query_id, query in queries["query"].items()}         # equal scores in product_id order

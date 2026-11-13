@@ -27,7 +27,7 @@ print()
 for word in ["floats", "molding"]:
     print(f"products with {word}:", len(plain.postings[word]))
     print(f"products with the stem of {word}:", len(stemmed.postings[stemmer.stemWord(word)]))
-# every product whose text has the stem float, from either floats or floating
+# every product with a word whose stem is float: float, floats, floating and any other form
 float_products = list(stemmed.postings["float"])
 print("products with the stem of floats that say floating:", len(plain.postings["floating"].keys() & set(float_products)))
 for product_class, count in products.loc[float_products, "product_class"].value_counts().head(2).items():

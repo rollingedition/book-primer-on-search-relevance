@@ -23,7 +23,6 @@ after, before = scores["test"]["with stemming"]["ndcg@10"], scores["test"]["with
 # the planned test comparison: permutation test, t-test and bootstrap interval
 report_test_comparison(after, before)
 gain = after - before
-# the query with the largest gain, and the mean gain without that query
 print("test query with the largest gain:", gain.idxmax())
 print(f"its gain: {gain.max():.3f}")
 print(f"mean test gain without it: {gain.drop(gain.idxmax()).mean():.3f}")

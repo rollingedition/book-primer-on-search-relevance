@@ -17,7 +17,6 @@ print(f"average product length: {sum(lengths.values()) / len(lengths):.1f} terms
 # (product ID, term frequency) pairs, starting from product 1
 print("postings for cooker, first 3:", list(postings["cooker"].items())[:3])
 print()
-# train query 62, looked up by its ID
 query = load_queries().at[62, "query"]
 for term in tokenize(query):
     print(f"products with {term}:", len(postings.get(term, {})))
