@@ -131,7 +131,7 @@ Small boosts barely move the train score, and large ones hurt it: nDCG@10 is {{o
 
 On the test queries, judged@10 is {{out:class-boost-train-and-test:test judged@10 semantic}} without the boost and {{out:class-boost-train-and-test:test judged@10 boosted}} with it, and the boost's gain isn't established ([planned comparisons](#understanding-queries-decisions)).
 
-**Working rule:** Don't filter on a predicted class. Boost it with a weight tuned on train queries, and keep the boost only if its planned test comparison is established. The store's isn't, so its semantic retrieval stays unboosted. We recommend a class filter only when the shopper chose the class, for example by clicking a category.
+**Working rule:** Don't filter on a predicted class. Boost it with a weight tuned on train queries, and keep the boost only if its planned comparison is established. The store's isn't, so its semantic retrieval stays unboosted. We recommend a class filter only when the shopper chose the class, for example by clicking a category.
 
 ## Rewrite queries with an LLM {#rewrite-queries-with-llm}
 

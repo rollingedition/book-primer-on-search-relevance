@@ -34,8 +34,8 @@ The two top 10s share {{out:overlap-and-union-recall:products in both top 10s, m
 
 | Share of exact products retrieved | Top 20 | Top 100 |
 | --- | --- | --- |
-| BM25 | — | {{out:overlap-and-union-recall:bm25 top 100, share of exact products retrieved}} |
-| Semantic retrieval | — | {{out:overlap-and-union-recall:semantic top 100, share of exact products retrieved}} |
+| BM25 | {{out:overlap-and-union-recall:bm25 top 20, share of exact products retrieved}} | {{out:overlap-and-union-recall:bm25 top 100, share of exact products retrieved}} |
+| Semantic retrieval | {{out:overlap-and-union-recall:semantic top 20, share of exact products retrieved}} | {{out:overlap-and-union-recall:semantic top 100, share of exact products retrieved}} |
 | Union of both | {{out:overlap-and-union-recall:union top 20, share of exact products retrieved}} | {{out:overlap-and-union-recall:union top 100, share of exact products retrieved}} |
 
 Two train queries show the kinds of failure:
