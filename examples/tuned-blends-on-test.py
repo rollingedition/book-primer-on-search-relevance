@@ -18,7 +18,6 @@ def blends(queries):
 
 
 train, test = blends(load_queries("train")), blends(load_queries("test"))
-# Bonferroni: the two planned comparisons share the 0.05
 threshold = 0.05 / len(test)                                 # two planned comparisons, Bonferroni-corrected
 semantic_scores = evaluate(semantic.run(load_queries("test")), qrels("test"))
 print("test queries:", len(semantic_scores))
@@ -40,7 +39,7 @@ for name, blend in test.items():
     print(f"{name} permutation p: {result['permutation p']:.3f}")
     print(f"{name} t-test p: {result['t-test p']:.3f}")
     print(f"{name} interval: {result['ci low']:.3f} to {result['ci high']:.3f}")
-    # a difference is established only below the corrected threshold
+    # neither difference is established: each permutation p-value stays at or above the corrected threshold
     assert result['permutation p'] >= threshold
 print(f"lowest judged@10: {min(judged):.3f}")
 print(f"highest judged@10: {max(judged):.3f}")

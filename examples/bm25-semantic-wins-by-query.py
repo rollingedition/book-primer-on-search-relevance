@@ -25,6 +25,5 @@ has_digit = queries["query"].str.contains(r"\d")
 print("queries with a digit:", has_digit.sum())
 print("queries with a digit, bm25 better:", (lead[has_digit] > 0).sum())
 print()
-# a lead of 0.1 nDCG@10 or more, the threshold the prose cites
 print("queries where bm25 leads by 0.1 or more:", (lead >= 0.1).sum())
 print(queries.loc[lead[lead >= 0.1].index, "query"].to_string())

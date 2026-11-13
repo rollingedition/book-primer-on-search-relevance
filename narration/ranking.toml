@@ -56,3 +56,18 @@ say = "A table of what each reranker reads per query at depth 20. The cross-enco
 section = "ranking-decisions"
 starts = "| Measure |"
 say = "A table of the planned comparisons, one per column: LambdaMART, the cross-encoder, the pointwise and listwise LLM rerankers, and the distilled ranker, each against semantic retrieval. Its rows give each one's nDCG@10, mean difference, wins, losses and ties, both p-values, whether the difference is established, the 99% interval, and whether the t-test and the interval agree. None of them is established."
+
+[[tables]]
+section = "ranking-features"
+starts = "| Grade | Mean | Median |"
+say = "A table of the mean and median rating count for the exact, partial and irrelevant candidates. The means fall as the grade falls, while the medians don't: a few heavily rated products set the means."
+
+[[tables]]
+section = "lambdamart-on-test-queries"
+starts = "| Feature | Share of gain |"
+say = "A table of the share of the gain that LambdaMART's splits give the four features with the most of it. The cross-encoder takes by far the largest share."
+
+[[tables]]
+section = "llm-pointwise-reranking"
+starts = "| Label | LLM | People |"
+say = "A table of the labels the LLM gave the products it scored, beside the grades people gave the same products. Its last row counts the products nobody judged."

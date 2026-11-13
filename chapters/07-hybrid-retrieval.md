@@ -6,13 +6,13 @@ chapter_id: hybrid-retrieval
 
 By the end of this chapter you can combine a lexical and a semantic ranking into one, either by adding normalized scores or by reciprocal rank fusion, tune how much each ranking counts on train queries, and decide with a paired test on test queries whether the combination beats the better of its two inputs.
 
-Combining two retrievers can only help if they fail on different queries. This chapter tests that for the two retrievers of [the store](#store-data), an online furniture and home-goods retailer ([chapter 1](#store-data)): {{out:bm25-semantic-wins-by-query:train queries}} train queries for tuning and {{out:tuned-blends-on-test:test queries}} test queries for reporting. [BM25](#rank-with-bm25) matches the query's words; it is the book's baseline, `lib.lexical` at bm25s's defaults, without stemming. [Semantic retrieval](#search-by-meaning) compares query and product embeddings, computed in advance by the open model `Snowflake/snowflake-arctic-embed-m-v1.5`.
+[The store](#store-data) searches its furniture and home-goods catalog with two retrievers, and [chapter 1](#fuse-with-rrf) fused them into one ranking. That fusion didn't beat semantic retrieval alone: on the test queries it scored {{out:tuned-blends-on-test:unweighted rrf ndcg@10}} [nDCG@10](#score-one-ranking) against {{out:tuned-blends-on-test:semantic ndcg@10}} for semantic retrieval, a gap that [chapter 3's tests](#compare-runs-in-a-harness) don't establish either way. So the store needs to know whether a better mix can beat semantic retrieval, its best ranker so far and so the one to beat.
+
+[BM25](#rank-with-bm25) matches the query's words; it is the book's baseline, `lib.lexical` at bm25s's defaults, without stemming. [Semantic retrieval](#search-by-meaning) compares query and product embeddings, computed in advance by the open model `Snowflake/snowflake-arctic-embed-m-v1.5`. This chapter tests whether the two fail on different queries.
 
 Industry search systems commonly pair the two. One semantic product-search model was built "to complement a lexical search engine in ad hoc product retrieval" ([Nigam et al., 2019](https://arxiv.org/abs/1907.00937)), and a social network's search engine uses embedding retrieval and keyword matching together to score documents ([Huang et al., 2020](https://arxiv.org/abs/2006.11632)).
 
-Chapter 1 [fused the two rankings into one](#fuse-with-rrf), and the result didn't beat semantic retrieval alone. On the test queries it scored {{out:tuned-blends-on-test:unweighted rrf ndcg@10}} [nDCG@10](#score-one-ranking) against {{out:tuned-blends-on-test:semantic ndcg@10}} for semantic retrieval, a gap that [chapter 3's tests](#compare-runs-in-a-harness) don't establish either way. So the store needs to know whether a better mix can beat semantic retrieval, its best ranker so far.
-
-This chapter finds the queries each retriever wins and checks each alone. It then builds two **blends**, ways to fuse the rankings with a weight that sets how much each counts, and tunes that weight. Every analysis and tuning step runs on the train queries, where comparisons guide the tuning but aren't evidence. The chapter plans two comparisons on the test queries, made once, at the end: each tuned blend, the [weighted sum](#normalize-scores-before-adding) and [weighted reciprocal rank fusion](#tune-blend-on-train), against semantic retrieval. Following [chapter 3](#compare-runs-in-a-harness), a difference counts as established only when its paired permutation test gives a p-value below 0.05 divided by the number of planned comparisons, here {{out:tuned-blends-on-test:p-value threshold for each comparison}}.
+The store has {{out:bm25-semantic-wins-by-query:train queries}} train queries for tuning and {{out:tuned-blends-on-test:test queries}} test queries for reporting. This chapter finds the queries each retriever wins and checks each alone. It then builds two **blends**, ways to fuse the rankings with a weight that sets how much each counts, and tunes that weight. Every analysis and every tuning step runs on the train queries. Comparisons there guide the tuning; they aren't evidence. The chapter plans two comparisons on the test queries, made once, at the end: each tuned blend, the [weighted sum](#normalize-scores-before-adding) and [weighted reciprocal rank fusion](#tune-blend-on-train), against semantic retrieval. Following [chapter 3](#compare-runs-in-a-harness), a difference counts as established only when its paired permutation test gives a p-value below 0.05 divided by the number of planned comparisons, here {{out:tuned-blends-on-test:p-value threshold for each comparison}}.
 
 ## Find the queries each retriever wins {#queries-each-retriever-wins}
 
@@ -22,15 +22,15 @@ Score both of the store's retrievers by [nDCG@10](#score-one-ranking) on every [
 
 [Example: bm25-semantic-wins-by-query](../examples/bm25-semantic-wins-by-query.py)
 
-Neither retriever wins every query. Semantic retrieval averages {{out:bm25-semantic-wins-by-query:semantic ndcg@10}} nDCG@10 against BM25's {{out:bm25-semantic-wins-by-query:bm25 ndcg@10}}, yet it is better on {{out:bm25-semantic-wins-by-query:semantic better}} train queries and BM25 on {{out:bm25-semantic-wins-by-query:bm25 better}}, and the rest tie.
+Neither retriever wins every query. Semantic retrieval averages {{out:bm25-semantic-wins-by-query:semantic ndcg@10}} nDCG@10 against BM25's {{out:bm25-semantic-wins-by-query:bm25 ndcg@10}}, but BM25 still wins {{out:bm25-semantic-wins-by-query:bm25 better}} train queries to semantic retrieval's {{out:bm25-semantic-wins-by-query:semantic better}}, and the rest tie.
 
-If you could choose the better of the two for each query, the mean would be {{out:bm25-semantic-wins-by-query:better of the two, chosen per query}}. That isn't a ceiling for fusion, which mixes the lists, but it shows what the differences are worth.
+If you could choose the better of the two for each query, the mean would be {{out:bm25-semantic-wins-by-query:better of the two, chosen per query}}. That isn't a ceiling for fusion, which mixes the lists rather than choosing one, but it shows what the differences could be worth.
 
 Next, see whether the two lists hold different products, and what share of each query's **exact** products (those the judges graded as fully matching) each list finds:
 
 [Example: overlap-and-union-recall](../examples/overlap-and-union-recall.py)
 
-The two top 10s share {{out:overlap-and-union-recall:products in both top 10s, mean}} products on average, so most of each is missing from the other. Fusion can't rank a product neither list holds, so each list's depth caps what fusion can reach. Shares of exact products reached, at both depths:
+The two top 10s share {{out:overlap-and-union-recall:products in both top 10s, mean}} products on average, so most of each is missing from the other. Fusion can't rank a product neither list holds, so each list's depth caps what fusion can reach. The union beats either list at both depths:
 
 | Share of exact products retrieved | Top 20 | Top 100 |
 | --- | --- | --- |
@@ -38,31 +38,29 @@ The two top 10s share {{out:overlap-and-union-recall:products in both top 10s, m
 | Semantic retrieval | {{out:overlap-and-union-recall:semantic top 20, share of exact products retrieved}} | {{out:overlap-and-union-recall:semantic top 100, share of exact products retrieved}} |
 | Union of both | {{out:overlap-and-union-recall:union top 20, share of exact products retrieved}} | {{out:overlap-and-union-recall:union top 100, share of exact products retrieved}} |
 
-The union beats either list at both depths, yet cut to 20 it still holds under half the exact products.
-
 Two train queries show the kinds of failure:
 
 [Example: two-queries-two-winners](../examples/two-queries-two-winners.py)
 
 For `butcher block island`, BM25's top 10 holds {{out:two-queries-two-winners:exact in bm25 top 10 for butcher block island}} exact products to semantic retrieval's {{out:two-queries-two-winners:exact in semantic top 10 for butcher block island}}. BM25 rewards products whose text contains all three words: kitchen islands with butcher-block tops. Semantic retrieval ranks prep tables and carts with butcher-block tops near the top too, and the judges graded those partial: the right material, but not the island the query asks for.
 
-For `7qt slow cooker` it's the other way round, with {{out:two-queries-two-winners:exact in bm25 top 10 for 7qt slow cooker}} exact product in BM25's top 10 and {{out:two-queries-two-winners:exact in semantic top 10 for 7qt slow cooker}} in semantic retrieval's. The catalog has {{out:two-queries-two-winners:products containing 7qt}} products whose text contains `7qt` and {{out:two-queries-two-winners:products containing 7 qt}} that contain `7 qt`, so BM25 matches only `slow cooker` and ranks cookers of every size, while semantic retrieval puts 7-quart cookers first.
+For `7qt slow cooker` it's the other way round: BM25's top 10 holds {{out:two-queries-two-winners:exact in bm25 top 10 for 7qt slow cooker}} exact and semantic retrieval's {{out:two-queries-two-winners:exact in semantic top 10 for 7qt slow cooker}}. The catalog has {{out:two-queries-two-winners:products containing 7qt}} products whose text contains `7qt` and {{out:two-queries-two-winners:products containing 7 qt}} that contain `7 qt`, so BM25 matches only `slow cooker` and ranks cookers of every size, while semantic retrieval puts 7-quart cookers first.
 
-Those are single queries: they show a kind of failure, not how often it happens. [The per-query count](#bm25-semantic-wins-by-query) lists the {{out:bm25-semantic-wins-by-query:queries where bm25 leads by 0.1 or more}} train queries where BM25 leads by 0.1 nDCG@10 or more. Most name a specific kind of product in two or more words that all have to match, and one, `malachi sled`, names a product line.
+Those are single queries: they show a kind of failure, not its frequency. [The per-query count](#bm25-semantic-wins-by-query) lists the {{out:bm25-semantic-wins-by-query:queries where bm25 leads by 0.1 or more}} train queries where BM25 leads by 0.1 nDCG@10 or more. Most name a specific kind of product in two or more words that all have to match, and one, `malachi sled`, names a product line.
 
-[Chapter 1](#search-by-meaning) found BM25 ahead on {{out:compare-lexical-semantic:of those, bm25 better}} of the {{out:compare-lexical-semantic:test queries with a size in inches}} test queries that give a size in inches, yet of the {{out:bm25-semantic-wins-by-query:queries with a digit}} train queries that contain a digit, BM25 wins only {{out:bm25-semantic-wins-by-query:queries with a digit, bm25 better}}.
+[Chapter 1](#search-by-meaning) found BM25 ahead on {{out:compare-lexical-semantic:of those, bm25 better}} of the {{out:compare-lexical-semantic:test queries with a size in inches}} test queries that give a size in inches, yet of the {{out:bm25-semantic-wins-by-query:queries with a digit}} train queries that contain a digit, BM25 wins {{out:bm25-semantic-wins-by-query:queries with a digit, bm25 better}}.
 
 **Working rule:** Before you fuse, count per query where each retriever wins on your train queries, and check how many relevant products the union of their lists holds that the better one misses. Consider fusing when each wins a real share of queries and the union holds more relevant products than either list. That is necessary, not sufficient: next, [check each retriever alone](#check-each-retriever-before-fusing), and [test the tuned blend on held-out queries](#report-blends-on-test) before you adopt it.
 
 ## Check each retriever before you fuse {#check-each-retriever-before-fusing}
 
-Knowing [where each retriever wins](#queries-each-retriever-wins) isn't enough: fusion gives each input a say in the final ranking, a weak input included. A study of hybrid search over 11 datasets reports "A “weakest link” phenomenon, where a weak path can substantially degrade overall accuracy, highlighting the need for path-wise quality assessment before fusion" ([Wang et al., PVLDB 2026](https://arxiv.org/abs/2508.01405)). So compare the retrievers' mean nDCG@10, with [judged@10](#unjudged-results), the share of the top 10 that has a judgment, beside it. Then compare them query by query with a **paired test**: how likely is a mean difference this large if the two were equally good? The book's test is the [permutation test](#permutation-test-on-queries), with the [paired t-test](#paired-t-test-on-queries) beside it.
+Knowing [where each retriever wins](#queries-each-retriever-wins) isn't enough: fusion gives each input a say in the final ranking, a weak input included. A study of hybrid search over 11 datasets found a “weakest link” effect: one weak retriever can drag down the fused result, so each should be checked before fusion ([Wang et al., PVLDB 2026](https://arxiv.org/abs/2508.01405)). So compare the retrievers' mean nDCG@10, with [judged@10](#unjudged-results), the share of the top 10 that has a judgment, beside it. Then compare them query by query with a **paired test**: how likely is a mean difference this large if the two were equally good? The book's test is the [permutation test](#permutation-test-on-queries), with the [paired t-test](#paired-t-test-on-queries) beside it.
 
 Fuse BM25 and semantic retrieval as [chapter 1](#fuse-with-rrf) did, with reciprocal rank fusion (RRF): each product scores 1 / (60 + its rank) in each ranking, summed over the two, so each ranking gets an equal vote. Then split the train queries by winner and compare fusion with semantic retrieval alone:
 
 [Example: fusion-gain-by-winning-retriever](../examples/fusion-gain-by-winning-retriever.py)
 
-BM25's top 10s leave more products unjudged: judged@10 is {{out:fusion-gain-by-winning-retriever:bm25 judged@10}} against {{out:fusion-gain-by-winning-retriever:semantic judged@10}} for semantic retrieval, and [chapter 2](#unjudged-results) shows how unjudged products can lower a score. Semantic retrieval leads by {{out:fusion-gain-by-winning-retriever:semantic minus bm25, mean ndcg@10}} nDCG@10, with a permutation p-value of {{out:fusion-gain-by-winning-retriever:semantic minus bm25, permutation p}}; the t-test's p-value, printed beside it, is close. On the test queries, [chapter 3](#compare-runs-in-a-harness) establishes the same lead. So the store has a strong retriever and a weaker one.
+BM25's judged@10 is {{out:fusion-gain-by-winning-retriever:bm25 judged@10}} against {{out:fusion-gain-by-winning-retriever:semantic judged@10}} for semantic retrieval, so BM25's top 10s hold a few more products nobody judged, and [chapter 2](#unjudged-results) shows how those can lower a score. Semantic retrieval leads by {{out:fusion-gain-by-winning-retriever:semantic minus bm25, mean ndcg@10}} nDCG@10, with a permutation p-value of {{out:fusion-gain-by-winning-retriever:semantic minus bm25, permutation p}} and a t-test p-value of {{out:fusion-gain-by-winning-retriever:semantic minus bm25, t-test p}}. On the test queries, [chapter 3](#compare-runs-in-a-harness) establishes the same lead. So the store has a strong retriever and a weaker one.
 
 Split by winner, fusion helps on average where BM25 wins and hurts where semantic retrieval wins:
 
@@ -71,61 +69,52 @@ Split by winner, fusion helps on average where BM25 wins and hurts where semanti
 | BM25 wins | {{out:fusion-gain-by-winning-retriever:bm25 wins, queries}} | {{out:fusion-gain-by-winning-retriever:bm25 wins, fusion better than semantic}} | {{out:fusion-gain-by-winning-retriever:bm25 wins, fusion worse than semantic}} | {{out:fusion-gain-by-winning-retriever:bm25 wins, mean change in ndcg@10}} |
 | Semantic retrieval wins | {{out:fusion-gain-by-winning-retriever:semantic wins, queries}} | {{out:fusion-gain-by-winning-retriever:semantic wins, fusion better than semantic}} | {{out:fusion-gain-by-winning-retriever:semantic wins, fusion worse than semantic}} | {{out:fusion-gain-by-winning-retriever:semantic wins, mean change in ndcg@10}} |
 
-Grouping queries by the winner builds this pattern in, since almost any mix helps where BM25 wins and hurts where it loses. What matters is the net change over all the train queries: fusion differs from semantic retrieval by {{out:fusion-gain-by-winning-retriever:hybrid minus semantic, mean ndcg@10}} nDCG@10 on average, with a permutation p-value of {{out:fusion-gain-by-winning-retriever:hybrid minus semantic, permutation p}}. On these queries, equal votes gain nothing measurable.
+Grouping queries by the winner builds this pattern in, since almost any mix helps where BM25 wins and hurts where it loses. What matters is the net change over all the train queries. Fusion differs from semantic retrieval by {{out:fusion-gain-by-winning-retriever:hybrid minus semantic, mean ndcg@10}} nDCG@10 on average, with a permutation p-value of {{out:fusion-gain-by-winning-retriever:hybrid minus semantic, permutation p}}. On these queries, equal votes gain nothing measurable.
 
-The split uses the judgments, so it diagnoses the pattern and can't pick a retriever for a live query, which has no judgments.
+The split uses the judgments to decide which retriever wins, so it diagnoses the pattern and can't pick a retriever for a live query, which has no judgments.
 
 **Working rule:** Check each retriever alone on train queries, with judged@10 and a paired test, before you fuse. When one is weaker and wins fewer queries, don't give it an equal vote: weight it and [tune the weight](#tune-blend-on-train), or leave it out. Equal votes suit two retrievers of about the same quality.
 
 ## Normalize scores before you add them {#normalize-scores-before-adding}
 
-The most direct way to give the weaker retriever, BM25 in the store, [a smaller say](#check-each-retriever-before-fusing) is to add the two retrievers' scores with a weight: α times the semantic score plus (1 − α) times the BM25 score. A sum whose weights add up to 1 is a **convex combination**, or weighted sum. It only works if the scores are on comparable scales, and here they aren't: a [BM25](#rank-with-bm25) score has no fixed range and grows with the number and rarity of the query's words, while semantic retrieval's score, a cosine similarity, lies between −1 and 1. **Score normalization** rescales each retriever's scores for each query before adding them. Per-query min-max scaling maps the lowest score among the query's ranked products to 0 and the highest to 1. A study of fusion functions calls it "the de facto method in the literature" and tests two alternatives ([Bruch et al., 2023](https://arxiv.org/abs/2210.11934)). **Theoretical min-max** uses each score's lowest possible value instead of the lowest one seen: 0 for BM25 and −1 for cosine. The **z-score** subtracts the mean and divides by the standard deviation.
+The most direct way to give the weaker retriever, BM25 in the store, [a smaller say](#check-each-retriever-before-fusing) is to add the two retrievers' scores with a weight: α times the semantic score plus (1 − α) times the BM25 score. A sum whose weights add up to 1 is a **convex combination**, or weighted sum. It only works if the scores are on comparable scales, and here they aren't: a [BM25](#rank-with-bm25) score has no fixed range and grows with the number and rarity of the query's words, while semantic retrieval's score, a cosine similarity, lies between −1 and 1. **Score normalization** rescales each retriever's scores for each query before adding them. Per-query min-max scaling maps the lowest score among the query's ranked products to 0 and the highest to 1. A study of fusion functions calls it "the de facto method in the literature" and tests two alternatives ([Bruch et al., 2023](https://arxiv.org/abs/2210.11934)). **Theoretical min-max** uses each score's lowest possible value instead of the lowest one seen: 0 for BM25 and −1 for cosine. The **z-score** subtracts the mean and divides by the standard deviation. The examples' shared module `lib/blend.py` writes each in a few lines.
 
 ```text
 min-max(s) = (s − lowest score among the query's candidates) / (highest − lowest)
 blend      = α · min-max(similarity) + (1 − α) · min-max(BM25)
 ```
 
-A sum needs both scores for every product it ranks, so the **candidate set** for a query is the union of both retrievers' top 100, and `lib.blend.candidates` looks up both scores for each: the BM25 score, 0 when the product shares no word with the query, and the cosine similarity.
+A sum needs both scores for every product it ranks. The **candidate set** for a query is the union of both retrievers' top 100, and `lib.blend.candidates` looks up both scores for every product in it: the BM25 score, 0 when the product shares no word with the query, and the cosine similarity.
 
 Start with the store's raw scores, added with α = 0.5 on the train queries, then do the same after min-max scaling, written out in the example and checked against `lib.blend.weighted_sum`:
 
 [Example: raw-scores-versus-min-max](../examples/raw-scores-versus-min-max.py)
 
-For `laundry basket with wheels`, the candidates have BM25 scores from {{out:raw-scores-versus-min-max:bm25 range}} and similarities from {{out:raw-scores-versus-min-max:similarity range}}. BM25's spread is many times larger, so it decides the order of the raw sum. Over the train queries, the raw sum's top 10 shares {{out:raw-scores-versus-min-max:raw sum, products shared with the bm25 top 10}} products with BM25's top 10 on average and {{out:raw-scores-versus-min-max:raw sum, products shared with the semantic top 10}} with semantic retrieval's.
+For `laundry basket with wheels`, the {{out:raw-scores-versus-min-max:candidates for laundry basket with wheels}} candidates have BM25 scores from {{out:raw-scores-versus-min-max:bm25 range}} and similarities from {{out:raw-scores-versus-min-max:similarity range}}. BM25's spread is many times larger, so it decides the order of the raw sum. Over the train queries, the raw sum's top 10 shares {{out:raw-scores-versus-min-max:raw sum, products shared with the bm25 top 10}} products with BM25's top 10 on average and {{out:raw-scores-versus-min-max:raw sum, products shared with the semantic top 10}} with semantic retrieval's.
 
 The weight says "half each", but the ranking is mostly BM25's: the raw sum's nDCG@10 of {{out:raw-scores-versus-min-max:raw sum ndcg@10}} is close to [BM25's {{out:bm25-semantic-wins-by-query:bm25 ndcg@10}}](#queries-each-retriever-wins).
 
-After min-max scaling, both retrievers have a say: the top 10 shares {{out:raw-scores-versus-min-max:min-max sum, products shared with the bm25 top 10}} products with BM25's and {{out:raw-scores-versus-min-max:min-max sum, products shared with the semantic top 10}} with semantic retrieval's. Against the raw sum, its nDCG@10 is {{out:raw-scores-versus-min-max:min-max sum ndcg@10}}, with a permutation p-value of {{out:raw-scores-versus-min-max:min-max minus raw, permutation p}} for the difference. The by-hand version matches `lib.blend.weighted_sum` on every train query.
+After min-max scaling, both retrievers have a say. The scaled sum's top 10 shares {{out:raw-scores-versus-min-max:min-max sum, products shared with the bm25 top 10}} products with BM25's and {{out:raw-scores-versus-min-max:min-max sum, products shared with the semantic top 10}} with semantic retrieval's, and its nDCG@10 rises to {{out:raw-scores-versus-min-max:min-max sum ndcg@10}}. The permutation p-value for that difference from the raw sum is {{out:raw-scores-versus-min-max:min-max minus raw, permutation p}}. The by-hand version ranks {{out:raw-scores-versus-min-max:train queries ranked as lib.blend.weighted_sum ranks them}} train queries exactly as `lib.blend.weighted_sum` does.
 
-Raw scores can work with a tuned weight. The authors of DPR, an embedding-based retriever, ranked candidates by BM25 plus 1.1 times DPR's similarity, with the 1.1 chosen on a development set ([Karpukhin et al., 2020](https://arxiv.org/abs/2004.04906)). Normalization gives α one meaning for every query; without it, BM25's share of the say changes with its range. Min-max isn't an absolute scale, though: it is relative to the query's candidates, so the best candidate always gets 1, however poor it is.
+Raw scores can work with a tuned weight. The authors of DPR, an embedding-based retriever, ranked candidates by BM25 plus 1.1 times DPR's similarity, with the 1.1 chosen on a development set ([Karpukhin et al., 2020](https://arxiv.org/abs/2004.04906)). Normalization gives α one meaning for every query; without it, BM25's share of the say changes with its range from query to query. Min-max isn't an absolute scale, though: it is relative to the query's candidates, so the best candidate always gets 1, however poor it is.
 
 **Working rule:** Never add raw BM25 and cosine scores with a guessed weight. We recommend per-query min-max as the default, because it needs no knowledge of either scoring function. Use theoretical min-max when you know each score's lowest possible value and want a floor that doesn't move with the candidates. In either case, tune α on train queries.
 
 ## Test reciprocal rank fusion's settings on train queries {#rrf-settings-on-train}
 
-Ranks, unlike [scores](#normalize-scores-before-adding), share one scale, so fusing by rank needs no normalization. **Reciprocal rank fusion** (RRF) scores each product by adding, over the rankings that contain it, 1 divided by the sum of a constant k and its rank ([Cormack et al., 2009](http://cormack.uwaterloo.ca/cormack/cormacksigir09-rrf.pdf)). [Chapter 1's formula](#fuse-with-rrf) writes it the same way. The price is information: "because RRF is a function of ranks, it disregards the distribution of scores and, as such, discards useful information" ([Bruch et al., 2023](https://arxiv.org/abs/2210.11934)). A product a hair behind the leader and one far behind it get scores set by their ranks alone.
+Ranks, unlike [scores](#normalize-scores-before-adding), share one scale, so fusing by rank needs no normalization. **Reciprocal rank fusion** (RRF) scores each product by adding, over the rankings that contain it, 1 divided by the sum of a constant k and its rank ([Cormack et al., 2009](http://cormack.uwaterloo.ca/cormack/cormacksigir09-rrf.pdf)), as [chapter 1's formula](#fuse-with-rrf) writes it. The price is information: "because RRF is a function of ranks, it disregards the distribution of scores and, as such, discards useful information" ([Bruch et al., 2023](https://arxiv.org/abs/2210.11934)). A product a hair behind the leader and one far behind it get scores set by their ranks alone.
 
-The constant k sets how much the top ranks dominate. RRF's authors fixed k = 60 in a pilot study and found that 60 came close to the best value and that the exact choice mattered little. Their pilots fused 30 configurations of Wumpus Search, one search engine, on TREC collections, a series of shared retrieval evaluations (Cormack et al., 2009). Bruch et al. fused one lexical and one semantic retriever, gave each its own constant, η, and found the results sensitive to the balance between the constants, which acts as a weight: "where the semantic model already performs strongly, for example, discounting the lexical system by increasing η_Lex leads to better performance". One k shared by both rankings sets no balance.
+The constant k sets how much the top ranks dominate. RRF's authors fixed k = 60 in a pilot study and found that 60 came close to the best value and that the exact choice mattered little. Their pilots fused 30 configurations of Wumpus Search, one search engine, on collections from TREC, a series of shared retrieval evaluations (Cormack et al., 2009). Bruch et al. fused one lexical and one semantic retriever, gave each its own constant, η, and found the results sensitive to the balance between the constants, which acts as a weight: "where the semantic model already performs strongly, for example, discounting the lexical system by increasing η_Lex leads to better performance". One k shared by both rankings, as in the store, sets no balance between them.
 
-The depth of each list matters too. A product in one retriever's top 20 but not in the other's earns nothing from the second ranking, though it has a low rank there. As Bruch et al. put it, "ranks cannot be computed exactly unless the entire collection D is ranked by retrieval system o for every query." On the store's train queries, the union of two top-20 lists holds a far smaller share of exact products than the union of two top-100 lists, as [the first section's table](#queries-each-retriever-wins) shows.
+The depth of each list matters too. A product in one retriever's top 20 but not in the other's earns nothing from the second ranking, though it has a low rank there. As Bruch et al. put it, "ranks cannot be computed exactly unless the entire collection D is ranked by retrieval system o for every query." On the store's train queries, the union of two top-20 lists holds far fewer exact products than the union of two top-100 lists, as [the shares of exact products in each list](#queries-each-retriever-wins) show.
 
 Try six values of k on the train queries, fusing lists 100 deep. One check is planned before running: does the best k beat the default, k = 60?
 
 [Example: rrf-k-on-train](../examples/rrf-k-on-train.py)
 
-At k = 1, rank 1 earns {{out:rrf-k-on-train:rank 1 over rank 10 at k=1}} times what rank 10 earns. At k = 60, it earns {{out:rrf-k-on-train:rank 1 over rank 10 at k=60}} times as much, so a product near the top of both lists beats one at the top of only one. Mean nDCG@10 for each k:
+At k = 1, rank 1 earns {{out:rrf-k-on-train:rank 1 over rank 10 at k=1}} times what rank 10 earns. At k = 60, it earns {{out:rrf-k-on-train:rank 1 over rank 10 at k=60}} times as much, so a product near the top of both lists beats one at the top of only one. Mean nDCG@10 goes from {{out:rrf-k-on-train:k=1 ndcg@10}} at k = 1 to {{out:rrf-k-on-train:k=60 ndcg@10}} at the default.
 
-| k | Mean nDCG@10 |
-| --- | --- |
-| 1 | {{out:rrf-k-on-train:k=1 ndcg@10}} |
-| 10 | {{out:rrf-k-on-train:k=10 ndcg@10}} |
-| 30 | {{out:rrf-k-on-train:k=30 ndcg@10}} |
-| 60 | {{out:rrf-k-on-train:k=60 ndcg@10}} |
-| 100 | {{out:rrf-k-on-train:k=100 ndcg@10}} |
-| 300 | {{out:rrf-k-on-train:k=300 ndcg@10}} |
-
-The best setting on train, k = {{out:rrf-k-on-train:best k on train}}, leads k = 60 by {{out:rrf-k-on-train:best k minus k=60}}, with a permutation p-value of {{out:rrf-k-on-train:best k minus k=60, permutation p}} and a t-test p-value of {{out:rrf-k-on-train:best k minus k=60, t-test p}}. The book takes its verdict from the permutation test, which can't tell that gain from chance at 0.05. Its 95% bootstrap interval excludes 0, so it disagrees with both tests.
+The best setting on train, k = {{out:rrf-k-on-train:best k on train}}, leads k = 60 by {{out:rrf-k-on-train:best k minus k=60}}, with a permutation p-value of {{out:rrf-k-on-train:best k minus k=60, permutation p}} and a t-test p-value of {{out:rrf-k-on-train:best k minus k=60, t-test p}}. The book takes its verdict from the permutation test, which can't tell that gain from chance at 0.05. The gain's 95% bootstrap interval, {{out:rrf-k-on-train:best k minus k=60, 95% interval}}, excludes 0, so the interval disagrees with both tests.
 
 The two settings' rankings differ on only a handful of queries (wins, losses and ties: {{out:rrf-k-on-train:best k minus k=60, wins, losses, ties}}). Which k is best is fragile too: [with BM25's tied products listed the other way](#tuned-weight-stability), k = {{out:tuning-with-ties-reversed:best rrf k, ties reversed}} wins instead. This fits Cormack et al.'s finding that the choice of k matters little.
 
@@ -137,17 +126,17 @@ The chapter's two [blends](#hybrid-retrieval) each take one weight, α, the shar
 
 [Example: weighted-rrf-one-product](../examples/weighted-rrf-one-product.py)
 
-For `laundry basket with wheels`, the top product, {{out:weighted-rrf-one-product:first product}}, sits at rank {{out:weighted-rrf-one-product:its bm25 rank}} in BM25's ranking and rank {{out:weighted-rrf-one-product:its semantic rank}} in semantic retrieval's, so its score is 0.25 / (60 + its BM25 rank) + 0.75 / (60 + its semantic rank), which comes to {{out:weighted-rrf-one-product:its weighted rrf score}}.
+For `laundry basket with wheels`, the top product, {{out:weighted-rrf-one-product:first product}}, sits at rank {{out:weighted-rrf-one-product:its bm25 rank}} in BM25's ranking and rank {{out:weighted-rrf-one-product:its semantic rank}} in semantic retrieval's, so it scores 0.25 / (60 + {{out:weighted-rrf-one-product:its bm25 rank}}) + 0.75 / (60 + {{out:weighted-rrf-one-product:its semantic rank}}) = {{out:weighted-rrf-one-product:its weighted rrf score}}.
 
-Scored that way for every candidate, the full ranking agrees with `lib.blend.weighted_rrf` at {{out:weighted-rrf-one-product:places that match lib.blend.weighted_rrf}} places.
+The example scores every candidate this way; its ranking matches `lib.blend.weighted_rrf` in {{out:weighted-rrf-one-product:places that match lib.blend.weighted_rrf}} places.
 
-Tuning tries a grid of α values on train queries and keeps the one with the best mean nDCG@10. Bruch et al. (2023) report three findings about tuning a [convex combination](#normalize-scores-before-adding), CC: that the learned weight doesn't hinge on which score normalization is used, that CC beats RRF both in-domain and out-of-domain, and that it is sample efficient. Sample efficient meant that α converged "with less than 5% of the training data", a fraction of training sets much larger than the store's.
+Tuning tries a grid of α values on train queries and keeps the one with the best mean nDCG@10. Bruch et al. (2023) report three findings about tuning a [convex combination](#normalize-scores-before-adding), CC: that a tuned CC does about as well whichever score normalization it uses, that it beats RRF both in-domain and out-of-domain, and that it is sample efficient. Sample efficient meant that α converged "with less than 5% of the training data", a fraction of training sets much larger than the store's.
 
-The grid runs α over 0, 0.1, … 1 for the weighted sum under each of [the three normalizations](#normalize-scores-before-adding), and for weighted RRF with k = 60. As tuning checks, each normalization is compared with min-max, and the two blends that go to test with semantic retrieval:
+Tune α over 0, 0.1, … 1 for the weighted sum under each of [the three normalizations](#normalize-scores-before-adding), and for weighted RRF with k = 60. Then, as tuning checks, test each normalization against min-max, and test the two blends bound for the test queries against semantic retrieval:
 
 [Example: tune-blend-weights-on-train](../examples/tune-blend-weights-on-train.py)
 
-Semantic retrieval alone scores {{out:tune-blend-weights-on-train:semantic alone ndcg@10}} on the same queries, and every tuned setting clears it by a little:
+Semantic retrieval alone scores {{out:tune-blend-weights-on-train:semantic alone ndcg@10}} on the same queries. Each setting's best α and score:
 
 | Setting | Best α | Mean nDCG@10 | Permutation p against tuned min-max |
 | --- | --- | --- | --- |
@@ -158,9 +147,7 @@ Semantic retrieval alone scores {{out:tune-blend-weights-on-train:semantic alone
 
 At 0.05, the test on train queries can't tell either alternative normalization from min-max, which fits Bruch et al.'s finding that the normalization hardly matters. It can't tell weighted RRF from tuned min-max either. Bruch et al.'s second finding, that the weighted sum beats RRF, doesn't show here, and these queries can't settle it.
 
-Every tuned blend scores at least as well as semantic retrieval on the train queries, since α = 1 is in the grid, yet the permutation test can't tell either gain from chance at 0.05, even on the queries that chose it. The weighted sum gains {{out:tune-blend-weights-on-train:min-max gain over semantic}}, with a permutation p-value of {{out:tune-blend-weights-on-train:min-max gain over semantic, permutation p}}, and weighted RRF gains {{out:tune-blend-weights-on-train:weighted rrf gain over semantic}}, with {{out:tune-blend-weights-on-train:weighted rrf gain over semantic, permutation p}}.
-
-Each gain is also the best of {{out:tune-blend-weights-on-train:alphas tried}} tries on the same queries, which flatters it further.
+Every tuned blend scores at least as well as semantic retrieval on the train queries, since α = 1 is in the grid. Yet even on the queries that chose them, the permutation test can't tell either blend's gain from chance at 0.05. The weighted sum gains {{out:tune-blend-weights-on-train:min-max gain over semantic}}, with a permutation p-value of {{out:tune-blend-weights-on-train:min-max gain over semantic, permutation p}}, and weighted RRF gains {{out:tune-blend-weights-on-train:weighted rrf gain over semantic}}, with {{out:tune-blend-weights-on-train:weighted rrf gain over semantic, permutation p}}. Each gain is also the best of {{out:tune-blend-weights-on-train:alphas tried}} tries on the same queries, which flatters it further.
 
 **Working rule:** Tune one weight on train queries over a coarse grid, and keep the normalization at min-max unless another one beats it by a margin the test on train queries can tell from chance, with p below 0.05. Treat the train gain over the best single retriever as optimistic, and expect it to shrink on test queries, a rule of thumb for any setting picked as the best of several. Before you trust the setting, [check that it's stable](#tuned-weight-stability), then [report it on test queries](#report-blends-on-test).
 
@@ -168,13 +155,17 @@ Each gain is also the best of {{out:tune-blend-weights-on-train:alphas tried}} t
 
 The [tuned weights](#tune-blend-on-train) come from a few dozen queries, so they may depend on which queries you had. The **bootstrap** shows how much: draw as many queries from the train set as it holds, with replacement, so some appear twice and others not at all, tune α on that sample, and repeat many times. If the chosen α jumps around, the tuned value reflects the sample more than the store. [Chapter 3](#report-the-size-of-a-gap) uses the same resampling to put intervals around scores.
 
-This run resamples the train queries {{out:blend-weight-bootstrap:resamples}} times with a fixed seed and counts how often each α wins for both tuned blends on the same resamples:
+Resample the train queries {{out:blend-weight-bootstrap:resamples}} times with a fixed seed, and count how often each α wins for both tuned blends, the weighted sum of min-max scores and weighted RRF, on the same resamples:
 
 [Example: blend-weight-bootstrap](../examples/blend-weight-bootstrap.py)
 
-On all the train queries, the weighted sum's α is {{out:blend-weight-bootstrap:weighted sum alpha tuned on all train queries}}, and α = 0.7 wins {{out:blend-weight-bootstrap:weighted sum resamples choosing alpha 0.7}} of the resamples, more than any other choice. Weighted RRF, tuned at {{out:blend-weight-bootstrap:weighted rrf alpha tuned on all train queries}}, is less settled: its resamples run from 0.5 to 1.0, with most between 0.6 and 0.8. Both weights stay on the side of the grid that favours semantic retrieval, apart from equal weight, α = 0.5, which the output counts for each blend.
+The weighted sum's weight holds. On all the train queries its α is {{out:blend-weight-bootstrap:weighted sum alpha tuned on all train queries}}, and α = 0.7 wins {{out:blend-weight-bootstrap:weighted sum resamples choosing alpha 0.7}} resamples, more than any other choice. α = 0.6 wins {{out:blend-weight-bootstrap:weighted sum resamples choosing alpha 0.6}} resamples, and semantic retrieval alone, α = 1, wins {{out:blend-weight-bootstrap:weighted sum resamples choosing alpha 1.0}}.
 
-Resampling isn't the only check. Products with equal BM25 scores need some order, and `lib.lexical` lists them by `product_id`, an order that carries no information, as descending `product_id` doesn't either. The weighted sum gives tied products the same BM25 term, so their order hardly matters to it, but RRF gives them consecutive ranks, and so different scores. List BM25's ties by descending `product_id`, and tune the [best RRF k](#rrf-settings-on-train) and both weights again on the train queries:
+Weighted RRF, tuned at α = {{out:blend-weight-bootstrap:weighted rrf alpha tuned on all train queries}}, is less settled: its weight moves between 0.6 and 0.8, with α = 0.6 winning {{out:blend-weight-bootstrap:weighted rrf resamples choosing alpha 0.6}} resamples, α = 0.8 winning {{out:blend-weight-bootstrap:weighted rrf resamples choosing alpha 0.8}} and α = 0.7 winning {{out:blend-weight-bootstrap:weighted rrf resamples choosing alpha 0.7}}.
+
+Both weights stay on the side of the grid that favours semantic retrieval, apart from equal weight, α = 0.5, which wins {{out:blend-weight-bootstrap:weighted sum resamples choosing alpha 0.5}} resamples for the weighted sum and {{out:blend-weight-bootstrap:weighted rrf resamples choosing alpha 0.5}} for weighted RRF.
+
+Resampling isn't the only check. Products with equal BM25 scores need some order, and `lib.lexical` lists them by `product_id`, an order that carries no information. Descending `product_id` carries none either. The weighted sum gives tied products the same BM25 term, so their order hardly matters to it, but RRF gives them consecutive ranks, and so different scores. List BM25's ties by descending `product_id`, and tune the [best RRF k](#rrf-settings-on-train) and both weights again on the train queries:
 
 [Example: tuning-with-ties-reversed](../examples/tuning-with-ties-reversed.py)
 
@@ -186,31 +177,31 @@ Reversing the ties changes RRF's settings but not the weighted sum's:
 | Weighted RRF α | {{out:tuning-with-ties-reversed:weighted rrf alpha, ties by product_id}} | {{out:tuning-with-ties-reversed:weighted rrf alpha, ties reversed}} |
 | Weighted sum α | {{out:tuning-with-ties-reversed:weighted sum alpha, ties by product_id}} | {{out:tuning-with-ties-reversed:weighted sum alpha, ties reversed}} |
 
-When an order that carries no information changes a setting, the train queries can't tell the settings apart: RRF's k and weight are fragile, and the weighted sum's weight isn't. The store has no more train queries to settle weighted RRF's weight, and its test comparison was planned with the weight tuned with ties by `product_id`, so α = {{out:tuning-with-ties-reversed:weighted rrf alpha, ties by product_id}} goes to test.
+When an order that carries no information changes a setting, the train queries can't tell the settings apart, so RRF's k and weight are fragile and the weighted sum's weight isn't. The store has no more train queries to settle weighted RRF's weight, and its test comparison was planned with the weight tuned with ties by `product_id`, so α = {{out:tuning-with-ties-reversed:weighted rrf alpha, ties by product_id}} goes to test.
 
-Stability means the train queries agree on a weight, not that it improves search on other queries: the resamples reuse the same queries, so they share whatever those have in common.
+Stability means the train queries agree on a weight, not that it improves search on other queries: the resamples reuse the same queries, so they share what those have in common.
 
 **Working rule:** Bootstrap the train queries and tune on each sample, then tune once more with ties listed in another order that carries no information. If the chosen weight scatters across the grid, use a coarser grid or more train queries, or prefer the simpler setting. If the tie order alone moves it, say so wherever you report it. If it holds steady under both checks, take it to the test queries.
 
 ## Report the tuned blends on test queries {#report-blends-on-test}
 
-Only held-out queries show whether a tuned setting helps beyond the queries that chose it. Run each tuned blend once on the test queries and compare it, query by query, with semantic retrieval, the best single retriever, using the harness from [chapter 3](#compare-runs-in-a-harness). The chapter fixed these two comparisons before looking. With the Bonferroni correction, a difference is established when its permutation p-value is below {{out:tuned-blends-on-test:p-value threshold for each comparison}}. The t-test and a bootstrap interval at the matching confidence level, {{out:tuned-blends-on-test:confidence level of each interval}}, stand beside it.
+Only held-out queries show whether a tuned setting helps beyond the queries that chose it. Run each tuned blend once on the test queries, and compare it query by query with semantic retrieval, the best single retriever, using the [chapter 3](#compare-runs-in-a-harness) harness. The chapter fixed these two comparisons before looking. With the Bonferroni correction, a difference is established when its permutation p-value is below {{out:tuned-blends-on-test:p-value threshold for each comparison}}. The t-test and a bootstrap interval at the matching confidence level, {{out:tuned-blends-on-test:confidence level of each interval}}, stand beside it.
 
-On the store's train queries, the [tuned blends](#tune-blend-on-train) gained {{out:tune-blend-weights-on-train:min-max gain over semantic}} and {{out:tune-blend-weights-on-train:weighted rrf gain over semantic}} over semantic retrieval, neither a gain the permutation test could tell from chance. Make your call before reading the result: on the test queries, does the weighted sum at α = {{out:tuned-blends-on-test:weighted sum alpha chosen on train}}, or weighted RRF at α = {{out:tuned-blends-on-test:weighted rrf alpha chosen on train}}, score above semantic retrieval, level with it, or below it?
+On the store's train queries, the [tuned blends](#tune-blend-on-train) gained {{out:tune-blend-weights-on-train:min-max gain over semantic}} and {{out:tune-blend-weights-on-train:weighted rrf gain over semantic}} over semantic retrieval, neither of them a gain the permutation test could tell from chance. Predict first: on the test queries, will the weighted sum at α = {{out:tuned-blends-on-test:weighted sum alpha chosen on train}} and weighted RRF at α = {{out:tuned-blends-on-test:weighted rrf alpha chosen on train}} score above semantic retrieval, level with it, or below it?
 
 [Example: tuned-blends-on-test](../examples/tuned-blends-on-test.py)
 
-Neither blend beats semantic retrieval. The three [runs](#score-every-test-query)' judged@10 values lie between {{out:tuned-blends-on-test:lowest judged@10}} and {{out:tuned-blends-on-test:highest judged@10}}, so missing judgments weigh about equally across the runs.
+Neither blend beats semantic retrieval. Semantic retrieval scores {{out:tuned-blends-on-test:semantic ndcg@10}}, the weighted sum of min-max scores {{out:tuned-blends-on-test:weighted sum ndcg@10}}, and weighted RRF {{out:tuned-blends-on-test:weighted rrf ndcg@10}}.
 
-| Run | nDCG@10 | Minus semantic retrieval | Permutation p | t-test p | Interval |
-| --- | --- | --- | --- | --- | --- |
-| Semantic retrieval | {{out:tuned-blends-on-test:semantic ndcg@10}} | — | — | — | — |
-| Weighted sum, α = {{out:tuned-blends-on-test:weighted sum alpha chosen on train}} | {{out:tuned-blends-on-test:weighted sum ndcg@10}} | {{out:tuned-blends-on-test:weighted sum minus semantic}} | {{out:tuned-blends-on-test:weighted sum permutation p}} | {{out:tuned-blends-on-test:weighted sum t-test p}} | {{out:tuned-blends-on-test:weighted sum interval}} |
-| Weighted RRF, α = {{out:tuned-blends-on-test:weighted rrf alpha chosen on train}} | {{out:tuned-blends-on-test:weighted rrf ndcg@10}} | {{out:tuned-blends-on-test:weighted rrf minus semantic}} | {{out:tuned-blends-on-test:weighted rrf permutation p}} | {{out:tuned-blends-on-test:weighted rrf t-test p}} | {{out:tuned-blends-on-test:weighted rrf interval}} |
+The [runs](#score-every-test-query)' judged@10 values lie between {{out:tuned-blends-on-test:lowest judged@10}} and {{out:tuned-blends-on-test:highest judged@10}}, so missing judgments weigh about equally on all three.
+
+The weighted sum differs from semantic retrieval by {{out:tuned-blends-on-test:weighted sum minus semantic}}, with a permutation p-value of {{out:tuned-blends-on-test:weighted sum permutation p}}, a t-test p-value of {{out:tuned-blends-on-test:weighted sum t-test p}} and an interval from {{out:tuned-blends-on-test:weighted sum interval}}.
+
+Weighted RRF differs by {{out:tuned-blends-on-test:weighted rrf minus semantic}}, with p-values of {{out:tuned-blends-on-test:weighted rrf permutation p}} and {{out:tuned-blends-on-test:weighted rrf t-test p}} and an interval from {{out:tuned-blends-on-test:weighted rrf interval}}.
 
 Both intervals contain 0, and the tests agree with them. Neither difference is established at the corrected threshold, so the finding is "no improvement", not "worse". For weighted RRF, it is the finding for α = {{out:tuned-blends-on-test:weighted rrf alpha chosen on train}}, a weight that [the order of BM25's ties can move](#tuned-weight-stability).
 
-A call of "above" would have trusted a train gain the permutation test couldn't tell from chance, even on the queries that chose it, and that was the best of several tries.
+Calling it "above" would have trusted a train gain the permutation test couldn't tell from chance, even on the queries that chose it, the best of several tries.
 
 **Working rule:** Adopt a blend only when it beats the best single retriever on held-out queries, with a permutation p-value below a threshold corrected for the number of planned comparisons. When it doesn't, keep the simpler system. That leaves semantic retrieval alone as the store's ranker to beat. Keep the tuned weights and the code, and test the blends again when a retriever or the catalog changes.
 
@@ -228,16 +219,9 @@ Expansion terms target one of BM25's failures in the store. Count, on the train 
 
 [Example: exact-products-missing-query-words](../examples/exact-products-missing-query-words.py)
 
-Of {{out:exact-products-missing-query-words:exact train pairs}} exact (query, product) pairs, {{out:exact-products-missing-query-words:exact pairs missing a query word}} miss at least one query word, a share of {{out:exact-products-missing-query-words:share missing a query word}}. The words missed most often, led by the typo `ligth`, are listed in the example's output. Some are typos, which [chapter 8's corrector](#correct-spelling-from-catalog) targets, and plural forms, which [chapter 5 stems](#stem-word-forms); others are descriptive words the product text leaves out, or different words for one thing.
+Of {{out:exact-products-missing-query-words:exact train pairs}} exact (query, product) pairs, {{out:exact-products-missing-query-words:exact pairs missing a query word}} miss at least one query word, a share of {{out:exact-products-missing-query-words:share missing a query word}}. The most-missed word is the typo `ligth`. Some are typos, which [chapter 8's corrector](#correct-spelling-from-catalog) targets, and plural forms, which [chapter 5 stems](#stem-word-forms); others are descriptive words the product text leaves out, or different words for one thing.
 
-Of the {{out:exact-products-missing-query-words:exact products for midcentury tv unit}} exact products for `midcentury tv unit`, the table counts how many contain each term:
-
-| Term in the product text | Exact products containing it |
-| --- | --- |
-| `midcentury` | {{out:exact-products-missing-query-words:exact products containing midcentury}} |
-| `unit` | {{out:exact-products-missing-query-words:exact products containing unit}} |
-| `stand` | {{out:exact-products-missing-query-words:exact products containing stand}} |
-| `mid-century` | {{out:exact-products-missing-query-words:exact products whose text says mid-century}} |
+For `midcentury tv unit`, the exact products use other words. Of the {{out:exact-products-missing-query-words:exact products for midcentury tv unit}} exact products, {{out:exact-products-missing-query-words:exact products containing midcentury}} contain `midcentury` and {{out:exact-products-missing-query-words:exact products containing unit}} contain `unit`. Their text says `mid-century` instead in {{out:exact-products-missing-query-words:exact products whose text says mid-century}} and `stand` in {{out:exact-products-missing-query-words:exact products containing stand}}.
 
 Expansion terms are aimed at gaps like these, though whether a model learns that a TV stand is a TV unit is something you'd measure.
 
@@ -279,7 +263,7 @@ Fusing scores isn't the only kind of hybrid. A search engine can also use lexica
 
 **Missing scores need a rule.** When each retriever returns only its top k, a product missing from one list has no score from that retriever. The DPR replication assigns it "the minimum dense retrieval score among the retrieved documents", and the reverse for BM25 ([Ma et al., 2021](https://arxiv.org/abs/2104.05740)). Bruch et al. compute the missing score exactly instead, as `lib.blend.candidates` does, which a production engine may not let you do ([Bruch et al., 2023](https://arxiv.org/abs/2210.11934)).
 
-**Min-max is relative.** A query that shares no word with any product in the catalog gives every candidate a BM25 score of 0. Plain min-max then divides by zero, and `lib.blend` returns zeros, so the blend silently becomes semantic retrieval alone. No store query does this; a live search box will.
+**Min-max is relative.** The best candidate for a query always gets 1, even when every candidate is poor. A query that shares no word with any product in the catalog gives every candidate a BM25 score of 0. Plain min-max then divides by zero, and `lib.blend` returns zeros, so the blend silently becomes semantic retrieval alone. No store query does this; a live search box will.
 
 **A fused score isn't a confidence.** Retrieval scores are poorly calibrated: "Confidence calibration is consistently weak across model families" ([Abdallah et al., 2026](https://arxiv.org/abs/2604.03676)). Don't set a threshold on a fused score to decide that a query has no good results.
 
@@ -300,4 +284,3 @@ Each choice is a default for the store, with a reason a later change would need 
 - **One weight, α, tuned over 0 to 1 in steps of 0.1** for both blends, chosen by mean nDCG@10 on train, then bootstrapped and tuned again with BM25's ties reversed. The weighted sum's α holds under both checks; weighted RRF's doesn't.
 - **Adopt a blend only if it beats the best single retriever on test.** Neither tuned blend does, so the store's ranker to beat stays semantic retrieval alone, with BM25, unstemmed, kept as the baseline.
 - **SPLADE and ColBERT are described, not recorded,** because neither is needed to answer the store's question.
-- **A blend has to earn its place on held-out queries.** Neither tuned blend beat semantic retrieval on test, so it stays the ranker to beat.
