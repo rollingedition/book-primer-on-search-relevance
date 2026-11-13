@@ -12,9 +12,9 @@ bm25 = LexicalSearch(load_products()).run(queries, k=100)
 semantic = SemanticSearch().run(queries, k=100)
 hybrid = reciprocal_rank_fusion([bm25, semantic])
 score = {(query_id, product_id): value for query_id, product_id, value in cross_encoder_scores().itertuples(index=False)}
-# only the top 50 are reranked; the rest keep their hybrid order
+# chapter 1's rerank: only the top 50 are reordered; the rest keep their hybrid order
 reranked = {query_id: sorted(ranking[:50], key=lambda product_id: score[(query_id, product_id)], reverse=True)
-            + ranking[50:] for query_id, ranking in hybrid.items()}          # chapter 1's rerank of the top 50
+            + ranking[50:] for query_id, ranking in hybrid.items()}
 
 runs = {"bm25": bm25, "semantic": semantic, "hybrid": hybrid, "reranked": reranked}
 scores = {name: evaluate(run, judgments) for name, run in runs.items()}       # one row per test query
@@ -30,6 +30,7 @@ print(f"chance of a false positive, all gaps noise, tests independent: {1 - 0.95
 established, disagreements = 0, 0
 for after, before in planned + exploratory:
     result, name = compare(scores[after]["ndcg@10"], scores[before]["ndcg@10"], confidence=1 - threshold), f"{after} minus {before}"
+    # verdict runs on the exploratory one too, only for its agreement checks; it is never counted as established
     checks, kind = verdict(result, threshold), "planned" if (after, before) in planned else "exploratory"
     print(f"\n{name}: {result['mean difference']:.3f}\n{name} kind: {kind}")
     print(f"{name} interval: {result['ci low']:.3f} to {result['ci high']:.3f}")

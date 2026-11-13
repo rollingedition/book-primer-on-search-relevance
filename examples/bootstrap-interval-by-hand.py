@@ -26,7 +26,7 @@ for after, before in [("semantic", "bm25"), ("hybrid", "semantic")]:
     print(f"{name} percentile interval from scipy: "
           f"{percentile.confidence_interval.low:.3f} to {percentile.confidence_interval.high:.3f}")
     # BCa is SciPy's default method, so no method argument is given
-    bca = bootstrap((difference,), np.mean, rng=np.random.default_rng(2026)).confidence_interval   # BCa, the default
+    bca = bootstrap((difference,), np.mean, rng=np.random.default_rng(2026)).confidence_interval
     print(f"{name} bca low: {bca.low:.3f}\n{name} bca high: {bca.high:.3f}")
     print(f"{name} bca interval and 0: {'includes 0' if bca.low <= 0 <= bca.high else 'excludes 0'}")
     # ddof=1: the standard deviation of the differences, with n - 1 in the denominator

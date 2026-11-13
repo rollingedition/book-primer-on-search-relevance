@@ -25,7 +25,6 @@ def ndcg(ranking, judgments, k=10):
 queries, judgments = load_queries("test"), qrels("test")
 bm25 = LexicalSearch(load_products()).run(queries, k=100)
 semantic = SemanticSearch().run(queries, k=100)
-# the hybrid run: BM25 and semantic rankings fused by reciprocal rank fusion
 runs = {"bm25": bm25, "semantic": semantic, "hybrid": reciprocal_rank_fusion([bm25, semantic])}
 
 gaps = [abs(ndcg(run[query_id], judgments[query_id]) - ndcg_at_k(run[query_id], judgments[query_id], 10))
