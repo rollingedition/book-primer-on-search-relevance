@@ -1,5 +1,5 @@
-"""Scores each typo query, and the variant spelling tye dye, with BM25 and with recorded embeddings, as typed and as
-corrected. The prose's point rests on the nDCG@10 lines for queries 20 and 224 (train) and the corrected BM25 line for 459 (test)."""
+"""Scores each typo query, and the variant spelling tye dye, with BM25, and with recorded embeddings where the corrected
+text has one, as typed and as corrected. The prose's point rests on the nDCG@10 lines for queries 20 and 224 (train) and the corrected BM25 line for 459 (test)."""
 from lib.lexical import LexicalSearch
 from lib.metrics import ndcg_at_k
 from lib.queries import correct_query, word_counts

@@ -5,7 +5,6 @@ of them, train queries: 3
   twin over full bunk beds cool desins (train), corrected: twin over full bunk beds cool designs
   ligth bulb (train), corrected: light bulb
   tye dye duvet cover (test), corrected: the dye duvet cover
-same as lib.queries.correct_query: True
 catalog count of tye: 0
 catalog count of tie: 45
 catalog count of the: 20389

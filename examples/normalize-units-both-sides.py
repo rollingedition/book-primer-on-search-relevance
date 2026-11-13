@@ -12,7 +12,7 @@ text = product_text(products).str.lower()
 for name, unit in [("''", r"''"), ('"', r"\""), ("inch", r"-?inch")]:
     print(f"products that write a number then {name}:", text.str.contains(rf"\d\s*{unit}").sum())
 
-# the first rule, written from the queries' units: the spellings above without the two apostrophes
+# the first rule, written from the queries' units: lib's inch spellings (inches, inch, in, ") without the two apostrophes; quarts are always included
 first_try = unit_rules([spelling for spelling in INCH_SPELLINGS if spelling != "''"])   # written from queries
 # None leaves the text as written, with no normalization
 rules = {"as written": None, "first try": first_try, "normalized": unit_rules()}

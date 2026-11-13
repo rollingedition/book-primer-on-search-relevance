@@ -1,4 +1,4 @@
-"""For the typos in two test queries, counts how often each nearby catalog word comes before the query's next
+"""For the misspelled word in two test queries, `tye` and the real-word error `an`, counts how often each nearby catalog word comes before the query's next
 word, and shows the context-free corrector's choice. The prose's point rests on the "catalog count of ... the
 corrector's choice" lines."""
 import re

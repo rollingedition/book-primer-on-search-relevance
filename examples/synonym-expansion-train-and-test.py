@@ -33,7 +33,6 @@ for kind, query_id in [("gain", change.idxmax()), ("loss", change.idxmin())]:
     print(f"largest train {kind}: {query}")
     print(f"largest train {kind}, words added: {added}")
     print(f"largest train {kind}, change: {change[query_id]:+.3f}")
-# query and added are still the largest loss's, left over from the loop above
 named = [product_id for product_id in bm25.search(expand(query), k=10).index if added in products.at[product_id, "name"]]
 print(f"largest train loss, top 10 names with {added}:", len(named))      # query and added: the largest loss's
 print("largest train loss, of those, unjudged:", sum(product_id not in judgments[query_id] for product_id in named))

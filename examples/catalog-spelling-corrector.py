@@ -1,5 +1,5 @@
 """A spelling corrector built from the catalog's word counts, run on every query and checked against
-lib.queries.correct_query. The prose's point rests on the "queries changed" line and on the line that says whether both correctors agree."""
+lib.queries.correct_query. The prose's point rests on the "queries changed" line and on the assert that both correctors agree."""
 import re
 from collections import Counter
 
@@ -39,6 +39,6 @@ print("of them, train queries:", (changed["split"] == "train").sum())
 for query_id, query in changed["query"].items():
     print(f"  {query} ({changed.at[query_id, 'split']}), corrected: {corrected[query_id]}")
 same = corrected.equals(queries["query"].map(lambda query: correct_query(query, counts)))
-print("same as lib.queries.correct_query:", same)
+assert same, "lib.queries.correct_query makes different corrections"
 for word in ["tye", "tie", "the", "kohler", "whitehaven", "malachi", "luau"]:      # P(c), as counts
     print(f"catalog count of {word}:", counts[word])
