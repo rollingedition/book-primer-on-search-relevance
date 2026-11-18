@@ -8,7 +8,7 @@ abstract: 'How search engines find and rank results, and how to measure whether 
 url: https://rollingedition.com/primer-on-search-relevance
 repository-code: https://github.com/rollingedition/book-primer-on-search-relevance
 license:
-- CC-BY-4.0
+- CC-BY-NC-4.0
 - MIT
 preferred-citation:
   type: book
