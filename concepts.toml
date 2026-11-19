@@ -1,0 +1,1679 @@
+# The terms this book defines, each quoted from the sentence that defines it (writing standards W-77 to W-80).
+
+context = "search-and-recommendation"
+
+[[concepts]]
+id = "judgment"
+term = "judgment"
+definition = "A judgment is a person's label for one pair of a query and a product"
+section = "store-data"
+example = "judge-first-results"
+
+[concepts.relations]
+prerequisite-of = ["grade"]
+
+[[concepts]]
+id = "grade"
+term = "grade"
+definition = "a grade is the number that stands for a judgment's label."
+section = "store-data"
+example = "load-the-store"
+
+[[concepts]]
+id = "relevant"
+term = "relevant"
+definition = "In this book, a relevant product is one judged exact for the query, unless a sentence says otherwise."
+section = "store-data"
+example = "judge-first-results"
+
+[concepts.relations]
+measured-from = ["judgment"]
+
+[[concepts]]
+id = "retrieval"
+term = "retrieval"
+definition = "Retrieval finds the products that might match a query, out of the whole catalog."
+section = "rank-with-bm25"
+example = "first-bm25-search"
+
+[concepts.relations]
+prerequisite-of = ["ranking", "reranking"]
+
+[[concepts]]
+id = "bm25"
+term = "BM25"
+definition = "BM25 is a lexical scoring function with three parts."
+section = "rank-with-bm25"
+example = "bm25-by-hand"
+
+[concepts.relations]
+computed-from = ["term-frequency", "inverse-document-frequency"]
+implemented-by = [{ to = "bm25s", versions = ">=0.3" }]
+
+[[concepts]]
+id = "ranking"
+term = "ranking"
+definition = "Ranking puts the retrieved products in order, best first."
+section = "rank-with-bm25"
+example = "first-bm25-search"
+
+[concepts.relations]
+contrasts-with = ["retrieval"]
+
+[[concepts]]
+id = "run"
+term = "run"
+definition = "The rankings for every query in a set form a run, written as `{query_id: [product_id, ...]}`, best first."
+section = "score-every-test-query"
+example = "bm25-test-scores"
+
+[[concepts]]
+id = "semantic-retrieval"
+term = "semantic retrieval"
+definition = "Semantic retrieval compares the meanings of the query and the product instead of their words."
+section = "search-by-meaning"
+example = "first-semantic-search"
+
+[concepts.relations]
+broader = ["retrieval"]
+contrasts-with = ["lexical-retrieval"]
+prerequisite-of = ["hybrid-retrieval"]
+
+[[concepts]]
+id = "embedding"
+term = "embedding"
+context = "semantic-search"
+definition = "An embedding is a list of numbers, a vector, that a neural network computes for a piece of text."
+section = "search-by-meaning"
+example = "first-semantic-search"
+
+[concepts.relations]
+prerequisite-of = ["search-and-recommendation/semantic-retrieval"]
+
+[[concepts]]
+id = "reranking"
+term = "reranking"
+definition = "Reranking reorders a short list from retrieval with a slower model, one that can afford to look at the query and each product together because it only sees a few dozen products."
+section = "rerank-with-cross-encoder"
+example = "cross-encoder-rerank"
+
+[[concepts]]
+id = "cross-encoder"
+term = "cross-encoder"
+definition = "One kind of reranking model is a cross-encoder, which reads the query and the product text together, as one input, and outputs one relevance score for the pair, scoring each pair independently"
+section = "rerank-with-cross-encoder"
+example = "cross-encoder-rerank"
+
+[concepts.relations]
+broader = ["reranking"]
+contrasts-with = ["large-language-model"]
+
+[[concepts]]
+id = "large-language-model"
+term = "large language model"
+aliases = ["LLM"]
+definition = "An LLM is a model trained on large amounts of text to generate text in response to a prompt."
+section = "rerank-with-cross-encoder"
+
+[[concepts]]
+id = "information-need"
+term = "information need"
+definition = "The judge grades the product against the information need behind the query's words, the thing the shopper wanted, not against the words."
+section = "relevance-is-a-judgment"
+example = "word-match-versus-judgment"
+
+[concepts.relations]
+prerequisite-of = ["judgment"]
+
+[[concepts]]
+id = "intent"
+term = "intent"
+definition = "A shopper's intent is what they want to do."
+section = "intent-in-product-search"
+
+[[concepts]]
+id = "target-entity"
+term = "target entity"
+definition = "A query names a target entity, the kind of product"
+section = "intent-in-product-search"
+example = "predicted-class-check"
+
+[concepts.relations]
+contrasts-with = ["modifier"]
+
+[[concepts]]
+id = "modifier"
+term = "modifier"
+aliases = ["modifiers"]
+definition = "the query's modifiers are the attributes the shopper asked for."
+section = "intent-in-product-search"
+
+[[concepts]]
+id = "binary-label"
+term = "binary label"
+definition = "A binary label says relevant or not."
+section = "graded-relevance"
+example = "binary-labels-hide-partial"
+
+[concepts.relations]
+contrasts-with = ["graded-label"]
+
+[[concepts]]
+id = "graded-label"
+term = "graded label"
+aliases = ["graded judgments"]
+definition = "A graded label, such as WANDS's exact, partial or irrelevant, says how relevant."
+section = "graded-relevance"
+example = "binary-labels-hide-partial"
+
+[[concepts]]
+id = "gain"
+term = "gain"
+context = "search-evaluation"
+aliases = ["gains"]
+definition = "A gain is what a result at a given position adds to the score before the position discount."
+section = "graded-relevance"
+example = "gain-choice-changes-ndcg"
+
+[concepts.relations]
+part-of = ["search-and-recommendation/dcg"]
+
+[[concepts]]
+id = "position-bias"
+term = "position bias"
+definition = "position bias: people click higher-ranked results more, partly because they trust the ranking."
+section = "clicks-are-not-judgments"
+example = "cascade-clicks"
+
+[[concepts]]
+id = "cascade-model"
+term = "cascade model"
+definition = "In the cascade model, users read results from top to bottom and leave at the first worthwhile document"
+section = "clicks-are-not-judgments"
+example = "cascade-clicks"
+
+[[concepts]]
+id = "presentation-bias"
+term = "presentation bias"
+definition = "Presentation bias goes beyond position: clicks depend on how a result is shown, not only on where."
+section = "clicks-are-not-judgments"
+
+[concepts.relations]
+contrasts-with = ["position-bias"]
+
+[[concepts]]
+id = "pool"
+term = "pool"
+definition = "Nobody judges every product for every query, so test collections judge a pool instead, a set of candidates gathered for each query."
+section = "pooled-judgments"
+
+[concepts.relations]
+prerequisite-of = ["unjudged"]
+
+[[concepts]]
+id = "unjudged"
+term = "unjudged"
+definition = "A product without a judgment for a query is unjudged for it"
+section = "pooled-judgments"
+example = "trundle-daybeds-unjudged"
+
+[[concepts]]
+id = "judged-at-k"
+term = "Judged@k"
+aliases = ["judged@10"]
+definition = "Judged@k is the share of the top k that has a judgment of any grade"
+formula = "judged@k = (number of the top k products that have a judgment for the query) / k"
+section = "unjudged-results"
+example = "unjudged-in-bm25-top-10"
+
+[concepts.relations]
+measured-from = ["judgment"]
+
+[[concepts]]
+id = "condensed-list"
+term = "condensed list"
+aliases = ["condensed"]
+definition = "the condensed list, a ranking with its unjudged products dropped before scoring, so the judged ones move up"
+section = "unjudged-results"
+example = "condensed-ndcg"
+
+[[concepts]]
+id = "precision-at-k"
+term = "Precision at k"
+aliases = ["precision@k", "precision@10"]
+definition = "Precision at k, written precision@k, is the share of the top k results that are relevant."
+section = "count-relevant-in-top-k"
+example = "precision-recall-by-hand"
+
+[concepts.relations]
+measured-from = ["judgment"]
+contrasts-with = ["recall-at-k"]
+
+[[concepts]]
+id = "recall-at-k"
+term = "Recall at k"
+aliases = ["recall@k", "recall@10"]
+definition = "Recall at k, recall@k, is the share of all relevant products that appear in the top k."
+section = "count-relevant-in-top-k"
+example = "precision-recall-by-hand"
+
+[concepts.relations]
+measured-from = ["judgment"]
+
+[[concepts]]
+id = "reciprocal-rank"
+term = "Reciprocal rank"
+aliases = ["RR"]
+definition = "Reciprocal rank (RR) scores a query as 1 divided by the position of the first relevant result, or 0 if there is none"
+section = "score-the-first-relevant-result"
+example = "reciprocal-rank-by-hand"
+
+[concepts.relations]
+measured-from = ["judgment"]
+
+[[concepts]]
+id = "mean-reciprocal-rank"
+term = "Mean reciprocal rank"
+aliases = ["MRR"]
+definition = "the mean of RR over queries is the mean reciprocal rank (MRR)"
+section = "score-the-first-relevant-result"
+example = "reciprocal-rank-by-hand"
+
+[concepts.relations]
+computed-from = ["reciprocal-rank"]
+
+[[concepts]]
+id = "dcg"
+term = "Discounted cumulative gain"
+aliases = ["DCG", "DCG@k"]
+definition = "Each result contributes its grade as a gain, shrunk by a discount that grows with its position, and the sum is the discounted cumulative gain (DCG)."
+formula = "DCG@k  = sum over positions i from 1 to k of  grade(i) / log2(i + 1)"
+section = "build-ndcg-from-dcg"
+example = "ndcg-from-scratch"
+
+[concepts.relations]
+computed-from = ["search-evaluation/gain"]
+
+[[concepts]]
+id = "ndcg"
+term = "Normalized DCG"
+aliases = ["nDCG", "nDCG@k", "nDCG@10"]
+definition = "Normalized DCG (nDCG) divides a ranking's DCG by the DCG of the ideal ranking."
+formula = "nDCG@k = DCG@k / DCG@k of the ideal ranking"
+section = "build-ndcg-from-dcg"
+example = "ndcg-from-scratch"
+
+[concepts.relations]
+computed-from = ["dcg"]
+implemented-by = [{ to = "scikit-learn", versions = ">=1.9" }]
+
+[[concepts]]
+id = "per-query-differences"
+term = "per-query differences"
+definition = "per-query differences: one number per query, the new ranker's score minus the old one's"
+section = "read-per-query-differences"
+example = "per-query-hybrid-versus-bm25"
+
+[[concepts]]
+id = "significance-test"
+term = "significance test"
+definition = "A significance test asks how surprising a gap between two rankers would be under the null hypothesis"
+section = "permutation-test-on-queries"
+
+[[concepts]]
+id = "null-hypothesis"
+term = "null hypothesis"
+definition = "the null hypothesis, the assumption that the rankers are equally good"
+section = "permutation-test-on-queries"
+
+[concepts.relations]
+prerequisite-of = ["significance-test", "p-value"]
+
+[[concepts]]
+id = "p-value"
+term = "p-value"
+definition = "p-value: the probability, under the null hypothesis, of a gap at least as large as the one you measured"
+section = "permutation-test-on-queries"
+example = "permutation-test-by-hand"
+
+[concepts.relations]
+part-of = ["significance-test"]
+
+[[concepts]]
+id = "paired-test"
+term = "paired test"
+aliases = ["paired"]
+definition = "The tests in this book are paired: both rankers are scored on the same queries, so each test works on the per-query differences, and a hard query's low scores cancel out."
+section = "permutation-test-on-queries"
+
+[concepts.relations]
+broader = ["significance-test"]
+computed-from = ["per-query-differences"]
+
+[[concepts]]
+id = "permutation-test"
+term = "permutation test"
+definition = "A permutation test builds the gaps you'd see under the null hypothesis directly."
+section = "permutation-test-on-queries"
+example = "permutation-test-by-hand"
+
+[concepts.relations]
+broader = ["paired-test"]
+implemented-by = [{ to = "scipy", versions = ">=1.18" }]
+
+[[concepts]]
+id = "standard-error"
+term = "standard error"
+definition = "standard error: the standard deviation of the differences divided by the square root of the number of queries, which estimates how far the mean would move from one sample of queries to another"
+section = "paired-t-test-on-queries"
+example = "paired-t-test-by-hand"
+
+[concepts.relations]
+computed-from = ["per-query-differences"]
+
+[[concepts]]
+id = "t-distribution"
+term = "t distribution"
+definition = "t distribution: bell-shaped, with heavier tails than the normal, and a shape set by its degrees of freedom, here one fewer than the number of queries"
+section = "paired-t-test-on-queries"
+
+[[concepts]]
+id = "confidence-interval"
+term = "confidence interval"
+definition = "A confidence interval is a range of plausible values for the true mean difference"
+section = "report-the-size-of-a-gap"
+
+[[concepts]]
+id = "bootstrap"
+term = "bootstrap"
+definition = "The bootstrap builds a confidence interval by resampling."
+section = "report-the-size-of-a-gap"
+example = "bootstrap-interval-by-hand"
+
+[concepts.relations]
+prerequisite-of = ["percentile-interval"]
+implemented-by = [{ to = "scipy", versions = ">=1.18" }]
+
+[[concepts]]
+id = "percentile-interval"
+term = "percentile interval"
+definition = "The percentile interval is the middle 95% of the resampled means."
+section = "report-the-size-of-a-gap"
+example = "bootstrap-interval-by-hand"
+
+[concepts.relations]
+broader = ["confidence-interval"]
+
+[[concepts]]
+id = "effect-size"
+term = "effect size"
+definition = "The effect size of a paired comparison is the mean difference divided by the standard deviation of the differences"
+section = "report-the-size-of-a-gap"
+example = "bootstrap-interval-by-hand"
+
+[concepts.relations]
+computed-from = ["per-query-differences"]
+contrasts-with = ["p-value"]
+
+[[concepts]]
+id = "bonferroni-correction"
+term = "Bonferroni correction"
+aliases = ["Bonferroni"]
+definition = "The Bonferroni correction is a simple, conservative fix: when you test m hypotheses, test each at 0.05 divided by m"
+section = "when-a-difference-is-established"
+example = "compare-chapter-one-rankers"
+
+[[concepts]]
+id = "evaluation-harness"
+term = "evaluation harness"
+definition = "an evaluation harness, which holds everything fixed except the ranker: the same queries, judgments, metrics and tests, so that two runs differ only in their rankings"
+section = "compare-runs-in-a-harness"
+example = "compare-chapter-one-rankers"
+
+[[concepts]]
+id = "judge"
+term = "judge"
+definition = "This chapter calls whoever gives a judgment, person or LLM, a judge"
+section = "write-judging-guidelines"
+
+[[concepts]]
+id = "judging-guidelines"
+term = "Judging guidelines"
+definition = "Judging guidelines say what each grade means, how to choose between grades, and what to do with the cases that fall between them."
+section = "write-judging-guidelines"
+example = "print-judging-guidelines"
+
+[[concepts]]
+id = "observed-agreement"
+term = "observed agreement"
+definition = "The share of pairs on which two judges give the same grade, the observed agreement"
+section = "agreement-beyond-chance"
+example = "kappa-by-hand"
+
+[[concepts]]
+id = "cohens-kappa"
+term = "Cohen's kappa"
+aliases = ["kappa"]
+definition = "Cohen's kappa corrects the observed agreement for chance by comparing it with the agreement expected if each judge kept its own label shares but chose independently of the other."
+formula = "kappa    = (observed - expected) / (1 - expected)"
+section = "agreement-beyond-chance"
+example = "kappa-by-hand"
+
+[concepts.relations]
+computed-from = ["observed-agreement"]
+implemented-by = [{ to = "scikit-learn", versions = ">=1.9" }]
+
+[[concepts]]
+id = "weighted-kappa"
+term = "Weighted kappa"
+definition = "Weighted kappa gives each disagreement a weight by its distance and compares the weighted disagreement with the weighted disagreement expected by chance"
+formula = "weighted kappa = 1 - (sum of weight × observed count) / (sum of weight × count expected by chance)"
+section = "weighted-kappa-for-grades"
+example = "weighted-kappa-by-hand"
+
+[concepts.relations]
+contrasts-with = ["cohens-kappa"]
+implemented-by = [{ to = "scikit-learn", versions = ">=1.9" }]
+
+[[concepts]]
+id = "linear-weights"
+term = "linear weights"
+definition = "With linear weights, a disagreement one grade apart weighs 0.5 and one two grades apart weighs 1"
+section = "weighted-kappa-for-grades"
+example = "weighted-kappa-by-hand"
+
+[concepts.relations]
+part-of = ["weighted-kappa"]
+
+[[concepts]]
+id = "confusion-matrix"
+term = "confusion matrix"
+definition = "A confusion matrix shows how two judges differ: a table of counts with one row for each of the store's grades and one column for each of the LLM's, both in the order exact, partial, irrelevant."
+section = "read-llm-error-direction"
+example = "llm-confusion-matrix"
+
+[concepts.relations]
+contrasts-with = ["cohens-kappa"]
+
+[[concepts]]
+id = "concordant-pair"
+term = "concordant pair"
+aliases = ["concordant"]
+definition = "A pair of systems is concordant when two orderings put it the same way round"
+section = "system-order-human-versus-llm"
+example = "kendall-tau-four-rankers"
+
+[concepts.relations]
+contrasts-with = ["discordant-pair"]
+
+[[concepts]]
+id = "discordant-pair"
+term = "discordant pair"
+aliases = ["discordant"]
+definition = "A pair of systems is concordant when two orderings put it the same way round, and discordant when two orderings put it opposite ways round."
+section = "system-order-human-versus-llm"
+example = "kendall-tau-four-rankers"
+
+[[concepts]]
+id = "kendalls-tau"
+term = "Kendall's tau"
+aliases = ["tau"]
+definition = "Tau is concordant pairs minus discordant pairs, divided by all pairs, from 1 for the same order to −1 for the reverse."
+section = "system-order-human-versus-llm"
+example = "kendall-tau-four-rankers"
+
+[concepts.relations]
+computed-from = ["concordant-pair", "discordant-pair"]
+implemented-by = [{ to = "scipy", versions = ">=1.18" }]
+
+[[concepts]]
+id = "prediction-powered-inference"
+term = "Prediction-powered inference"
+definition = "Prediction-powered inference rigorously corrects a model's predictions with a human sample, with confidence intervals that hold \"without making any assumptions on the machine-learning algorithm that supplies the predictions\""
+formula = "corrected = mean over all queries of the LLM score + mean over the human sample of (human score − LLM score)"
+section = "calibrate-on-a-human-sample"
+example = "correct-llm-scores-with-humans"
+
+[[concepts]]
+id = "lexical-retrieval"
+term = "Lexical retrieval"
+definition = "Lexical retrieval finds and ranks products by the words they share with the query."
+section = "lexical-retrieval"
+
+[[concepts]]
+id = "token"
+term = "token"
+definition = "Splitting the text into pieces gives tokens."
+section = "split-text-into-terms"
+example = "tokenize-product-text"
+
+[concepts.relations]
+prerequisite-of = ["term"]
+
+[[concepts]]
+id = "stop-word"
+term = "stop word"
+definition = "stop words, very common words such as `the` and `with`"
+section = "split-text-into-terms"
+example = "tokenize-product-text"
+
+[[concepts]]
+id = "term"
+term = "term"
+definition = "Removing stop words, very common words such as `the` and `with`, leaves the terms that search compares"
+section = "split-text-into-terms"
+example = "tokenize-product-text"
+
+[concepts.relations]
+part-of = ["vocabulary"]
+
+[[concepts]]
+id = "vocabulary"
+term = "vocabulary"
+definition = "all the terms in the catalog form its vocabulary"
+section = "split-text-into-terms"
+example = "inverted-index-by-hand"
+
+[[concepts]]
+id = "probe-query"
+term = "probe query"
+definition = "a probe query: one written for this chapter to test a behaviour, not one of the store's queries"
+section = "split-text-into-terms"
+example = "tokenize-product-text"
+
+[[concepts]]
+id = "inverted-index"
+term = "inverted index"
+definition = "An inverted index turns the texts around: for each term, it keeps the list of products that contain the term"
+section = "build-an-inverted-index"
+example = "inverted-index-by-hand"
+
+[[concepts]]
+id = "postings"
+term = "postings"
+definition = "the list of products that contain the term, called the term's postings"
+section = "build-an-inverted-index"
+example = "inverted-index-by-hand"
+
+[concepts.relations]
+part-of = ["inverted-index"]
+
+[[concepts]]
+id = "term-frequency"
+term = "term frequency"
+aliases = ["tf"]
+definition = "With each product, the postings store the term frequency, the number of times the term occurs in that product's text."
+section = "build-an-inverted-index"
+example = "inverted-index-by-hand"
+
+[concepts.relations]
+part-of = ["postings"]
+
+[[concepts]]
+id = "document-frequency"
+term = "document frequency"
+definition = "The number of products in a term's postings is its document frequency"
+section = "build-an-inverted-index"
+example = "inverted-index-by-hand"
+
+[concepts.relations]
+computed-from = ["postings"]
+
+[[concepts]]
+id = "inverse-document-frequency"
+term = "inverse document frequency"
+aliases = ["IDF"]
+definition = "the inverse document frequency, IDF: the logarithm of the number of products divided by the term's document frequency, high for a rare term and low for a common one"
+formula = "idf(t)       = ln(N / df(t))"
+section = "weight-terms-with-tf-idf"
+example = "tf-idf-by-hand"
+
+[concepts.relations]
+computed-from = ["document-frequency"]
+
+[[concepts]]
+id = "tf-idf"
+term = "TF-IDF"
+definition = "TF-IDF multiplies tf and IDF for each query term and adds them up"
+formula = "tf-idf(q, d) = sum over query terms t of  tf(t, d) × idf(t)"
+section = "weight-terms-with-tf-idf"
+example = "tf-idf-by-hand"
+
+[concepts.relations]
+computed-from = ["term-frequency", "inverse-document-frequency"]
+contrasts-with = ["bm25"]
+
+[[concepts]]
+id = "saturation"
+term = "saturation"
+definition = "With saturation, each repeat of a term adds less than the one before, and no number of repeats can push the term's contribution past a ceiling"
+section = "bm25-from-scratch"
+example = "bm25-by-hand"
+
+[concepts.relations]
+part-of = ["bm25"]
+
+[[concepts]]
+id = "length-normalization"
+term = "length normalization"
+definition = "With length normalization, a long text, which has more chances to contain any term, gets its term frequencies discounted."
+section = "bm25-from-scratch"
+example = "bm25-by-hand"
+
+[concepts.relations]
+part-of = ["bm25"]
+
+[[concepts]]
+id = "stemming"
+term = "Stemming"
+definition = "Stemming cuts common endings off words, so that the forms of a word share one term"
+section = "stem-word-forms"
+example = "stemmer-merges-word-forms"
+
+[concepts.relations]
+prerequisite-of = ["stem"]
+implemented-by = [{ to = "pystemmer", versions = ">=3.1" }]
+
+[[concepts]]
+id = "stem"
+term = "stem"
+definition = "the forms of a word share one term, its stem"
+section = "stem-word-forms"
+example = "stemmer-merges-word-forms"
+
+[[concepts]]
+id = "field"
+term = "field"
+definition = "A product's text has parts, called fields"
+section = "weight-the-product-name"
+example = "fields-scored-apart"
+
+[concepts.relations]
+prerequisite-of = ["bm25f"]
+
+[[concepts]]
+id = "bm25f"
+term = "BM25F"
+definition = "Combining a term's weighted frequencies across fields before saturating the total is BM25F."
+section = "weight-the-product-name"
+example = "repeat-the-name-field"
+
+[concepts.relations]
+computed-from = ["term-frequency"]
+
+[[concepts]]
+id = "attribute"
+term = "attribute"
+definition = "a catalog often keeps facts about a product as structured attributes, such as `color: clear` or `material: glass`"
+section = "index-attributes-as-a-field"
+example = "add-attributes-field"
+
+[[concepts]]
+id = "phrase-match"
+term = "phrase match"
+definition = "A phrase match needs the terms next to each other and in order"
+section = "match-phrases-with-positions"
+example = "phrase-positions-by-hand"
+
+[[concepts]]
+id = "positional-index"
+term = "positional index"
+definition = "A positional index stores, for each term and product, the positions where the term occurs, so that a phrase becomes a check on positions"
+section = "match-phrases-with-positions"
+example = "phrase-positions-by-hand"
+
+[[concepts]]
+id = "encoder"
+term = "encoder"
+definition = "The model that computes an embedding is an encoder, trained so that texts with similar meanings get vectors that point in similar directions, whether or not they share words."
+section = "turn-text-into-embeddings"
+
+[concepts.relations]
+prerequisite-of = ["bi-encoder"]
+
+[[concepts]]
+id = "dimension"
+term = "dimension"
+definition = "Every text gets the same count of numbers, the embedding's dimension, whether it's a three-word query or a product's whole description."
+section = "turn-text-into-embeddings"
+example = "inspect-recorded-embeddings"
+
+[concepts.relations]
+part-of = ["semantic-search/embedding"]
+
+[[concepts]]
+id = "bi-encoder"
+term = "bi-encoder"
+definition = "Search uses the encoder as a bi-encoder: it encodes each product by itself, once, ahead of time, and each query by itself when the shopper types it."
+section = "turn-text-into-embeddings"
+
+[concepts.relations]
+contrasts-with = ["cross-encoder"]
+
+[[concepts]]
+id = "token"
+term = "token"
+context = "semantic-search"
+definition = "The store's encoder reads text as tokens, word pieces from its own vocabulary, not the terms of chapter 5's tokenizer."
+section = "turn-text-into-embeddings"
+example = "inspect-recorded-embeddings"
+
+[concepts.relations]
+contrasts-with = ["search-and-recommendation/term"]
+
+[[concepts]]
+id = "cosine-similarity"
+term = "Cosine similarity"
+aliases = ["cosine"]
+definition = "Cosine similarity is the cosine of the angle between two vectors: 1 when they point the same way, 0 at right angles and −1 when they point in opposite directions."
+formula = "cosine(q, d) = dot(q, d) / (length(q) × length(d))"
+section = "compare-with-cosine-similarity"
+example = "cosine-by-hand"
+
+[concepts.relations]
+computed-from = ["dot-product"]
+implemented-by = [{ to = "scikit-learn", versions = ">=1.0" }]
+
+[[concepts]]
+id = "dot-product"
+term = "dot product"
+definition = "The dot product multiplies two vectors number by number and adds up the results, so it equals the cosine times both lengths."
+formula = "dot(q, d)    = q1 × d1 + q2 × d2 + ... + qn × dn"
+section = "compare-with-cosine-similarity"
+example = "cosine-by-hand"
+
+[[concepts]]
+id = "normalizing"
+term = "normalizing"
+definition = "Scaling every vector to length 1, called normalizing"
+section = "compare-with-cosine-similarity"
+example = "cosine-by-hand"
+
+[[concepts]]
+id = "nearest-neighbour-search"
+term = "nearest-neighbour search"
+definition = "Retrieval by embeddings is a nearest-neighbour search: find the k products whose vectors are most similar to the query's."
+section = "exact-nearest-neighbours-numpy"
+example = "exact-search-numpy"
+
+[[concepts]]
+id = "exact-search"
+term = "exact search"
+definition = "Exact search compares the query with every product and keeps the best k, so it never misses one."
+section = "exact-nearest-neighbours-numpy"
+example = "exact-search-numpy"
+
+[concepts.relations]
+broader = ["nearest-neighbour-search"]
+implemented-by = [{ to = "numpy", versions = ">=2.0" }, { to = "faiss-cpu", versions = ">=1.7" }]
+
+[[concepts]]
+id = "approximate-nearest-neighbour-index"
+term = "approximate nearest-neighbour index"
+aliases = ["ANN", "ANN index"]
+definition = "When exact search costs too much, an approximate nearest-neighbour (ANN) index skips most of its comparisons, and in return may miss some of the true nearest neighbours."
+section = "hnsw-recall-for-speed"
+example = "hnsw-efsearch-sweep"
+
+[concepts.relations]
+broader = ["nearest-neighbour-search"]
+contrasts-with = ["exact-search"]
+
+[[concepts]]
+id = "recall-at-k-against-exact-search"
+term = "recall@k against exact search"
+aliases = ["recall against exact search"]
+definition = "An ANN index's quality is its recall@k against exact search: the share of exact search's top k that it also returns."
+section = "hnsw-recall-for-speed"
+example = "hnsw-efsearch-sweep"
+
+[concepts.relations]
+measured-from = ["exact-search"]
+contrasts-with = ["recall-at-k"]
+
+[[concepts]]
+id = "hnsw"
+term = "HNSW"
+aliases = ["hierarchical navigable small world"]
+definition = "HNSW, short for hierarchical navigable small world, is a graph index."
+section = "hnsw-recall-for-speed"
+example = "hnsw-efsearch-sweep"
+
+[concepts.relations]
+broader = ["approximate-nearest-neighbour-index"]
+implemented-by = [{ to = "faiss-cpu", versions = ">=1.15" }]
+
+[[concepts]]
+id = "matryoshka-training"
+term = "Matryoshka training"
+aliases = ["Matryoshka"]
+definition = "Matryoshka training teaches a model to put the most useful information in its first dimensions, so that the start of a vector works as a smaller embedding on its own."
+section = "truncate-dimensions-test-loss"
+example = "truncate-embeddings"
+
+[[concepts]]
+id = "blend"
+term = "blend"
+definition = "blends, ways to fuse a lexical and a semantic ranking with a weight that sets how much each counts"
+section = "hybrid-retrieval"
+example = "tune-blend-weights-on-train"
+
+[concepts.relations]
+narrower = ["convex-combination", "weighted-rrf"]
+
+[[concepts]]
+id = "hybrid-retrieval"
+term = "hybrid retrieval"
+definition = "Hybrid retrieval combines the rankings of a lexical and a semantic retriever into one ranking."
+section = "queries-each-retriever-wins"
+example = "fusion-gain-by-winning-retriever"
+
+[concepts.relations]
+broader = ["fusion"]
+
+[[concepts]]
+id = "fusion"
+term = "fusion"
+definition = "Combining rankings is called fusion."
+section = "queries-each-retriever-wins"
+example = "fusion-gain-by-winning-retriever"
+
+[[concepts]]
+id = "convex-combination"
+term = "convex combination"
+aliases = ["weighted sum", "CC"]
+definition = "A sum whose weights add up to 1 is a convex combination, or weighted sum."
+section = "normalize-scores-before-adding"
+example = "raw-scores-versus-min-max"
+
+[concepts.relations]
+contrasts-with = ["reciprocal-rank-fusion"]
+
+[[concepts]]
+id = "score-normalization"
+term = "score normalization"
+definition = "Score normalization rescales each retriever's scores for each query before adding them."
+section = "normalize-scores-before-adding"
+example = "raw-scores-versus-min-max"
+
+[concepts.relations]
+narrower = ["min-max-scaling", "theoretical-min-max", "z-score"]
+prerequisite-of = ["convex-combination"]
+
+[[concepts]]
+id = "min-max-scaling"
+term = "per-query min-max scaling"
+aliases = ["min-max", "per-query min-max"]
+definition = "Per-query min-max scaling maps the lowest score among the query's ranked products to 0 and the highest to 1."
+formula = "min-max(s) = (s − lowest score among the query's candidates) / (highest − lowest)"
+section = "normalize-scores-before-adding"
+example = "raw-scores-versus-min-max"
+
+[concepts.relations]
+contrasts-with = ["theoretical-min-max"]
+
+[[concepts]]
+id = "theoretical-min-max"
+term = "theoretical min-max"
+definition = "Theoretical min-max uses each score's lowest possible value instead of the lowest one seen: 0 for BM25 and −1 for cosine."
+section = "normalize-scores-before-adding"
+example = "tune-blend-weights-on-train"
+
+[[concepts]]
+id = "z-score"
+term = "z-score"
+definition = "The z-score subtracts the mean of a query's scores and divides by their standard deviation."
+section = "normalize-scores-before-adding"
+example = "tune-blend-weights-on-train"
+
+[[concepts]]
+id = "candidate-set"
+term = "candidate set"
+definition = "The candidate set for a query is the union of BM25's top 100 and semantic retrieval's top 100"
+section = "normalize-scores-before-adding"
+example = "raw-scores-versus-min-max"
+
+[concepts.relations]
+prerequisite-of = ["convex-combination"]
+
+[[concepts]]
+id = "reciprocal-rank-fusion"
+term = "reciprocal rank fusion"
+aliases = ["RRF"]
+definition = "Reciprocal rank fusion (RRF) scores each product by adding, over the rankings that contain it, 1 divided by the sum of a constant k and its rank"
+section = "rrf-settings-on-train"
+example = "rrf-k-on-train"
+
+[concepts.relations]
+broader = ["fusion"]
+
+[[concepts]]
+id = "weighted-rrf"
+term = "weighted RRF"
+aliases = ["weighted reciprocal rank fusion"]
+definition = "In weighted RRF, a product scores (1 − α) / (k + its BM25 rank) plus α / (k + its semantic rank)."
+section = "tune-blend-on-train"
+example = "weighted-rrf-one-product"
+
+[concepts.relations]
+broader = ["reciprocal-rank-fusion"]
+
+[[concepts]]
+id = "learned-sparse-retrieval"
+term = "learned sparse retrieval"
+definition = "Learned sparse retrieval keeps BM25's machinery, an inverted index of terms, but has a neural model choose each product's terms and their weights."
+section = "learned-sparse-splade"
+
+[concepts.relations]
+narrower = ["splade"]
+
+[[concepts]]
+id = "splade"
+term = "SPLADE"
+definition = "SPLADE is one learned sparse retrieval model"
+formula = "weight of term j = sum over the text's tokens i of  log(1 + ReLU(w_ij))"
+section = "learned-sparse-splade"
+
+[[concepts]]
+id = "expansion-terms"
+term = "expansion terms"
+definition = "The nonzero terms of a SPLADE vector include expansion terms: words the text doesn't contain but the model weights anyway, so a product can match a query word it never uses."
+section = "learned-sparse-splade"
+example = "exact-products-missing-query-words"
+
+[concepts.relations]
+part-of = ["splade"]
+
+[[concepts]]
+id = "late-interaction"
+term = "late interaction"
+aliases = ["multi-vector retrieval"]
+definition = "Late interaction keeps one vector per token instead of one per text, so it is also called multi-vector retrieval."
+section = "late-interaction-colbert"
+
+[concepts.relations]
+narrower = ["colbert"]
+
+[[concepts]]
+id = "colbert"
+term = "ColBERT"
+definition = "ColBERT encodes the query and the product separately, as an embedding model does, and compares them only at the end."
+section = "late-interaction-colbert"
+
+[concepts.relations]
+contrasts-with = ["cross-encoder"]
+
+[[concepts]]
+id = "maxsim"
+term = "MaxSim"
+definition = "For each query token ColBERT finds the most similar product token, and it sums those maxima, an operation called MaxSim"
+formula = "score(query, product) = sum over query tokens q of  max over product tokens d of  cosine(q, d)"
+section = "late-interaction-colbert"
+
+[concepts.relations]
+part-of = ["colbert"]
+
+[[concepts]]
+id = "query-understanding"
+term = "query understanding"
+definition = "Query understanding is everything a search system does to a query before retrieval"
+section = "understanding-queries"
+
+[concepts.relations]
+narrower = ["query-expansion", "query-classification", "query-rewriting"]
+
+[[concepts]]
+id = "noisy-channel-model"
+term = "noisy channel model"
+aliases = ["noisy channel"]
+definition = "The classic corrector is the noisy channel model: for a typed word t, choose the correction c that maximizes P(c) × P(t | c)"
+formula = "correction(t) = argmax over candidates c of  P(c) × P(t | c)"
+section = "correct-spelling-from-catalog"
+example = "catalog-spelling-corrector"
+
+[[concepts]]
+id = "edit-distance"
+term = "edit distance"
+definition = "The number of insertions, deletions and replacements that turn one string into another is their edit distance"
+section = "correct-spelling-from-catalog"
+example = "catalog-spelling-corrector"
+
+[concepts.relations]
+prerequisite-of = ["noisy-channel-model"]
+
+[[concepts]]
+id = "lexicon"
+term = "lexicon"
+definition = "The lexicon, the list of words that count as correct, decides what gets corrected."
+section = "correct-spelling-from-catalog"
+example = "catalog-spelling-corrector"
+
+[[concepts]]
+id = "real-word-error"
+term = "real-word error"
+definition = "real-word error, a typo in which every word is spelled right, as in \"flew form Heathrow\""
+section = "correct-spelling-from-catalog"
+example = "spelling-context-counts"
+
+[[concepts]]
+id = "text-normalization"
+term = "normalization"
+aliases = ["unit normalization"]
+definition = "Normalization maps the different ways of writing one thing to a single form, on the products and on the query alike."
+section = "normalize-units"
+example = "normalize-units-both-sides"
+
+[[concepts]]
+id = "query-expansion"
+term = "query expansion"
+definition = "Query expansion adds terms to a query so that it can match products that use other words for the same thing."
+section = "expand-with-synonyms"
+example = "synonym-expansion-train-and-test"
+
+[[concepts]]
+id = "query-drift"
+term = "query drift"
+definition = "A word that expansion adds can match products the shopper didn't ask for, and move the query away from its meaning, which is called query drift."
+section = "expand-with-synonyms"
+example = "synonym-expansion-train-and-test"
+
+[[concepts]]
+id = "pseudo-relevance-feedback"
+term = "pseudo-relevance feedback"
+definition = "Pseudo-relevance feedback assumes the top results are relevant and adds their terms to the query"
+section = "expand-with-synonyms"
+
+[concepts.relations]
+broader = ["query-expansion"]
+
+[[concepts]]
+id = "query-classification"
+term = "query classification"
+definition = "Query classification assigns a query to a class in the store's taxonomy"
+section = "classify-queries-from-products"
+example = "query-classes-by-hand"
+
+[[concepts]]
+id = "naive-bayes"
+term = "naive Bayes"
+definition = "In words, naive Bayes finds a class likely for a query when the class is common among products, and when the query's words are common in that class's product text."
+formula = "predicted class = argmax over classes c of  log P(c) + sum over the query's words w of  log P(w | c)"
+section = "classify-queries-from-products"
+example = "query-classes-by-hand"
+
+[concepts.relations]
+implemented-by = [{ to = "scikit-learn", versions = ">=1.0" }]
+
+[[concepts]]
+id = "filter"
+term = "filter"
+definition = "A filter keeps only products in the predicted class."
+section = "boost-predicted-class"
+example = "class-boost-train-and-test"
+
+[[concepts]]
+id = "boost"
+term = "boost"
+definition = "A boost adds a fixed amount to the scores of products in the predicted class, so that they move up without anything else being removed."
+section = "boost-predicted-class"
+example = "class-boost-train-and-test"
+
+[concepts.relations]
+contrasts-with = ["filter"]
+
+[[concepts]]
+id = "query-rewriting"
+term = "query rewriting"
+definition = "Query rewriting replaces the query with a text written to retrieve better."
+section = "rewrite-queries-with-llm"
+example = "llm-rewrites-on-train"
+
+[[concepts]]
+id = "hyde"
+term = "HyDE"
+aliases = ["hypothetical document embeddings"]
+definition = "Where a rewrite asks the LLM for a better query, HyDE, short for hypothetical document embeddings, asks it for the document it imagines would answer the query."
+formula = "hyde(query) = (embedding(hypothetical product) + embedding(query)) / 2,  then scaled to length 1"
+section = "hyde-hypothetical-products"
+example = "hyde-train-and-test"
+
+[concepts.relations]
+contrasts-with = ["query-rewriting"]
+computed-from = ["hypothetical-document"]
+
+[[concepts]]
+id = "hypothetical-document"
+term = "hypothetical document"
+definition = "hypothetical document, written by an LLM to answer the query"
+section = "hyde-hypothetical-products"
+example = "hyde-train-and-test"
+
+[[concepts]]
+id = "relevance-feedback"
+term = "relevance feedback"
+definition = "Relevance feedback improves a query from judgments of its first results"
+section = "hyde-hypothetical-products"
+
+[[concepts]]
+id = "standalone-query"
+term = "standalone query"
+definition = "standalone query, one that reads without the earlier turns and keeps what the shopper still wants"
+section = "standalone-follow-ups"
+example = "follow-up-refinements"
+
+[[concepts]]
+id = "conversational-query-rewriting"
+term = "conversational query rewriting"
+definition = "Conversational query rewriting turns a context-dependent question into a self-contained one with the same answer"
+section = "standalone-follow-ups"
+example = "follow-up-refinements"
+
+[[concepts]]
+id = "feature"
+term = "feature"
+aliases = ["features", "ranking feature"]
+definition = "A learned ranker scores each pair of a query and a product from a list of numbers, its features, and learns from judgments how to weigh them."
+section = "ranking-features"
+example = "ranking-features-by-grade"
+
+[concepts.relations]
+prerequisite-of = ["learning-to-rank"]
+
+[[concepts]]
+id = "query-dependent-feature"
+term = "query-dependent feature"
+definition = "A query-dependent feature describes the query and the product together, such as a BM25 score."
+section = "ranking-features"
+example = "ranking-features-by-grade"
+
+[concepts.relations]
+broader = ["feature"]
+
+[[concepts]]
+id = "query-independent-feature"
+term = "query-independent feature"
+definition = "A query-independent feature describes the product alone, such as how many shoppers rated it."
+section = "ranking-features"
+example = "ranking-features-by-grade"
+
+[concepts.relations]
+broader = ["feature"]
+contrasts-with = ["query-dependent-feature"]
+
+[[concepts]]
+id = "ranking-candidate"
+term = "candidate"
+aliases = ["candidates"]
+definition = "A ranker scores only candidates, the products a cheaper retrieval stage returns"
+section = "ranking-features"
+example = "ranking-features-by-grade"
+
+[[concepts]]
+id = "learning-to-rank"
+term = "learning to rank"
+definition = "Learning to rank trains a model on judged queries to order candidates by their features."
+section = "learn-from-pairs"
+example = "lambdas-for-one-query"
+
+[concepts.relations]
+computed-from = ["feature"]
+
+[[concepts]]
+id = "pointwise-model"
+term = "pointwise model"
+definition = "A pointwise model predicts each product's grade on its own, as a regression."
+section = "learn-from-pairs"
+example = "lambdamart-choices-on-train"
+
+[concepts.relations]
+broader = ["learning-to-rank"]
+
+[[concepts]]
+id = "pairwise-model"
+term = "pairwise model"
+definition = "A pairwise model learns which of two products should rank higher."
+section = "learn-from-pairs"
+
+[concepts.relations]
+broader = ["learning-to-rank"]
+
+[[concepts]]
+id = "listwise-model"
+term = "listwise model"
+definition = "A listwise model scores a whole ranking."
+section = "learn-from-pairs"
+
+[concepts.relations]
+broader = ["learning-to-rank"]
+
+[[concepts]]
+id = "gradient-boosted-trees"
+term = "gradient-boosted trees"
+definition = "gradient-boosted trees, which add small decision trees one at a time, each fitted to the gradients of the trees before it"
+section = "learn-from-pairs"
+
+[concepts.relations]
+prerequisite-of = ["lambdamart"]
+
+[[concepts]]
+id = "lambdamart"
+term = "LambdaMART"
+definition = "LambdaMART uses LambdaRank's λ as the gradients for gradient-boosted trees"
+section = "learn-from-pairs"
+example = "lambdamart-on-test"
+
+[concepts.relations]
+broader = ["learning-to-rank"]
+contrasts-with = ["pointwise-model"]
+implemented-by = [{ to = "lightgbm", versions = ">=4.0" }]
+
+[[concepts]]
+id = "early-stopping"
+term = "early stopping"
+definition = "Early stopping scores held-out train queries after every tree, and keeps the trees up to the best score once 30 more bring no gain."
+section = "train-lambdamart"
+example = "lambdamart-on-test"
+
+[[concepts]]
+id = "cross-validation"
+term = "cross-validation"
+definition = "Choose the tree size by cross-validation on the train queries: split them into five folds, rank each fold with a model fitted on three others and stopped early on the fifth, and score every query once."
+section = "train-lambdamart"
+example = "lambdamart-tree-size-on-train"
+
+[[concepts]]
+id = "feature-importance"
+term = "feature importance"
+aliases = ["gain importance"]
+definition = "Feature importance shows what a model learned: LightGBM's \"gain\" importance is the \"total gains of splits which use the feature\""
+section = "lambdamart-on-test-queries"
+example = "lambdamart-on-test"
+applies_to = ["lightgbm"]
+
+[concepts.relations]
+implemented-by = [{ to = "lightgbm", versions = ">=4.0" }]
+
+[[concepts]]
+id = "pointwise-llm-reranking"
+term = "pointwise LLM reranking"
+definition = "Pointwise, an LLM judges each product alone and returns a label or a score."
+section = "llm-pointwise-reranking"
+example = "llm-pointwise-rerank"
+
+[concepts.relations]
+broader = ["reranking"]
+
+[[concepts]]
+id = "pairwise-llm-reranking"
+term = "pairwise LLM reranking"
+definition = "Pairwise, an LLM says which of two products fits the query better."
+section = "llm-pointwise-reranking"
+
+[concepts.relations]
+broader = ["reranking"]
+
+[[concepts]]
+id = "listwise-llm-reranking"
+term = "listwise LLM reranking"
+definition = "Listwise, an LLM orders a whole list in one answer"
+section = "llm-pointwise-reranking"
+example = "llm-listwise-rerank"
+
+[concepts.relations]
+broader = ["reranking"]
+
+[[concepts]]
+id = "sliding-window"
+term = "sliding window"
+definition = "A prompt can hold only so many products, so a long list is reranked in a sliding window: RankGPT reranks BM25's top 100 with \"a window size of 20 and step size of 10\", from the bottom of the list up"
+section = "llm-listwise-reranking"
+
+[concepts.relations]
+part-of = ["listwise-llm-reranking"]
+
+[[concepts]]
+id = "positional-bias"
+term = "positional bias"
+definition = "A listwise answer can suffer from positional bias: an LLM's tendency to let a product's place in the prompt affect its rank, not the click position bias of shoppers."
+section = "llm-position-bias"
+example = "listwise-position-bias"
+
+[concepts.relations]
+contrasts-with = ["position-bias"]
+
+[[concepts]]
+id = "rerank-depth"
+term = "rerank depth"
+definition = "the rerank depth, how many products the reranker reads per query, is a budget decision"
+section = "rerank-depth-from-budget"
+example = "rerank-depth-on-train"
+
+[[concepts]]
+id = "distillation"
+term = "distillation"
+definition = "Distillation trains a small model, the student, to imitate a large model, the teacher."
+section = "distill-the-cross-encoder"
+example = "distilled-ranker-on-test"
+
+[[concepts]]
+id = "student-model"
+term = "student"
+definition = "a small model, the student, to imitate a large model"
+section = "distill-the-cross-encoder"
+example = "distilled-ranker-on-test"
+
+[concepts.relations]
+part-of = ["distillation"]
+
+[[concepts]]
+id = "teacher-model"
+term = "teacher"
+definition = "to imitate a large model, the teacher"
+section = "distill-the-cross-encoder"
+example = "distilled-ranker-on-test"
+
+[concepts.relations]
+part-of = ["distillation"]
+
+[[concepts]]
+id = "agent"
+term = "agent"
+aliases = ["agents"]
+definition = "an agent, an LLM that runs the searches itself and decides how many to run"
+section = "retrieval-for-llm-applications"
+example = "agent-searches-in-traces"
+
+[concepts.relations]
+broader = ["large-language-model"]
+
+[[concepts]]
+id = "retrieval-augmented-generation"
+term = "Retrieval-augmented generation"
+aliases = ["RAG"]
+definition = "Retrieval-augmented generation (RAG), the design behind a shopping assistant, pairs an LLM with a retriever."
+section = "put-retrieved-products-in-the-prompt"
+example = "rag-answers-by-context"
+
+[[concepts]]
+id = "prompt"
+term = "prompt"
+definition = "The retrieved text goes into the prompt, the input the model reads"
+section = "put-retrieved-products-in-the-prompt"
+example = "catalog-against-the-context"
+
+[[concepts]]
+id = "context"
+term = "context"
+context = "retrieval-augmented-generation"
+definition = "the retrieved text in a prompt is the context"
+section = "put-retrieved-products-in-the-prompt"
+example = "catalog-against-the-context"
+
+[concepts.relations]
+part-of = ["search-and-recommendation/prompt"]
+
+[[concepts]]
+id = "context-window"
+term = "context window"
+definition = "A model's context window is the most tokens it can read, a fixed number of the word pieces in its own vocabulary."
+section = "put-retrieved-products-in-the-prompt"
+example = "catalog-against-the-context"
+
+[[concepts]]
+id = "distractor"
+term = "distractor"
+aliases = ["distractors"]
+definition = "Products that look right but aren't are distractors"
+section = "retrieval-bounds-the-answer"
+
+[[concepts]]
+id = "citation"
+term = "citation"
+aliases = ["citations"]
+definition = "A citation here is the ID an answer gives for a product it recommends."
+section = "retrieval-bounds-the-answer"
+example = "citations-inside-the-context"
+
+[[concepts]]
+id = "grounding"
+term = "Grounding"
+aliases = ["grounded"]
+definition = "Grounding means that an answer rests on the context it was given, as the exact share assumes, not on what the model remembers or invents."
+section = "check-citations-against-context"
+example = "citations-inside-the-context"
+
+[[concepts]]
+id = "attribution"
+term = "attribution"
+definition = "attribution asks whether a cited source supports the statement it is attached to"
+section = "check-citations-against-context"
+
+[[concepts]]
+id = "faithfulness"
+term = "Faithfulness"
+aliases = ["faithful"]
+definition = "Faithfulness is the share of an answer's claims that the context supports."
+section = "check-citation-support"
+example = "faithful-but-partial"
+
+[[concepts]]
+id = "context-precision"
+term = "context precision"
+aliases = ["context precision@k"]
+definition = "Ragas's context precision is the rank-aware one of its context measures, the mean of precision@k over the positions that hold a relevant chunk"
+formula = "context precision@k = mean of precision@i over the positions i ≤ k that hold an exact product"
+section = "measure-the-context"
+example = "context-measures-by-hand"
+
+[concepts.relations]
+computed-from = ["precision-at-k"]
+contrasts-with = ["context-recall"]
+
+[[concepts]]
+id = "context-recall"
+term = "context recall"
+aliases = ["context recall@k"]
+definition = "context recall is the share of a reference answer's claims that the context supports"
+formula = "context recall@k    = (exact products in the top k) / (exact products judged for the query)"
+section = "measure-the-context"
+example = "context-measures-by-hand"
+
+[[concepts]]
+id = "spearmans-rank-correlation"
+term = "Spearman's rank correlation"
+aliases = ["Spearman"]
+definition = "Spearman's rank correlation is the correlation between two measures' ranks rather than their values, 1 when they order the cases the same way and near 0 when the orders are unrelated"
+section = "measure-the-context"
+example = "context-measures-against-answers"
+
+[[concepts]]
+id = "retrievable-unit"
+term = "retrievable unit"
+aliases = ["retrieval unit"]
+definition = "A retrievable unit is the piece of text that retrieval scores and returns, and that a context holds: a whole document, a passage or a sentence."
+section = "choose-the-retrievable-unit"
+example = "retrievable-unit-on-train"
+
+[concepts.relations]
+part-of = ["retrieval-augmented-generation/context"]
+
+[[concepts]]
+id = "chunking"
+term = "chunking"
+definition = "chunking is the rule that cuts a document, such as a fixed number of tokens, sentences, paragraphs, or breaks chosen by meaning"
+section = "choose-the-retrievable-unit"
+
+[[concepts]]
+id = "tool"
+term = "tool"
+aliases = ["tools"]
+definition = "A tool is a function the program offers the model, described by a name, a description and its parameters."
+section = "read-agent-searches"
+example = "agent-picks-by-tool"
+
+[concepts.relations]
+prerequisite-of = ["tool-call"]
+
+[[concepts]]
+id = "tool-call"
+term = "tool call"
+aliases = ["tool calls"]
+definition = "A tool call is the model's request to run a tool with arguments."
+section = "read-agent-searches"
+example = "agent-searches-in-traces"
+
+[concepts.relations]
+part-of = ["agent-loop", "trace"]
+
+[[concepts]]
+id = "agent-loop"
+term = "agent loop"
+definition = "In the agent loop, the program runs each tool call, sends back the result, and the model decides what to do next."
+section = "read-agent-searches"
+example = "agent-searches-in-traces"
+
+[[concepts]]
+id = "trace"
+term = "trace"
+aliases = ["traces"]
+definition = "The trace is the record of every tool call and its result."
+section = "read-agent-searches"
+example = "agent-searches-in-traces"
+
+[[concepts]]
+id = "regression-set"
+term = "regression set"
+definition = "regression set: fixed queries, with judgments, that every change runs against before it ships"
+section = "diff-runs-per-query"
+example = "diff-semantic-against-bm25"
+
+[[concepts]]
+id = "baseline"
+term = "baseline"
+definition = "The ranker the store runs today is the baseline"
+section = "diff-runs-per-query"
+example = "diff-semantic-against-bm25"
+
+[concepts.relations]
+contrasts-with = ["candidate-ranker"]
+
+[[concepts]]
+id = "candidate-ranker"
+term = "candidate ranker"
+definition = "the ranker with the change is the candidate ranker"
+section = "diff-runs-per-query"
+example = "diff-semantic-against-bm25"
+
+[[concepts]]
+id = "risk-sensitive-evaluation"
+term = "risk-sensitive evaluation"
+definition = "Risk-sensitive evaluation counts losses more heavily than wins."
+section = "weigh-losses-with-urisk"
+
+[[concepts]]
+id = "urisk"
+term = "URisk"
+definition = "The risk-sensitive measure of the TREC 2013 Web track is URisk."
+formula = "URisk = (1 / N) × [ sum of Δ(q) over improved queries  −  (α + 1) × sum of |Δ(q)| over hurt queries ]"
+section = "weigh-losses-with-urisk"
+example = "urisk-of-two-candidates"
+
+[concepts.relations]
+broader = ["risk-sensitive-evaluation"]
+computed-from = ["baseline", "candidate-ranker"]
+
+[[concepts]]
+id = "sensitivity-check"
+term = "sensitivity check"
+definition = "a sensitivity check, which rescores both runs under two scenarios, one favouring each side"
+section = "judge-new-results"
+example = "unjudged-score-range"
+
+[concepts.relations]
+computed-from = ["unjudged"]
+
+[[concepts]]
+id = "ab-test"
+term = "A/B test"
+aliases = ["A/B tests", "controlled experiment"]
+definition = "An A/B test, or controlled experiment, assigns users at random to the current system or to the change, and compares a metric chosen before the test starts"
+section = "run-an-ab-test"
+example = "aa-tests-with-peeking"
+
+[[concepts]]
+id = "control"
+term = "control"
+definition = "The current system is the control"
+section = "run-an-ab-test"
+
+[concepts.relations]
+part-of = ["ab-test"]
+contrasts-with = ["treatment"]
+
+[[concepts]]
+id = "treatment"
+term = "treatment"
+definition = "the changed system is the treatment"
+section = "run-an-ab-test"
+
+[concepts.relations]
+part-of = ["ab-test"]
+
+[[concepts]]
+id = "aa-test"
+term = "A/A test"
+aliases = ["A/A tests"]
+definition = "an A/A test, in which both groups get the same system"
+section = "run-an-ab-test"
+example = "aa-tests-with-peeking"
+
+[[concepts]]
+id = "peeking"
+term = "peeking"
+definition = "Stopping a test the moment it looks significant, called peeking"
+section = "run-an-ab-test"
+example = "aa-tests-with-peeking"
+
+[[concepts]]
+id = "sample-ratio-mismatch"
+term = "sample ratio mismatch"
+aliases = ["SRM"]
+definition = "A sample ratio mismatch (SRM) means users went missing from one group or were added to it unevenly"
+section = "run-an-ab-test"
+
+[[concepts]]
+id = "power"
+term = "power"
+aliases = ["statistical power"]
+definition = "the test's power: the chance that it detects a real change of a given size"
+section = "size-tests-with-power"
+example = "sample-size-from-power"
+
+[[concepts]]
+id = "interleaving"
+term = "Interleaving"
+definition = "Interleaving shows each shopper one list that mixes two rankers' results."
+section = "team-draft-interleaving"
+example = "team-draft-one-query"
+
+[concepts.relations]
+contrasts-with = ["ab-test"]
+
+[[concepts]]
+id = "team-draft"
+term = "Team draft"
+aliases = ["team-draft interleaving"]
+definition = "Team draft interleaves two rankers' lists like picking teams for a game"
+section = "team-draft-interleaving"
+example = "team-draft-one-query"
+
+[concepts.relations]
+broader = ["interleaving"]
+
+[[concepts]]
+id = "click-model"
+term = "click model"
+aliases = ["click models"]
+definition = "A click model is a probabilistic model of how users scan and click a result list, used both to build metrics and to simulate users"
+section = "simulate-interleaving-with-clicks"
+example = "one-simulated-shopper"
