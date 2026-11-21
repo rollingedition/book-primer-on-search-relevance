@@ -45,10 +45,12 @@ term = "BM25"
 definition = "BM25 is a lexical scoring function with three parts."
 section = "rank-with-bm25"
 example = "bm25-by-hand"
+wikidata = "Q2068750"
 
 [concepts.relations]
 computed-from = ["term-frequency", "inverse-document-frequency"]
 implemented-by = [{ to = "bm25s", versions = ">=0.3" }]
+same-as = ["https://rollingedition.com/concepts/retrieval-augmented-generation/bm25"]
 
 [[concepts]]
 id = "ranking"
@@ -314,6 +316,9 @@ definition = "per-query differences: one number per query, the new ranker's scor
 section = "read-per-query-differences"
 example = "per-query-hybrid-versus-bm25"
 
+[concepts.relations]
+close-to = ["https://rollingedition.com/concepts/llm-evaluation/paired-difference"]
+
 [[concepts]]
 id = "significance-test"
 term = "significance test"
@@ -349,6 +354,7 @@ section = "permutation-test-on-queries"
 [concepts.relations]
 broader = ["significance-test"]
 computed-from = ["per-query-differences"]
+close-to = ["https://rollingedition.com/concepts/artificial-intelligence/paired-comparison"]
 
 [[concepts]]
 id = "permutation-test"
@@ -370,6 +376,7 @@ example = "paired-t-test-by-hand"
 
 [concepts.relations]
 computed-from = ["per-query-differences"]
+close-to = ["https://rollingedition.com/concepts/llm-evaluation/standard-error-of-the-proportion"]
 
 [[concepts]]
 id = "t-distribution"
@@ -382,6 +389,9 @@ id = "confidence-interval"
 term = "confidence interval"
 definition = "A confidence interval is a range of plausible values for the true mean difference"
 section = "report-the-size-of-a-gap"
+
+[concepts.relations]
+close-to = ["https://rollingedition.com/concepts/artificial-intelligence/interval"]
 
 [[concepts]]
 id = "bootstrap"
@@ -403,6 +413,7 @@ example = "bootstrap-interval-by-hand"
 
 [concepts.relations]
 broader = ["confidence-interval"]
+same-as = ["https://rollingedition.com/concepts/artificial-intelligence/percentile-bootstrap"]
 
 [[concepts]]
 id = "effect-size"
@@ -423,6 +434,9 @@ definition = "The Bonferroni correction is a simple, conservative fix: when you 
 section = "when-a-difference-is-established"
 example = "compare-chapter-one-rankers"
 
+[concepts.relations]
+same-as = ["https://rollingedition.com/concepts/artificial-intelligence/bonferroni-correction"]
+
 [[concepts]]
 id = "evaluation-harness"
 term = "evaluation harness"
@@ -435,6 +449,9 @@ id = "judge"
 term = "judge"
 definition = "This chapter calls whoever gives a judgment, person or LLM, a judge"
 section = "write-judging-guidelines"
+
+[concepts.relations]
+close-to = ["https://rollingedition.com/concepts/llm-evaluation/judge"]
 
 [[concepts]]
 id = "judging-guidelines"
@@ -450,6 +467,9 @@ definition = "The share of pairs on which two judges give the same grade, the ob
 section = "agreement-beyond-chance"
 example = "kappa-by-hand"
 
+[concepts.relations]
+same-as = ["https://rollingedition.com/concepts/llm-evaluation/agreement"]
+
 [[concepts]]
 id = "cohens-kappa"
 term = "Cohen's kappa"
@@ -462,6 +482,8 @@ example = "kappa-by-hand"
 [concepts.relations]
 computed-from = ["observed-agreement"]
 implemented-by = [{ to = "scikit-learn", versions = ">=1.9" }]
+same-as = ["https://rollingedition.com/concepts/llm-evaluation/cohens-kappa"]
+close-to = ["https://rollingedition.com/concepts/artificial-intelligence/kappa"]
 
 [[concepts]]
 id = "weighted-kappa"
@@ -540,6 +562,9 @@ term = "Lexical retrieval"
 definition = "Lexical retrieval finds and ranks products by the words they share with the query."
 section = "lexical-retrieval"
 
+[concepts.relations]
+same-as = ["https://rollingedition.com/concepts/artificial-intelligence/lexical-retrieval"]
+
 [[concepts]]
 id = "token"
 term = "token"
@@ -587,6 +612,7 @@ term = "inverted index"
 definition = "An inverted index turns the texts around: for each term, it keeps the list of products that contain the term"
 section = "build-an-inverted-index"
 example = "inverted-index-by-hand"
+wikidata = "Q1671754"
 
 [[concepts]]
 id = "postings"
@@ -681,6 +707,9 @@ definition = "the forms of a word share one term, its stem"
 section = "stem-word-forms"
 example = "stemmer-merges-word-forms"
 
+[concepts.relations]
+broader = ["term"]
+
 [[concepts]]
 id = "field"
 term = "field"
@@ -722,6 +751,9 @@ definition = "A positional index stores, for each term and product, the position
 section = "match-phrases-with-positions"
 example = "phrase-positions-by-hand"
 
+[concepts.relations]
+prerequisite-of = ["phrase-match"]
+
 [[concepts]]
 id = "encoder"
 term = "encoder"
@@ -760,6 +792,7 @@ example = "inspect-recorded-embeddings"
 
 [concepts.relations]
 contrasts-with = ["search-and-recommendation/term"]
+same-as = ["https://rollingedition.com/concepts/natural-language-processing/token", "https://rollingedition.com/concepts/large-language-models/token"]
 
 [[concepts]]
 id = "cosine-similarity"
@@ -773,6 +806,7 @@ example = "cosine-by-hand"
 [concepts.relations]
 computed-from = ["dot-product"]
 implemented-by = [{ to = "scikit-learn", versions = ">=1.0" }]
+same-as = ["https://rollingedition.com/concepts/artificial-intelligence/cosine-similarity"]
 
 [[concepts]]
 id = "dot-product"
@@ -1178,6 +1212,7 @@ example = "ranking-features-by-grade"
 
 [concepts.relations]
 prerequisite-of = ["learning-to-rank"]
+close-to = ["https://rollingedition.com/concepts/feature-engineering/feature"]
 
 [[concepts]]
 id = "query-dependent-feature"
@@ -1274,6 +1309,9 @@ definition = "Early stopping scores held-out train queries after every tree, and
 section = "train-lambdamart"
 example = "lambdamart-on-test"
 
+[concepts.relations]
+close-to = ["https://rollingedition.com/concepts/deep-learning/early-stopping"]
+
 [[concepts]]
 id = "cross-validation"
 term = "cross-validation"
@@ -1355,6 +1393,9 @@ definition = "Distillation trains a small model, the student, to imitate a large
 section = "distill-the-cross-encoder"
 example = "distilled-ranker-on-test"
 
+[concepts.relations]
+same-as = ["https://rollingedition.com/concepts/fine-tuning/distillation"]
+
 [[concepts]]
 id = "student-model"
 term = "student"
@@ -1385,6 +1426,7 @@ example = "agent-searches-in-traces"
 
 [concepts.relations]
 broader = ["large-language-model"]
+close-to = ["https://rollingedition.com/concepts/ai-agents/agent"]
 
 [[concepts]]
 id = "retrieval-augmented-generation"
@@ -1434,6 +1476,9 @@ definition = "A citation here is the ID an answer gives for a product it recomme
 section = "retrieval-bounds-the-answer"
 example = "citations-inside-the-context"
 
+[concepts.relations]
+close-to = ["https://rollingedition.com/concepts/retrieval-augmented-generation/citation"]
+
 [[concepts]]
 id = "grounding"
 term = "Grounding"
@@ -1442,11 +1487,17 @@ definition = "Grounding means that an answer rests on the context it was given, 
 section = "check-citations-against-context"
 example = "citations-inside-the-context"
 
+[concepts.relations]
+close-to = ["https://rollingedition.com/concepts/retrieval-augmented-generation/grounded"]
+
 [[concepts]]
 id = "attribution"
 term = "attribution"
 definition = "attribution asks whether a cited source supports the statement it is attached to"
 section = "check-citations-against-context"
+
+[concepts.relations]
+close-to = ["https://rollingedition.com/concepts/retrieval-augmented-generation/citation-accuracy"]
 
 [[concepts]]
 id = "faithfulness"
@@ -1455,6 +1506,9 @@ aliases = ["faithful"]
 definition = "Faithfulness is the share of an answer's claims that the context supports."
 section = "check-citation-support"
 example = "faithful-but-partial"
+
+[concepts.relations]
+same-as = ["https://rollingedition.com/concepts/retrieval-augmented-generation/faithfulness"]
 
 [[concepts]]
 id = "context-precision"
@@ -1513,6 +1567,7 @@ example = "agent-picks-by-tool"
 
 [concepts.relations]
 prerequisite-of = ["tool-call"]
+same-as = ["https://rollingedition.com/concepts/ai-agents/tool"]
 
 [[concepts]]
 id = "tool-call"
@@ -1524,6 +1579,7 @@ example = "agent-searches-in-traces"
 
 [concepts.relations]
 part-of = ["agent-loop", "trace"]
+same-as = ["https://rollingedition.com/concepts/ai-agents/tool-call"]
 
 [[concepts]]
 id = "agent-loop"
@@ -1539,6 +1595,9 @@ aliases = ["traces"]
 definition = "The trace is the record of every tool call and its result."
 section = "read-agent-searches"
 example = "agent-searches-in-traces"
+
+[concepts.relations]
+same-as = ["https://rollingedition.com/concepts/ai-agents/trace"]
 
 [[concepts]]
 id = "regression-set"
@@ -1556,6 +1615,7 @@ example = "diff-semantic-against-bm25"
 
 [concepts.relations]
 contrasts-with = ["candidate-ranker"]
+close-to = ["https://rollingedition.com/concepts/artificial-intelligence/baseline"]
 
 [[concepts]]
 id = "candidate-ranker"
