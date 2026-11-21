@@ -705,6 +705,9 @@ definition = "the forms of a word share one term, its stem"
 section = "stem-word-forms"
 example = "stemmer-merges-word-forms"
 
+[concepts.relations]
+broader = ["term"]
+
 [[concepts]]
 id = "field"
 term = "field"
@@ -745,6 +748,9 @@ term = "positional index"
 definition = "A positional index stores, for each term and product, the positions where the term occurs, so that a phrase becomes a check on positions"
 section = "match-phrases-with-positions"
 example = "phrase-positions-by-hand"
+
+[concepts.relations]
+prerequisite-of = ["phrase-match"]
 
 [[concepts]]
 id = "encoder"
