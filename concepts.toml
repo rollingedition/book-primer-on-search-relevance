@@ -45,6 +45,7 @@ term = "BM25"
 definition = "BM25 is a lexical scoring function with three parts."
 section = "rank-with-bm25"
 example = "bm25-by-hand"
+wikidata = "Q2068750"
 
 [concepts.relations]
 computed-from = ["term-frequency", "inverse-document-frequency"]
@@ -611,6 +612,7 @@ term = "inverted index"
 definition = "An inverted index turns the texts around: for each term, it keeps the list of products that contain the term"
 section = "build-an-inverted-index"
 example = "inverted-index-by-hand"
+wikidata = "Q1671754"
 
 [[concepts]]
 id = "postings"
