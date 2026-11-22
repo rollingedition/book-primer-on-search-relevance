@@ -1,0 +1,5 @@
+queries drawn: 80
+median exact share: 0.207
+lowest exact share: 0.014
+highest exact share: 0.749
+figure: figures/label-mix-per-query.svg

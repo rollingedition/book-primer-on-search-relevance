@@ -1,0 +1,7 @@
+mean difference: 0.087
+median difference: 0.057
+hybrid better: 17
+bm25 better: 7
+tied: 6
+largest gain: outdoor light fixtures
+figure: figures/per-query-differences.svg
