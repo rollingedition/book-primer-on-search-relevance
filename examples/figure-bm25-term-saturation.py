@@ -13,6 +13,7 @@ for k1, color, style in ((0.5, INK, "-"), (DEFAULT_K1, ACCENT, "-"), (2.0, MUTED
     print(f"term weight at 1 occurrence, k1 {k1}: {weight(1):.3f}")
     print(f"term weight at 10 occurrences, k1 {k1}: {weight(10):.3f}")
     print(f"term weight at 1000000 occurrences, k1 {k1}: {weight(1_000_000):.3f}")  # the ceiling, 1, is what it nears
+    print(f"gap below 1 at 1000000 occurrences, k1 {k1}: {1 - weight(1_000_000):.1e}")  # how far the weight still is from the ceiling
     ax.plot(COUNTS, [weight(tf) for tf in COUNTS], color=color, linestyle=style, marker="o", markersize=3, label=label)
 ax.set_xlabel("occurrences of the term in the product")
 ax.set_ylabel("term-frequency weight")

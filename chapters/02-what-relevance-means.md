@@ -98,11 +98,11 @@ Partial is the commonest label, at {{out:count-labels-per-query:partial share of
 
 Irrelevant judgments are rare for most queries, not all: the irrelevant share has a median of {{out:count-labels-per-query:median irrelevant share}}, yet it reaches {{out:count-labels-per-query:highest irrelevant share}} for `podium with locking cabinet`, and {{out:count-labels-per-query:queries with no irrelevant judgment}} queries have no irrelevant judgment at all.
 
-![One stacked column per query, sorted by exact share: partial fills most of most columns, and irrelevant is small for most queries but reaches far down for a few.](../examples/figures/label-mix-per-query.svg "The label mix of each query, sorted by exact share")
+![One stacked column per query, sorted by exact share: partial fills most of most columns, and irrelevant is small for most queries but is large for a few.](../examples/figures/label-mix-per-query.svg "The label mix of each query, sorted by exact share")
 
 [Example: figure-label-mix-per-query](../examples/figure-label-mix-per-query.py)
 
-{{fig:label-mix-per-query}} shows the whole mix in each column: exact solid at the bottom, partial dotted above it, irrelevant hatched on top. Partial is the largest share in {{out:figure-label-mix-per-query:queries where partial is the largest share}} of the {{out:figure-label-mix-per-query:queries drawn}} columns, and irrelevant tops a fifth of the column in only {{out:figure-label-mix-per-query:queries with an irrelevant share above 0.2}}.
+{{fig:label-mix-per-query}} shows the whole mix in each column: exact solid, partial dotted and irrelevant hatched, stacked in that order. Partial is the largest share in {{out:figure-label-mix-per-query:queries where partial is the largest share}} of the {{out:figure-label-mix-per-query:queries drawn}} columns, and irrelevant tops a fifth of the column in only {{out:figure-label-mix-per-query:queries with an irrelevant share above 0.2}}.
 
 The spread changes what [nDCG@10](#score-one-ranking) measures. Exact products per query run from {{out:count-labels-per-query:fewest exact products for a query}}, the sampling rule's floor, to {{out:count-labels-per-query:most exact products for a query}}, and {{out:count-labels-per-query:queries with fewer than 10 exact products}} queries have fewer than 10 exact products, {{out:count-labels-per-query:test queries with fewer than 10 exact products}} of them test queries. For those, the ideal top 10 includes partial products, so a ranking can score perfectly with partial products in its top 10. For a broad query such as `outdoor light fixtures`, a perfect score needs ten exact products. The same nDCG@10 means a different thing for each.
 

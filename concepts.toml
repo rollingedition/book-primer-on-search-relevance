@@ -1526,7 +1526,6 @@ contrasts-with = ["context-recall"]
 [[concepts]]
 id = "context-recall"
 term = "context recall"
-aliases = ["context recall@k"]
 definition = "context recall is the share of a reference answer's claims that the context supports"
 section = "measure-the-context"
 example = "context-measures-by-hand"

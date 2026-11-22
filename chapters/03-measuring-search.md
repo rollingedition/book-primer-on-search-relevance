@@ -129,7 +129,7 @@ The hybrid's deficit against semantic retrieval is {{out:permutation-test-by-han
 
 {{fig:permutation-null}} draws the 9,999 flipped means, the observed mean solid and its mirror dashed. The p-value, {{out:figure-permutation-null:p-value by hand}}, is the share outside the two lines.
 
-![Most sign flips land closer to zero than the observed mean does](../examples/figures/permutation-null.svg "Mean hybrid minus semantic difference after 9,999 random sign flips")
+![Most sign flips land closer to zero than the observed mean does.](../examples/figures/permutation-null.svg "Mean hybrid minus semantic difference after 9,999 random sign flips")
 
 [Example: figure-permutation-null](../examples/figure-permutation-null.py)
 

@@ -99,7 +99,7 @@ The average hides a wide spread. Scores run from {{out:bm25-test-scores:lowest n
 
 {{fig:bm25-test-query-scores}} draws each test query as one bar, sorted from lowest to highest, with the mean as a dashed line. The bars climb from the lowest score to the highest, and {{out:figure-bm25-test-query-scores:queries below the mean}} of the {{out:bm25-test-scores:test queries}} sit under the mean, so more than half of the queries score under the average.
 
-![Sorted from lowest to highest, more than half of the test queries' nDCG@10 bars sit under the mean line, so the average alone hides the spread](../examples/figures/bm25-test-query-scores.svg "BM25's nDCG@10 on each test query, sorted, with the mean as a dashed line")
+![Sorted from lowest to highest, more than half of the test queries' nDCG@10 bars sit under the mean line, so the average alone hides the spread.](../examples/figures/bm25-test-query-scores.svg "BM25's nDCG@10 on each test query, sorted, with the mean as a dashed line")
 
 [Example: figure-bm25-test-query-scores](../examples/figure-bm25-test-query-scores.py)
 

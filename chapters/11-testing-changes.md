@@ -106,7 +106,7 @@ Simulate {{out:aa-tests-with-peeking:simulated A/A tests}} A/A tests under state
 
 Checking every day makes far more A/A tests look significant. Read at the planned end, the share that come out significant is {{out:aa-tests-with-peeking:significant at the planned end}}, close to the 0.05 the threshold promises. Checked daily, the share that look significant on some day rises to {{out:aa-tests-with-peeking:significant on some day, checked daily}}, though neither group's search changed. For a split planned 50/50 that comes out 28,000 to 27,100, a binomial test of 27,100 out of 55,100 shoppers against one half gives a p-value {{out:aa-tests-with-peeking:sample ratio mismatch p}}: chance almost never produces a gap that size.
 
-![Checked every day, the share of A/A tests declared significant on some day climbs well past the planned 0.05](../examples/figures/peeking-false-positives.svg "The share of simulated A/A tests declared significant on some day so far, by day, against the planned 0.05")
+![Checked every day, the share of A/A tests declared significant on some day climbs well past the planned 0.05.](../examples/figures/peeking-false-positives.svg "The share of simulated A/A tests declared significant on some day so far, by day, against the planned 0.05")
 
 [Example: figure-peeking-false-positives](../examples/figure-peeking-false-positives.py)
 
@@ -140,11 +140,11 @@ The same arithmetic says what the [regression set](#diff-runs-per-query) can det
 
 The per-query changes have a spread of {{out:queries-needed-for-power:spread of per-query changes}}, so with {{out:load-the-store:test queries}} test queries the regression set detects a change of {{out:queries-needed-for-power:smallest change 30 queries detect}} in nDCG@10 with 80% power. A change of 0.01 would need {{out:queries-needed-for-power:queries needed for a change of 0.01}} queries.
 
-![Power rises with the change and with the queries: the larger query set reaches 0.8 power at a far smaller change than the test queries do](../examples/figures/power-curve.svg "Power by the normal-approximation formula against the change in nDCG@10, for the test queries and for the larger query set, with the planned 0.8 dashed")
+![Power rises with the change and with the queries: the larger query set reaches 0.8 power at a far smaller change than the test queries do.](../examples/figures/power-curve.svg "Power by the normal-approximation formula against the change in nDCG@10, for the test queries and for the larger query set, with the planned 0.8 dashed")
 
 [Example: figure-power-curve](../examples/figure-power-curve.py)
 
-{{fig:power-curve}} draws power against the change for the test queries and for the {{out:figure-power-curve:queries needed for a change of 0.01}} queries a change of 0.01 needs. The dashed line marks 0.8: by the formula, the test queries' line reaches it at {{out:figure-power-curve:smallest change 30 queries detect}}, and the larger set's line reaches it at {{out:figure-power-curve:smallest change for the larger query set}}, the change it was sized for. The t-test itself falls a little short, as the next simulation shows.
+{{fig:power-curve}} draws power against the change for the test queries in the accent, and, marked with squares, for the {{out:figure-power-curve:queries needed for a change of 0.01}} queries a change of 0.01 needs. The dashed line marks 0.8: by the formula, the test queries' line reaches it at {{out:figure-power-curve:smallest change 30 queries detect}}, and the larger set's line reaches it at {{out:figure-power-curve:smallest change for the larger query set}}, the change it was sized for. The t-test itself falls a little short, as the next simulation shows.
 
 `scipy.stats.power` checks the arithmetic by simulation, drawing normally distributed differences: at that change, the paired t-test has a simulated power of {{out:queries-needed-for-power:simulated power at that change}}. Is that below the planned 0.8? {{out:queries-needed-for-power:simulated power below the planned 0.8}}, because the formula uses the normal distribution where the t-test, on the test queries, uses the wider t-distribution. The real differences aren't normal, so the simulation checks the formula, not the data. When you add queries, add many and judge each shallowly: Webber et al. found that, for the same judging effort, many queries judged shallowly give more statistical power than a few judged deeply ([Webber et al., 2008](https://people.eng.unimelb.edu.au/ammoffat/abstracts/wmz08cikm.html)).
 
