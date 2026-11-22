@@ -21,6 +21,9 @@ say = "The code takes the hybrid's nDCG@10 minus BM25's on each test query, and 
 [examples.permutation-test-by-hand]
 say = "The code takes the hybrid's per-query differences from semantic retrieval on the test queries, flips their signs at random 9,999 times, and counts how often the flipped mean lands at least as far from 0 as the observed mean. That share is the p-value. The code checks it against SciPy's permutation test, and prints whether the difference is larger than chance at the 0.05 level."
 
+[examples.figure-permutation-null]
+say = "The code takes the same per-query differences and the same 9,999 random sign patterns as the permutation test by hand, and draws the 9,999 flipped means as a histogram. The observed mean is a solid line and its mirror image a dashed one. Then it prints the observed mean difference, {{out:figure-permutation-null:observed mean difference}}, and the p-value by hand, {{out:figure-permutation-null:p-value by hand}}."
+
 [examples.paired-t-test-by-hand]
 say = "For semantic retrieval against BM25, and for the hybrid against semantic retrieval, the code divides the mean per-query difference by its standard error to get t, and reads the two-sided p-value off the t distribution. Both p-values match SciPy's paired t-test to three decimals."
 
