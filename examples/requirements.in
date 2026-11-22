@@ -8,3 +8,4 @@ bm25s
 faiss-cpu
 lightgbm
 PyStemmer
+matplotlib
