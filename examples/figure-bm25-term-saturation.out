@@ -1,0 +1,10 @@
+term weight at 1 occurrence, k1 0.5: 0.667
+term weight at 10 occurrences, k1 0.5: 0.952
+term weight at 1000000 occurrences, k1 0.5: 1.000
+term weight at 1 occurrence, k1 1.5: 0.400
+term weight at 10 occurrences, k1 1.5: 0.870
+term weight at 1000000 occurrences, k1 1.5: 1.000
+term weight at 1 occurrence, k1 2.0: 0.333
+term weight at 10 occurrences, k1 2.0: 0.833
+term weight at 1000000 occurrences, k1 2.0: 1.000
+figure: figures/bm25-term-saturation.svg

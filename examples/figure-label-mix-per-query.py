@@ -1,7 +1,9 @@
 """Draws each query's share of exact, partial and irrelevant judgments as one stacked column, queries sorted by exact share.
-The prose's point rests on the `lowest exact share`, `median exact share` and `highest exact share` lines, which are the
-same numbers count-labels-per-query prints."""
+The prose's point rests on the `queries drawn`, `queries where partial is the largest share` and
+`queries with an irrelevant share above 0.2` lines, which the figure prints from the same judgments."""
 import pandas as pd
+
+from matplotlib.colors import to_rgba
 
 from lib.figures import ACCENT, INK, MUTED, new_figure, save
 from lib.store import load_labels
@@ -11,14 +13,15 @@ counts = pd.crosstab(labels["query_id"], labels["label"])[["exact", "partial", "
 shares = counts.div(counts.sum(axis=1), axis=0).sort_values("exact")
 
 print(f"queries drawn: {len(shares)}")
-print(f"median exact share: {shares['exact'].median():.3f}")
-print(f"lowest exact share: {shares['exact'].min():.3f}")
-print(f"highest exact share: {shares['exact'].max():.3f}")
+print(f"queries where partial is the largest share: {(shares.idxmax(axis=1) == 'partial').sum()}")
+print(f"queries with an irrelevant share above 0.2: {(shares['irrelevant'] > 0.2).sum()}")
 
 fig, ax = new_figure(height=3.4)
 columns = range(len(shares))
 bottom = pd.Series(0.0, index=shares.index)
-for label, color, hatch in [("exact", ACCENT, None), ("partial", MUTED, None), ("irrelevant", "none", "///")]:
+# exact solid, partial light with dots, irrelevant hatched: told apart by pattern as well as by colour
+for label, color, hatch in [("exact", ACCENT, None), ("partial", to_rgba(MUTED, 0.3), "."),
+                            ("irrelevant", "none", "///")]:
     ax.bar(columns, shares[label], bottom=bottom, width=0.85, color=color, edgecolor=INK if hatch else "none",
            hatch=hatch, linewidth=0, label=label)
     bottom = bottom + shares[label]

@@ -212,6 +212,14 @@ The two extremes among the test queries show it. `{{out:similarity-scale:first q
 
 A cutoff of 0.5 would keep {{out:similarity-scale:products above 0.5 for the first query}} products for the first query and {{out:similarity-scale:products above 0.5 for the second query}} for the second, and nothing for {{out:similarity-scale:test queries with no product above 0.5}} test queries. Nor does semantic retrieval ever come back empty: a [code that no product holds](#codes-carry-no-weight) still gets a full top 10. Decide that a query has no match some other way, for example when lexical retrieval finds none of its rare terms.
 
+{{fig:similarity-by-grade}} draws every judged test pair's cosine similarity, one line per grade, each as the share of its own pairs in each band.
+
+![Exact pairs sit highest in similarity, but the three grades overlap across most of the range](../examples/figures/similarity-by-grade.svg "Cosine similarity of judged test pairs, by grade")
+
+[Example: figure-similarity-by-grade](../examples/figure-similarity-by-grade.py)
+
+The medians rise from {{out:figure-similarity-by-grade:median similarity, irrelevant}} for irrelevant pairs to {{out:figure-similarity-by-grade:median similarity, partial}} for partial and {{out:figure-similarity-by-grade:median similarity, exact}} for exact, but the three lines overlap, and the share of exact pairs below 0.5 is {{out:figure-similarity-by-grade:share of exact pairs below 0.5}}.
+
 **Mismatched vectors fail silently.** Query and product vectors must come from the same model, revision and prompts. Vectors from two models are numbers in different spaces, and when the two have the same dimension, comparing them raises no error. Sentence Transformers' `encode_query` adds the model's predefined query prompt when one exists ([API reference](https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html)). Make sure the code that embeds live queries does what the indexing code did.
 
 **An index doesn't follow the catalog by itself.** faiss's HNSW does not support removing vectors, according to [the faiss wiki](https://github.com/facebookresearch/faiss/wiki/Guidelines-to-choose-an-index), so a discontinued product stays in the graph until you filter it out of results or rebuild. [Douze et al. (2024)](https://arxiv.org/abs/2401.08281) say that faiss is not a database: it has no concurrent writes, sharding or transactions. Recall against exact search belongs to one catalog and one set of settings, so measure it again after every rebuild.

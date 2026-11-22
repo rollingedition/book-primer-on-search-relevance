@@ -45,6 +45,9 @@ say = "The code compares 256 and 128 dimensions with the full 768 on the train q
 [examples.similarity-scale]
 say = "On the test queries, the code finds two queries: the one whose best match is least similar, with a count of the exact products in its top 10, and the one whose tenth match is most similar. Then it counts the products each would keep above a fixed similarity of 0.5, and the test queries that would keep none."
 
+[examples.figure-similarity-by-grade]
+say = "On the judged test pairs, the code takes each pair's cosine similarity and draws one line per grade, exact, partial and irrelevant, each as its share of that grade's pairs. It prints the number of pairs per grade, the median similarity for each, and the share of exact pairs below 0.5: {{out:figure-similarity-by-grade:share of exact pairs below 0.5}}."
+
 [examples.spelling-probes]
 say = "For each store query with a typo, the code compares the query as typed with its correct spelling: how similar the two are, how many products their semantic top 10s share, and both rankers' nDCG@10 for each spelling, scored with the query's judgments. Last, it prints the smallest p-value a test on so few queries could give."
 

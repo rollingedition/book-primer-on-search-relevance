@@ -1,0 +1,5 @@
+best alpha: 0.7
+best ndcg@10: 0.784
+bm25 alone ndcg@10: 0.695
+semantic alone ndcg@10: 0.772
+figure: figures/blend-weight-curve.svg

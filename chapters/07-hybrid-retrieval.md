@@ -90,6 +90,12 @@ Start with the store's raw scores, added with α = 0.5 on the train queries, the
 
 [Example: raw-scores-versus-min-max](../examples/raw-scores-versus-min-max.py)
 
+![BM25's raw scores spread far wider than the similarities, so a raw sum follows BM25, and min-max puts both on one scale](../examples/figures/score-scales.svg "Each retriever's scores for the candidates of laundry basket with wheels, raw and after min-max scaling")
+
+[Example: figure-score-scales](../examples/figure-score-scales.py)
+
+{{fig:score-scales}} draws those candidates raw on top, after min-max below: BM25's raw dots lie far right of the similarities, all below 1.
+
 For `laundry basket with wheels`, the {{out:raw-scores-versus-min-max:candidates for laundry basket with wheels}} candidates have BM25 scores from {{out:raw-scores-versus-min-max:bm25 range}} and similarities from {{out:raw-scores-versus-min-max:similarity range}}. BM25's spread is many times larger, so it decides the order of the raw sum. Over the train queries, the raw sum's top 10 shares {{out:raw-scores-versus-min-max:raw sum, products shared with the bm25 top 10}} products with BM25's top 10 on average and {{out:raw-scores-versus-min-max:raw sum, products shared with the semantic top 10}} with semantic retrieval's.
 
 The weight says "half each", but the ranking is mostly BM25's: the raw sum's nDCG@10 of {{out:raw-scores-versus-min-max:raw sum ndcg@10}} is close to [BM25's {{out:bm25-semantic-wins-by-query:bm25 ndcg@10}}](#queries-each-retriever-wins).
@@ -135,6 +141,12 @@ Tuning tries a grid of α values on train queries and keeps the one with the bes
 Tune α over 0, 0.1, … 1 for the weighted sum under each of [the three normalizations](#normalize-scores-before-adding), and for weighted RRF with k = 60. Then, as tuning checks, test each normalization against min-max, and test the two blends bound for the test queries against semantic retrieval:
 
 [Example: tune-blend-weights-on-train](../examples/tune-blend-weights-on-train.py)
+
+![The min-max blend is highest just short of pure semantic retrieval, a little above semantic retrieval alone, the dashed line, and it meets that line at the far right](../examples/figures/blend-weight-curve.svg "Mean nDCG@10 on the train queries for each weight alpha, with semantic retrieval alone")
+
+[Example: figure-blend-weight-curve](../examples/figure-blend-weight-curve.py)
+
+{{fig:blend-weight-curve}} draws the blend at each α beside semantic retrieval alone, the dashed line. It is highest at α = {{out:figure-blend-weight-curve:best alpha}}, scoring {{out:figure-blend-weight-curve:best ndcg@10}}.
 
 Semantic retrieval alone scores {{out:tune-blend-weights-on-train:semantic alone ndcg@10}} on the same queries. Each setting's best α and score:
 

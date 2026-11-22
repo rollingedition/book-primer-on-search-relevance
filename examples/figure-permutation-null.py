@@ -29,6 +29,5 @@ ax.axvline(observed, color=ACCENT, linewidth=1.6, label=f"observed mean, {observ
 ax.axvline(-observed, color=ACCENT, linestyle="--", linewidth=1.6, label=f"its mirror, {-observed:.3f}")
 ax.set_xlabel("mean hybrid minus semantic nDCG@10 after random sign flips")
 ax.set_ylabel("flipped means (of 9,999)")
-ax.set_ylim(top=ax.get_ylim()[1] * 1.3)                            # room for the legend above the bars
-ax.legend(loc="upper left", frameon=False)
+ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), frameon=False)   # above the plot, clear of both lines
 save(fig, "permutation-null")

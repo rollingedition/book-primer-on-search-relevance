@@ -1,4 +1,4 @@
-"""Draws BM25's nDCG@10 on each test query as one bar, sorted from lowest to highest, with the mean as a dashed line. The prose rests on the mean, median, lowest, highest and count-below-mean lines printed below the chart."""
+"""Draws BM25's nDCG@10 on each test query as one bar, sorted from lowest to highest, with the mean as a dashed line. The prose rests on the count-below-mean line; the other printed lines repeat bm25-test-scores and match it."""
 from lib.figures import ACCENT, INK, new_figure, save
 from lib.lexical import LexicalSearch
 from lib.metrics import evaluate

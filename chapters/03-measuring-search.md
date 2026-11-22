@@ -127,7 +127,7 @@ The hybrid trails semantic retrieval on the test queries, and [chapter 1](#fuse-
 
 The hybrid's deficit against semantic retrieval is {{out:permutation-test-by-hand:difference at the 0.05 level}} at the 0.05 level. The observed mean difference is {{out:permutation-test-by-hand:observed mean difference}}, and 95% of the flipped means are smaller than {{out:permutation-test-by-hand:95% of flipped means are smaller than}} in size. The p-value, the share of flipped means at least as large as the observed one, is {{out:permutation-test-by-hand:p-value by hand}}.
 
-{{fig:permutation-null}} draws the 9,999 flipped means. The p-value, {{out:figure-permutation-null:p-value by hand}}, is the share at least as far from zero as the observed mean.
+{{fig:permutation-null}} draws the 9,999 flipped means, the observed mean solid and its mirror dashed. The p-value, {{out:figure-permutation-null:p-value by hand}}, is the share outside the two lines.
 
 ![Most sign flips land closer to zero than the observed mean does](../examples/figures/permutation-null.svg "Mean hybrid minus semantic difference after 9,999 random sign flips")
 
