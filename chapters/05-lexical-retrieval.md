@@ -69,7 +69,7 @@ Over the train queries, TF-IDF averages an [nDCG@10](#score-one-ranking) of {{ou
 
 ## Rebuild BM25 by hand to match bm25s {#bm25-from-scratch}
 
-BM25 keeps IDF and changes how term frequency counts, in two ways. With **saturation**, each repeat of a term adds less than the one before, and no number of repeats can push the term's contribution past a ceiling ([Robertson and Zaragoza, 2009](https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf)). The parameter `k1` sets how quickly a term approaches it. With **length normalization**, a long text, which has more chances to contain any term, gets its term frequencies discounted. The parameter `b` sets how much: "b = 1 will perform full document-length normalisation, while b = 0 will switch normalisation off" (Robertson and Zaragoza). In the form bm25s computes by default ([bm25s scoring](https://raw.githubusercontent.com/xhluca/bm25s/0.3.15/bm25s/scoring.py)):
+BM25 keeps IDF and changes how term frequency counts, in two ways. With **saturation**, each repeat of a term adds less than the one before, and no number of repeats can push the term's contribution past a ceiling ([Robertson and Zaragoza, 2009](https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf)). The parameter `k1` sets how quickly a term approaches it. With **length normalization**, a text longer than average, which has more chances to contain any term, gets its term frequencies discounted, and a shorter one gets them raised. The parameter `b` sets how much: "b = 1 will perform full document-length normalisation, while b = 0 will switch normalisation off" (Robertson and Zaragoza). In the form bm25s computes by default ([bm25s scoring](https://raw.githubusercontent.com/xhluca/bm25s/0.3.15/bm25s/scoring.py)):
 
 ```text
 idf(t)     = ln(1 + (N − df(t) + 0.5) / (df(t) + 0.5))
@@ -78,6 +78,14 @@ bm25(q, d) = sum over query terms t of
 ```
 
 Two details differ between textbooks and libraries. A common variant multiplies the fraction by `k1` + 1, which grows every score by the same factor and so leaves the ranking unchanged (Robertson and Zaragoza, section 3.5.1). And Robertson's original IDF, without the 1 inside the logarithm, is negative for a term in more than half of the documents, so Lucene, an open-source search library, adds the 1 ([Kamphuis et al., 2020](https://cs.uwaterloo.ca/~jimmylin/publications/Kamphuis_etal_ECIR2020_preprint.pdf)). bm25s's default, `method="lucene"`, is Lucene's formula computed with exact document lengths ([bm25s README](https://github.com/xhluca/bm25s/blob/0.3.15/README.md)), where Lucene itself approximates them (Kamphuis et al.). "BM25" names a family of such variants, and a study of eight of them found no significant differences in effectiveness on three newswire collections (Kamphuis et al.).
+
+{{fig:bm25-term-saturation}} draws only the formula's term-frequency fraction, tf divided by tf plus k1 times the length factor, for a product of average length, at three values of k1: 0.5 as a solid ink line, the default 1.5 in the accent, and 2.0 dashed.
+
+![Each repeat of a term adds less weight, and a smaller k1 nears the cap sooner.](../examples/figures/bm25-term-saturation.svg "BM25's term-frequency weight by occurrences, at three values of k1")
+
+[Example: figure-bm25-term-saturation](../examples/figure-bm25-term-saturation.py)
+
+Each line climbs in shrinking steps toward the same ceiling, 1, and at a million occurrences the k1 1.5 weight still falls short of it by {{out:figure-bm25-term-saturation:gap below 1 at 1000000 occurrences, k1 1.5}}, and a smaller k1 sits nearer it at every count above zero: at 10 occurrences the weight is {{out:figure-bm25-term-saturation:term weight at 10 occurrences, k1 0.5}} at k1 0.5, {{out:figure-bm25-term-saturation:term weight at 10 occurrences, k1 1.5}} at the default 1.5, and {{out:figure-bm25-term-saturation:term weight at 10 occurrences, k1 2.0}} at 2.0.
 
 Write the formula over the store's [inverted index](#build-an-inverted-index) at bm25s's defaults, `k1=1.5` and `b=0.75`, and check it against bm25s {{version:bm25s}}: first every product's score for each of the {{out:load-the-store:queries}} queries, then the two rankings, by their top 100s and by [nDCG@10](#score-one-ranking):
 

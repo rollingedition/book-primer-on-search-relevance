@@ -15,11 +15,17 @@ say = "The code scores the blend on every query at each of the {{out:tuning-on-t
 [examples.aa-tests-with-peeking]
 say = "The code simulates the A/A tests under those assumptions, applies the two-proportion test to each one after every day, and prints the share that comes out significant at the planned end and the share that looks significant on some day when checked daily. Then it tests a split planned as even that came out uneven, and prints its p-value."
 
+[examples.figure-peeking-false-positives]
+say = "The code reruns the same simulated A/A tests and draws, for each of the 14 days, the share of tests declared significant on some day up to that day, as a line, with the planned 0.05 as a dashed line. It prints the share significant at the planned end, {{out:figure-peeking-false-positives:significant at the planned end}}, and the share significant on some day, checked daily, {{out:figure-peeking-false-positives:significant on some day, checked daily}}."
+
 [examples.sample-size-from-power]
 say = "The code prints the coefficient the normal distribution gives, then the users per group the rule of thumb asks for in each of Kohavi et al.'s two worked examples, and for the store's assumed conversion rate with a 2% and a 1% change to detect."
 
 [examples.queries-needed-for-power]
 say = "The code prints the spread of the per-query differences between the hybrid and semantic retrieval on the test queries, and from it the smallest change 30 queries detect with 80% power and the number of queries a change of 0.01 would need. Then a simulation with SciPy estimates the paired t-test's power at that smallest change, and says whether it falls below the planned 0.8."
+
+[examples.figure-power-curve]
+say = "The code takes the spread of the per-query differences as before, and draws the power the normal approximation gives against the change in nDCG@10, for the {{out:load-the-store:test queries}} test queries and for the larger query set, as two lines, the test queries' in the accent and the larger set's with square markers, and the planned power of 0.8 as a dashed line. It prints the spread, {{out:figure-power-curve:spread of per-query changes}}, the smallest change 30 queries detect, {{out:figure-power-curve:smallest change 30 queries detect}}, the queries needed for a change of 0.01, {{out:figure-power-curve:queries needed for a change of 0.01}}, and the smallest change that set detects, {{out:figure-power-curve:smallest change for the larger query set}}."
 
 [examples.team-draft-one-query]
 say = "The code writes team draft by hand, with a seeded coin, and interleaves semantic retrieval's and BM25's rankings for clear shower curtain into one ten-place list, printing each place's team, judgment and product. BM25 takes the first place with a partial curtain, and exact and partial curtains fill every place but the last. The book's experiments module builds the same list."

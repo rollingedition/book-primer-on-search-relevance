@@ -97,6 +97,12 @@ Over {{out:bm25-test-scores:test queries}} test queries, BM25 averages an nDCG@1
 
 The average hides a wide spread. Scores run from {{out:bm25-test-scores:lowest ndcg@10}} to {{out:bm25-test-scores:highest ndcg@10}}, with a median of {{out:bm25-test-scores:median ndcg@10}}, and {{out:bm25-test-scores:queries with ndcg@10 of 1}} queries score a perfect 1.
 
+{{fig:bm25-test-query-scores}} draws each test query as one bar, sorted from lowest to highest, with the mean as a dashed line. The bars climb from the lowest score to the highest, and {{out:figure-bm25-test-query-scores:queries below the mean}} of the {{out:bm25-test-scores:test queries}} sit under the mean, so more than half of the queries score under the average.
+
+![Sorted from lowest to highest, more than half of the test queries' nDCG@10 bars sit under the mean line, so the average alone hides the spread.](../examples/figures/bm25-test-query-scores.svg "BM25's nDCG@10 on each test query, sorted, with the mean as a dashed line")
+
+[Example: figure-bm25-test-query-scores](../examples/figure-bm25-test-query-scores.py)
+
 The lowest-scoring query, `{{out:bm25-test-scores:lowest query}}`, has a judged@10 of {{out:bm25-test-scores:judged@10 of the lowest query}}. Another low scorer, `outdoor light fixtures`, has a judged@10 of {{out:bm25-test-scores:judged@10 for outdoor light fixtures}}: BM25's top 5 holds an exact outdoor light, then light bulbs that share the query's words and that nobody judged for this query. A bulb isn't a light fixture, so here the grade of 0 is probably fair. But the metric can't know that, and for another ranker or another query, unjudged products may be good ones.
 
 **Working rule:** Report the mean nDCG@10 over the test queries with mean judged@10 beside it, and read the lowest-scoring queries every time you score a run. When one ranker's judged@10 is lower than another's, find out why before you compare their nDCG: the gap may come from missing judgments, not worse results.

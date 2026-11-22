@@ -18,6 +18,9 @@ say = "The code first prints the share of partial products in BM25's and semanti
 [examples.count-labels-per-query]
 say = "The code counts each query's exact, partial and irrelevant judgments, prints the shares at both ends and in the middle, and draws a histogram of how many queries fall in each tenth of the exact share, from 0 to 1. Most queries fall below an exact share of one half."
 
+[examples.figure-label-mix-per-query]
+say = "The code draws one stacked column per query, sorted by exact share: exact solid, partial dotted and irrelevant hatched, stacked in that order. It prints how many queries it draws, {{out:figure-label-mix-per-query:queries drawn}}, and counts the columns where partial is the largest share and where irrelevant tops a fifth."
+
 [examples.cascade-clicks]
 say = "The code applies the strictest cascade rule to BM25's and semantic retrieval's top 10 for clear shower curtain: read from the top, click the first exact product, and stop. For each ranker it prints the grades from rank 1 to 10, the rank and name of the clicked product, and how many exact products sit below the click, never seen."
 

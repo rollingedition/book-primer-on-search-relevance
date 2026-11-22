@@ -210,6 +210,16 @@ For the store, the decision follows from its size, not from the test. Its full v
 
 The two extremes among the test queries show it. `{{out:similarity-scale:first query, lowest best similarity}}` has the weakest best match, at {{out:similarity-scale:its best similarity}}, yet its top 10 holds {{out:similarity-scale:exact products in its top 10}} exact products, while `{{out:similarity-scale:second query, highest 10th similarity}}` has the most similar 10th match, at {{out:similarity-scale:its 10th similarity}}.
 
+{{fig:similarity-by-grade}} draws every judged test pair's cosine similarity, one line per grade: exact solid, partial dotted and irrelevant dashed, each as the share of its own pairs in each band of similarity 0.025 wide.
+
+![Exact pairs sit highest in similarity, and exact and partial pairs overlap.](../examples/figures/similarity-by-grade.svg "Cosine similarity of judged test pairs, by grade")
+
+[Example: figure-similarity-by-grade](../examples/figure-similarity-by-grade.py)
+
+The medians rise from {{out:figure-similarity-by-grade:median similarity, irrelevant}} for irrelevant pairs to {{out:figure-similarity-by-grade:median similarity, partial}} for partial and {{out:figure-similarity-by-grade:median similarity, exact}} for exact, but exact and partial pairs overlap.
+
+A cutoff at 0.5 would drop {{out:figure-similarity-by-grade:share of exact pairs below 0.5}} of exact pairs and keep {{out:figure-similarity-by-grade:share of partial pairs above 0.5}} of partial and {{out:figure-similarity-by-grade:share of irrelevant pairs above 0.5}} of irrelevant ones.
+
 A cutoff of 0.5 would keep {{out:similarity-scale:products above 0.5 for the first query}} products for the first query and {{out:similarity-scale:products above 0.5 for the second query}} for the second, and nothing for {{out:similarity-scale:test queries with no product above 0.5}} test queries. Nor does semantic retrieval ever come back empty: a [code that no product holds](#codes-carry-no-weight) still gets a full top 10. Decide that a query has no match some other way, for example when lexical retrieval finds none of its rare terms.
 
 **Mismatched vectors fail silently.** Query and product vectors must come from the same model, revision and prompts. Vectors from two models are numbers in different spaces, and when the two have the same dimension, comparing them raises no error. Sentence Transformers' `encode_query` adds the model's predefined query prompt when one exists ([API reference](https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html)). Make sure the code that embeds live queries does what the indexing code did.

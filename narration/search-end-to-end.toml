@@ -15,6 +15,9 @@ say = "The code takes BM25's top 10 for clear shower curtain, adds up each grade
 [examples.bm25-test-scores]
 say = "The code runs BM25 on every test query and scores the run against the judgments, one row per query. It prints the mean nDCG@10 and judged@10, the lowest, median and highest nDCG@10, and the three lowest-scoring queries, then BM25's top 5 for one of them, outdoor light fixtures, each product with its judgment."
 
+[examples.figure-bm25-test-query-scores]
+say = "The code scores BM25's top 100 on every test query again and draws each query's nDCG@10 as one bar, sorted from lowest on the left to highest on the right, with the mean as a dashed line. It prints the mean, median, lowest and highest nDCG@10, the number of queries that score 1, and the number that sit under the mean: {{out:figure-bm25-test-query-scores:queries below the mean}} of the test queries."
+
 [examples.first-semantic-search]
 say = "The code reads the recorded embeddings, compares the query clear shower curtain with every product, and prints the ten most similar, each with its similarity and its judgment. Every one of the ten is a shower curtain, a liner or a curtain set. It ends with a count of each label, the gap between the highest and lowest similarity, and the ranking's nDCG@10."
 

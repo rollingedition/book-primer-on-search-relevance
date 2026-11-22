@@ -98,6 +98,12 @@ Partial is the commonest label, at {{out:count-labels-per-query:partial share of
 
 Irrelevant judgments are rare for most queries, not all: the irrelevant share has a median of {{out:count-labels-per-query:median irrelevant share}}, yet it reaches {{out:count-labels-per-query:highest irrelevant share}} for `podium with locking cabinet`, and {{out:count-labels-per-query:queries with no irrelevant judgment}} queries have no irrelevant judgment at all.
 
+![One stacked column per query, sorted by exact share: partial fills most of most columns, and irrelevant is small for most queries but is large for a few.](../examples/figures/label-mix-per-query.svg "The label mix of each query, sorted by exact share")
+
+[Example: figure-label-mix-per-query](../examples/figure-label-mix-per-query.py)
+
+{{fig:label-mix-per-query}} shows the whole mix in each column: exact solid, partial dotted and irrelevant hatched, stacked in that order. Partial is the largest share in {{out:figure-label-mix-per-query:queries where partial is the largest share}} of the {{out:figure-label-mix-per-query:queries drawn}} columns, and irrelevant tops a fifth of the column in only {{out:figure-label-mix-per-query:queries with an irrelevant share above 0.2}}.
+
 The spread changes what [nDCG@10](#score-one-ranking) measures. Exact products per query run from {{out:count-labels-per-query:fewest exact products for a query}}, the sampling rule's floor, to {{out:count-labels-per-query:most exact products for a query}}, and {{out:count-labels-per-query:queries with fewer than 10 exact products}} queries have fewer than 10 exact products, {{out:count-labels-per-query:test queries with fewer than 10 exact products}} of them test queries. For those, the ideal top 10 includes partial products, so a ranking can score perfectly with partial products in its top 10. For a broad query such as `outdoor light fixtures`, a perfect score needs ten exact products. The same nDCG@10 means a different thing for each.
 
 **Working rule:** Print the label mix per query before you average any metric, and look at both ends. Read a low score on a query with few exact products as a different problem from a low score on a broad query. Keep per-query scores next to every mean; [chapter 3](#read-per-query-differences) shows what averages hide.
@@ -108,7 +114,7 @@ A store logs every click, and clicks cost nothing to collect, so they look like 
 
 The evidence on how clicks mislead comes from web search. Joachims et al. tracked the eyes and clicks of Cornell undergraduates answering ten set questions with Google, in two phases, with 34 students in the first phase and 22 in the second. In the second phase some saw the top two results swapped, or the whole list reversed ([Joachims et al., 2005](https://www.cs.cornell.edu/people/tj/publications/joachims_etal_05a.pdf)). They concluded that clicks are "informative but biased."
 
-The first bias is **position bias**: people click higher-ranked results more, partly because they trust the ranking. Joachims et al. call the effect a "trust bias," which draws clicks to highly ranked links even when other abstracts the user viewed are more relevant. The authors also found that relative preferences, such as a clicked result over a skipped one above it, are reasonably accurate on average.
+The first bias is **position bias**: people click higher-ranked results more, whatever their relevance, partly because they look at them first and partly because they trust the ranking. Joachims et al. call the effect a "trust bias," which draws clicks to highly ranked links even when other abstracts the user viewed are more relevant. The authors also found that relative preferences, such as a clicked result over a skipped one above it, are reasonably accurate on average.
 
 In a large experiment on a web search engine, Craswell et al. found that a **cascade model** explained position bias best in the top ranks. In the cascade model, users read results from top to bottom and leave at the first worthwhile document ([Craswell et al., 2008](https://www.microsoft.com/en-us/research/?p=156688)).
 
