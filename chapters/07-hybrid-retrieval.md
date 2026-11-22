@@ -77,7 +77,7 @@ The split uses the judgments to decide which retriever wins, so it diagnoses the
 
 ## Normalize scores before you add them {#normalize-scores-before-adding}
 
-The most direct way to give the weaker retriever, BM25 in the store, [a smaller say](#check-each-retriever-before-fusing) is to add the two retrievers' scores with a weight: α times the semantic score plus (1 − α) times the BM25 score. A sum whose weights add up to 1 is a **convex combination**, or weighted sum. It only works if the scores are on comparable scales, and here they aren't: a [BM25](#rank-with-bm25) score has no fixed range and grows with the number and rarity of the query's words, while semantic retrieval's score, a cosine similarity, lies between −1 and 1. **Score normalization** rescales each retriever's scores for each query before adding them. Per-query min-max scaling maps the lowest score among the query's ranked products to 0 and the highest to 1. A study of fusion functions calls it "the de facto method in the literature" and tests two alternatives ([Bruch et al., 2023](https://arxiv.org/abs/2210.11934)). **Theoretical min-max** uses each score's lowest possible value instead of the lowest one seen: 0 for BM25 and −1 for cosine. The **z-score** subtracts the mean of a query's scores and divides by their standard deviation. The examples' shared module `lib/blend.py` writes each in a few lines.
+The most direct way to give the weaker retriever, BM25 in the store, [a smaller say](#check-each-retriever-before-fusing) is to add the two retrievers' scores with a weight: α times the semantic score plus (1 − α) times the BM25 score. A sum whose weights are non-negative and add up to 1 is a **convex combination**, or weighted sum. It only works if the scores are on comparable scales, and here they aren't: a [BM25](#rank-with-bm25) score has no fixed range and grows with the number and rarity of the query's words, while semantic retrieval's score, a cosine similarity, lies between −1 and 1. **Score normalization** rescales each retriever's scores for each query before adding them. Per-query min-max scaling maps the lowest score among the query's ranked products to 0 and the highest to 1. A study of fusion functions calls it "the de facto method in the literature" and tests two alternatives ([Bruch et al., 2023](https://arxiv.org/abs/2210.11934)). **Theoretical min-max** uses each score's lowest possible value instead of the lowest one seen: 0 for BM25 and −1 for cosine. The **z-score** subtracts the mean of a query's scores and divides by their standard deviation. The examples' shared module `lib/blend.py` writes each in a few lines.
 
 ```text
 min-max(s) = (s − lowest score among the query's candidates) / (highest − lowest)
@@ -94,7 +94,7 @@ Start with the store's raw scores, added with α = 0.5 on the train queries, the
 
 [Example: figure-score-scales](../examples/figure-score-scales.py)
 
-{{fig:score-scales}} draws the candidates for `laundry basket with wheels` raw on top and after min-max below: the raw BM25 dots lie far right of the similarity dots, and after scaling both span {{out:figure-score-scales:after min-max, bm25 range}}.
+{{fig:score-scales}} draws the candidates for `laundry basket with wheels` raw on top, scaled below: BM25's raw dots lie right of the similarities, and after scaling both span {{out:figure-score-scales:after min-max, bm25 range}}.
 
 For `laundry basket with wheels`, the {{out:raw-scores-versus-min-max:candidates for laundry basket with wheels}} candidates have BM25 scores from {{out:raw-scores-versus-min-max:bm25 range}} and similarities from {{out:raw-scores-versus-min-max:similarity range}}. BM25's spread is many times larger, so it decides the order of the raw sum. Over the train queries, the raw sum's top 10 shares {{out:raw-scores-versus-min-max:raw sum, products shared with the bm25 top 10}} products with BM25's top 10 on average and {{out:raw-scores-versus-min-max:raw sum, products shared with the semantic top 10}} with semantic retrieval's.
 
@@ -142,11 +142,11 @@ Tune α over 0, 0.1, … 1 for the weighted sum under each of [the three normali
 
 [Example: tune-blend-weights-on-train](../examples/tune-blend-weights-on-train.py)
 
-![The min-max blend is highest just short of pure semantic retrieval, a little above semantic retrieval alone, the dashed line, and it meets that line at the far right](../examples/figures/blend-weight-curve.svg "Mean nDCG@10 on the train queries for each weight alpha, with semantic retrieval alone")
+![The min-max blend rises from BM25 alone to a peak above semantic retrieval alone, the dashed line, then stays a little above that line until the far right, where they meet](../examples/figures/blend-weight-curve.svg "Mean nDCG@10 on the train queries for each weight alpha, with semantic retrieval alone")
 
 [Example: figure-blend-weight-curve](../examples/figure-blend-weight-curve.py)
 
-{{fig:blend-weight-curve}} draws the blend at each α beside semantic retrieval alone, the dashed line. It is highest at α = {{out:figure-blend-weight-curve:best alpha}}, scoring {{out:figure-blend-weight-curve:best ndcg@10}}.
+{{fig:blend-weight-curve}} draws the blend beside semantic retrieval alone, dashed. It rises from BM25 alone, {{out:figure-blend-weight-curve:alpha 0.0 ndcg@10}}, to its peak at α = {{out:figure-blend-weight-curve:best alpha}}, stays above semantic alone from α = {{out:figure-blend-weight-curve:first alpha above semantic alone}} to {{out:figure-blend-weight-curve:last alpha above semantic alone}}, and meets it at α = 1.
 
 Semantic retrieval alone scores {{out:tune-blend-weights-on-train:semantic alone ndcg@10}} on the same queries. Each setting's best α and score:
 

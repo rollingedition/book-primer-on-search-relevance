@@ -110,7 +110,7 @@ Checking every day makes far more A/A tests look significant. Read at the planne
 
 [Example: figure-peeking-false-positives](../examples/figure-peeking-false-positives.py)
 
-{{fig:peeking-false-positives}} draws that share day by day. The solid line can only rise, since a test once declared stays declared, and it ends well above the dashed planned 0.05 at day 14.
+{{fig:peeking-false-positives}} draws that share day by day. The solid line never falls, since a test once declared stays declared, and it ends at {{out:figure-peeking-false-positives:significant on some day, checked daily}} at the planned end, against the dashed 0.05.
 
 A p-value is often misread: 0.05 doesn't mean a 5% chance that the result is a false positive; Kohavi et al. (2022) call that "a very common misunderstanding". It is the chance of data at least this extreme if the change did nothing.
 

@@ -916,7 +916,7 @@ example = "fusion-gain-by-winning-retriever"
 id = "convex-combination"
 term = "convex combination"
 aliases = ["weighted sum", "CC"]
-definition = "A sum whose weights add up to 1 is a convex combination, or weighted sum."
+definition = "A sum whose weights are non-negative and add up to 1 is a convex combination, or weighted sum."
 section = "normalize-scores-before-adding"
 example = "raw-scores-versus-min-max"
 
