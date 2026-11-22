@@ -36,6 +36,9 @@ say = "For semantic retrieval's top 20 on each test query, the code measures the
 [examples.rerank-depth-on-train]
 say = "On the train queries, the code reranks semantic retrieval's top 5, 10, 20, 30, 50 and 75 by the cross-encoder, and prints each depth's nDCG@10 and its change from the depth before, starting from semantic retrieval alone. It also counts the pairs per query that scoring every candidate would take."
 
+[examples.figure-rerank-depth-curve]
+say = "The code reranks semantic retrieval's top 5, 10, 20, 30, 50 and 75 by the cross-encoder on the train queries, as the depth sweep does, and draws each depth's nDCG@10 as a line, with semantic retrieval alone as a dashed line. It prints each depth's nDCG@10, then the best depth, {{out:figure-rerank-depth-curve:best depth}}, with its nDCG@10 of {{out:figure-rerank-depth-curve:best depth, train ndcg@10}}."
+
 [examples.distillation-on-train]
 say = "By cross-validation on the train queries, the code trains a student, a LightGBM regression on every feature but the cross-encoder's score, to predict that score, and a LambdaMART model on the same features with human grades, unjudged candidates as 0. It prints both models' nDCG@10 beside the teacher's own order and semantic retrieval's, and tests the student against the human-graded model with a permutation test."
 

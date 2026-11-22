@@ -13,7 +13,7 @@ say = "The code computes TF-IDF over the inverted index, prints the IDF of furni
 say = "The code writes BM25 as bm25s computes it, over the inverted index with k1 set to 1.5 and b to 0.75. It prints Robertson's and Lucene's IDF for the common word your, and a term's weight at 1, 2, 4 and 9 occurrences in a product of average length. Then it reports the largest score difference from bm25s over every product and query, whether both give the same top 100 for every query, and the mean nDCG@10 of each on the train and test queries."
 
 [examples.figure-bm25-term-saturation]
-say = "The code draws BM25's term-frequency part for a product of average length, for a term that occurs 0 to 10 times, at k1 0.5, 1.5 and 2.0, with b at 0.75. Each line is named in the legend, and the default 1.5 is the middle one. It prints each weight at 1 and at 10 occurrences, and at a million occurrences, where every line is close to 1."
+say = "The code draws BM25's term-frequency part for a product of average length, for a term that occurs 0 to 10 times, at k1 0.5, 1.5 and 2.0, with b at 0.75. It prints each weight at 1 and at 10 occurrences, and at a million occurrences, where each prints {{out:figure-bm25-term-saturation:term weight at 1000000 occurrences, k1 1.5}}."
 
 [examples.stemmer-merges-word-forms]
 say = "The code stems eight words two ways, with a stemmer written by hand that cuts a few common endings, and with Snowball English from PyStemmer, and prints both stems of each. Then, for floats and for molding, it counts the products whose text contains the word against those that contain its stem, and compares the vocabulary's size with and without stemming."

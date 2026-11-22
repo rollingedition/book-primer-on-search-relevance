@@ -1,4 +1,4 @@
-"""Draws BM25's term-frequency part for a product of average length, at k1 0.5, 1.5 and 2.0, for a term that occurs 0 to 10 times. The prose rests on the weights at 1 and 10 occurrences and on the value at a million, which show how each line levels off."""
+"""Draws BM25's term-frequency part for a product of average length, at k1 0.5, 1.5 and 2.0, for a term that occurs 0 to 10 times. The prose rests on the weights at 10 occurrences and on the value at a million, which show how each line levels off."""
 from lib.figures import ACCENT, INK, MUTED, new_figure, save
 
 B = 0.75                                   # bm25s's default b, which the store keeps

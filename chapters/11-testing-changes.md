@@ -106,6 +106,12 @@ Simulate {{out:aa-tests-with-peeking:simulated A/A tests}} A/A tests under state
 
 Checking every day makes far more A/A tests look significant. Read at the planned end, the share that come out significant is {{out:aa-tests-with-peeking:significant at the planned end}}, close to the 0.05 the threshold promises. Checked daily, the share that look significant on some day rises to {{out:aa-tests-with-peeking:significant on some day, checked daily}}, though neither group's search changed. For a split planned 50/50 that comes out 28,000 to 27,100, a binomial test of 27,100 out of 55,100 shoppers against one half gives a p-value {{out:aa-tests-with-peeking:sample ratio mismatch p}}: chance almost never produces a gap that size.
 
+![Checked every day, the share of A/A tests declared significant on some day climbs well past the planned 0.05](../examples/figures/peeking-false-positives.svg "The share of simulated A/A tests declared significant on some day so far, by day, against the planned 0.05")
+
+[Example: figure-peeking-false-positives](../examples/figure-peeking-false-positives.py)
+
+{{fig:peeking-false-positives}} draws that share day by day. The solid line can only rise, since a test once declared stays declared, and it ends well above the dashed planned 0.05 at day 14.
+
 A p-value is often misread: 0.05 doesn't mean a 5% chance that the result is a false positive; Kohavi et al. (2022) call that "a very common misunderstanding". It is the chance of data at least this extreme if the change did nothing.
 
 **Working rule:** Before the test, choose the primary metric and the guardrails that must not get worse, and size the test ([with power](#size-tests-with-power)). Run an A/A test on the same setup first. Check the sample ratio before you read any result, and read the result once, at the planned size. If you must watch a test as it runs, use a sequential method built for continuous monitoring, such as always-valid p-values ([Johari et al., 2015](https://arxiv.org/abs/1512.04922)).
@@ -133,6 +139,12 @@ The same arithmetic says what the [regression set](#diff-runs-per-query) can det
 [Example: queries-needed-for-power](../examples/queries-needed-for-power.py)
 
 The per-query changes have a spread of {{out:queries-needed-for-power:spread of per-query changes}}, so with {{out:load-the-store:test queries}} test queries the regression set detects a change of {{out:queries-needed-for-power:smallest change 30 queries detect}} in nDCG@10 with 80% power. A change of 0.01 would need {{out:queries-needed-for-power:queries needed for a change of 0.01}} queries.
+
+![Power rises with the change and with the queries: 300 queries reach 0.8 power at a far smaller change than 30 do](../examples/figures/power-curve.svg "Power of the paired t-test against the change in nDCG@10, for the test queries and for 300 queries, with the planned 0.8 dashed")
+
+[Example: figure-power-curve](../examples/figure-power-curve.py)
+
+{{fig:power-curve}} draws power against the change for the test queries and for 300. Both lines rise from near 0 toward 1, and the dashed line marks 0.8: the test queries' line reaches it at the smallest change above, and the 300-query line reaches it at a much smaller one.
 
 `scipy.stats.power` checks the arithmetic by simulation, drawing normally distributed differences: at that change, the paired t-test has a simulated power of {{out:queries-needed-for-power:simulated power at that change}}. Is that below the planned 0.8? {{out:queries-needed-for-power:simulated power below the planned 0.8}}, because the formula uses the normal distribution where the t-test, on the test queries, uses the wider t-distribution. The real differences aren't normal, so the simulation checks the formula, not the data. When you add queries, add many and judge each shallowly: Webber et al. found that, for the same judging effort, many queries judged shallowly give more statistical power than a few judged deeply ([Webber et al., 2008](https://people.eng.unimelb.edu.au/ammoffat/abstracts/wmz08cikm.html)).
 
