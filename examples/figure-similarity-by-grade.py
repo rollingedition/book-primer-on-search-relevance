@@ -1,10 +1,10 @@
-"""Draws the cosine similarity of every judged test pair, one line per grade: exact, partial and irrelevant. The prose rests on the pair counts, the median similarity by grade, and the share of exact pairs below 0.5."""
-import numpy as np
-import pandas as pd
-
+"""Draws the cosine similarity of every judged test pair, one line per grade: exact, partial and irrelevant. The prose rests on the pair counts, the median similarity by grade, and the shares above and below 0.5 that a cutoff there would keep or drop."""
 from lib.figures import ACCENT, INK, MUTED, new_figure, save
 from lib.recorded import embeddings
 from lib.store import load_labels, load_queries
+
+import numpy as np
+import pandas as pd
 
 product_ids, product_vectors, query_ids, query_vectors = embeddings()   # unit length, so a dot product is a cosine
 test = load_queries("test")
@@ -19,8 +19,8 @@ p = product_vectors[product_row[pairs["product_id"]].to_numpy()]
 pairs = pairs.assign(similarity=np.einsum("ij,ij->i", q, p))
 
 fig, ax = new_figure()
-edges = np.linspace(0, 1, 41)                                           # 0.025 wide, the whole range of the pairs
-styles = (("exact", ACCENT, "-"), ("partial", INK, "-"), ("irrelevant", MUTED, "--"))
+edges = np.linspace(0, 1, 41)                                           # 0.025 wide, across the whole cosine range from 0 to 1
+styles = (("exact", ACCENT, "-"), ("partial", INK, ":"), ("irrelevant", MUTED, "--"))
 for label, color, style in styles:
     s = pairs.loc[pairs["label"] == label, "similarity"]
     counts, _ = np.histogram(s, bins=edges)
@@ -31,6 +31,9 @@ for label, color, style in styles:
 
 exact = pairs.loc[pairs["label"] == "exact", "similarity"]
 print(f"share of exact pairs below 0.5: {(exact < 0.5).mean():.3f}")
+for label in ("partial", "irrelevant"):
+    s = pairs.loc[pairs["label"] == label, "similarity"]
+    print(f"share of {label} pairs above 0.5: {(s > 0.5).mean():.3f}")
 
 ax.set_xlabel("cosine similarity between query and product vectors")
 ax.set_ylabel("share of pairs in each grade")

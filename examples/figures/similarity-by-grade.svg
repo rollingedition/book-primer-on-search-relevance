@@ -201,7 +201,7 @@ L 439.917721 181.998979
 L 439.917721 181.998979 
 L 449.848197 181.998979 
 L 449.848197 181.998979 
-" clip-path="url(#pc34d14d1ca)" style="fill: none; stroke: #1b1712; stroke-width: 1.6; stroke-linejoin: miter"/>
+" clip-path="url(#pc34d14d1ca)" style="fill: none; stroke-dasharray: 1.6,2.64; stroke-dashoffset: 0; stroke: #1b1712; stroke-width: 1.6; stroke-linejoin: miter"/>
    </g>
    <g id="patch_5">
     <path d="M 52.629146 181.998979 
@@ -540,7 +540,7 @@ L 81.629146 16.098678
     <g id="line2d_30">
      <path d="M 61.629146 31.099459 
 L 81.629146 31.099459 
-" style="fill: none; stroke: #1b1712; stroke-width: 1.6; stroke-linecap: square"/>
+" style="fill: none; stroke-dasharray: 1.6,2.64; stroke-dashoffset: 0; stroke: #1b1712; stroke-width: 1.6"/>
     </g>
     <g id="text_18">
      <text style="font-size: 10px; font-family: 'IBM Plex Sans', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #1b1712" x="89.629146" y="34.599459" transform="rotate(-0 89.629146 34.599459)">partial pairs (2901)</text>

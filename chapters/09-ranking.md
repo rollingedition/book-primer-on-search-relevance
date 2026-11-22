@@ -233,12 +233,6 @@ For the cross-encoder, cost grows in step with depth, so the question is where q
 
 [Example: rerank-depth-on-train](../examples/rerank-depth-on-train.py)
 
-{{fig:rerank-depth-curve}} plots the same six depths, with semantic retrieval alone as the dashed line. The highest point is depth {{out:figure-rerank-depth-curve:best depth}}, and the points at 50 and 75 sit below it.
-
-![Reranking deeper is not always better on train: nDCG@10 peaks at depth 30 and is lower at depths 50 and 75](../examples/figures/rerank-depth-curve.svg "Train nDCG@10 by rerank depth, with semantic retrieval alone as a dashed line")
-
-[Example: figure-rerank-depth-curve](../examples/figure-rerank-depth-curve.py)
-
 The cross-encoder's gain flattens between 20 and 30, near the depth fixed to match the LLM recording. From semantic retrieval's {{out:rerank-depth-on-train:depth 0 (semantic alone), train ndcg@10}}, reranking the top 5 gives {{out:rerank-depth-on-train:depth 5, train ndcg@10}} and the top 20 {{out:rerank-depth-on-train:depth 20, train ndcg@10}}. The top 30 adds {{out:rerank-depth-on-train:depth 30, change from the depth before}} for half as many pairs again. Deeper, it falls: {{out:rerank-depth-on-train:depth 50, train ndcg@10}} at 50 and {{out:rerank-depth-on-train:depth 75, train ndcg@10}} at 75.
 
 On test, [the depth-20 rerank](#rerank-semantic-with-cross-encoder) didn't establish a gain, so for the store the cheapest reranker, none, is also the one to keep.
