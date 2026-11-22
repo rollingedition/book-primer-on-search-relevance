@@ -90,11 +90,11 @@ Start with the store's raw scores, added with α = 0.5 on the train queries, the
 
 [Example: raw-scores-versus-min-max](../examples/raw-scores-versus-min-max.py)
 
-![BM25's raw scores spread far wider than the similarities, so a raw sum follows BM25, and min-max puts both on one scale](../examples/figures/score-scales.svg "Each retriever's scores for the candidates of laundry basket with wheels, raw and after min-max scaling")
+![BM25's raw scores lie far above the similarities and spread far wider, and min-max puts both from 0 to 1](../examples/figures/score-scales.svg "Each retriever's scores for the candidates of laundry basket with wheels, raw and after min-max scaling")
 
 [Example: figure-score-scales](../examples/figure-score-scales.py)
 
-{{fig:score-scales}} draws those candidates raw on top, after min-max below: BM25's raw dots lie far right of the similarities, all below 1.
+{{fig:score-scales}} draws the candidates for `laundry basket with wheels` raw on top and after min-max below: the raw BM25 dots lie far right of the similarity dots, and after scaling both span {{out:figure-score-scales:after min-max, bm25 range}}.
 
 For `laundry basket with wheels`, the {{out:raw-scores-versus-min-max:candidates for laundry basket with wheels}} candidates have BM25 scores from {{out:raw-scores-versus-min-max:bm25 range}} and similarities from {{out:raw-scores-versus-min-max:similarity range}}. BM25's spread is many times larger, so it decides the order of the raw sum. Over the train queries, the raw sum's top 10 shares {{out:raw-scores-versus-min-max:raw sum, products shared with the bm25 top 10}} products with BM25's top 10 on average and {{out:raw-scores-versus-min-max:raw sum, products shared with the semantic top 10}} with semantic retrieval's.
 

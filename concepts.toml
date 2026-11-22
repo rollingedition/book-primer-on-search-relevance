@@ -183,7 +183,7 @@ part-of = ["search-and-recommendation/dcg"]
 [[concepts]]
 id = "position-bias"
 term = "position bias"
-definition = "position bias: people click higher-ranked results more, partly because they trust the ranking."
+definition = "position bias: people click higher-ranked results more, whatever their relevance, partly because they look at them first and partly because they trust the ranking."
 section = "clicks-are-not-judgments"
 example = "cascade-clicks"
 
@@ -682,7 +682,7 @@ part-of = ["bm25"]
 [[concepts]]
 id = "length-normalization"
 term = "length normalization"
-definition = "With length normalization, a long text, which has more chances to contain any term, gets its term frequencies discounted."
+definition = "With length normalization, a text longer than average, which has more chances to contain any term, gets its term frequencies discounted, and a shorter one gets them raised."
 section = "bm25-from-scratch"
 example = "bm25-by-hand"
 
@@ -1256,7 +1256,7 @@ computed-from = ["feature"]
 [[concepts]]
 id = "pointwise-model"
 term = "pointwise model"
-definition = "A pointwise model predicts each product's grade on its own, as a regression."
+definition = "A pointwise model predicts each product's grade on its own, as a regression or a classification."
 section = "learn-from-pairs"
 example = "lambdamart-choices-on-train"
 
@@ -1275,7 +1275,7 @@ broader = ["learning-to-rank"]
 [[concepts]]
 id = "listwise-model"
 term = "listwise model"
-definition = "A listwise model scores a whole ranking."
+definition = "A listwise model learns from a loss on a query's whole ranking."
 section = "learn-from-pairs"
 
 [concepts.relations]
@@ -1284,7 +1284,7 @@ broader = ["learning-to-rank"]
 [[concepts]]
 id = "gradient-boosted-trees"
 term = "gradient-boosted trees"
-definition = "gradient-boosted trees, which add small decision trees one at a time, each fitted to the gradients of the trees before it"
+definition = "gradient-boosted trees, which add small decision trees one at a time, each fitted to the gradients of the loss at the scores the trees before it give"
 section = "learn-from-pairs"
 
 [concepts.relations]
@@ -1457,7 +1457,7 @@ part-of = ["search-and-recommendation/prompt"]
 [[concepts]]
 id = "context-window"
 term = "context window"
-definition = "A model's context window is the most tokens it can read, a fixed number of the word pieces in its own vocabulary."
+definition = "A model's context window is the most tokens it can hold at once, its prompt and its answer together, a fixed number of the word pieces in its own vocabulary."
 section = "put-retrieved-products-in-the-prompt"
 example = "catalog-against-the-context"
 
@@ -1528,7 +1528,6 @@ id = "context-recall"
 term = "context recall"
 aliases = ["context recall@k"]
 definition = "context recall is the share of a reference answer's claims that the context supports"
-formula = "context recall@k    = (exact products in the top k) / (exact products judged for the query)"
 section = "measure-the-context"
 example = "context-measures-by-hand"
 

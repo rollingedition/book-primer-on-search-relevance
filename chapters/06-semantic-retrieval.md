@@ -216,7 +216,9 @@ The two extremes among the test queries show it. `{{out:similarity-scale:first q
 
 [Example: figure-similarity-by-grade](../examples/figure-similarity-by-grade.py)
 
-The medians rise from {{out:figure-similarity-by-grade:median similarity, irrelevant}} for irrelevant pairs to {{out:figure-similarity-by-grade:median similarity, partial}} for partial and {{out:figure-similarity-by-grade:median similarity, exact}} for exact, but each grade overlaps its neighbour. Read as a cutoff at 0.5, that drops {{out:figure-similarity-by-grade:share of exact pairs below 0.5}} of exact pairs and keeps {{out:figure-similarity-by-grade:share of partial pairs above 0.5}} of partial and {{out:figure-similarity-by-grade:share of irrelevant pairs above 0.5}} of irrelevant ones.
+The medians rise from {{out:figure-similarity-by-grade:median similarity, irrelevant}} for irrelevant pairs to {{out:figure-similarity-by-grade:median similarity, partial}} for partial and {{out:figure-similarity-by-grade:median similarity, exact}} for exact, but each grade overlaps its neighbour.
+
+Read as a cutoff at 0.5, that drops {{out:figure-similarity-by-grade:share of exact pairs below 0.5}} of exact pairs and keeps {{out:figure-similarity-by-grade:share of partial pairs above 0.5}} of partial and {{out:figure-similarity-by-grade:share of irrelevant pairs above 0.5}} of irrelevant ones.
 
 A cutoff of 0.5 would keep {{out:similarity-scale:products above 0.5 for the first query}} products for the first query and {{out:similarity-scale:products above 0.5 for the second query}} for the second, and nothing for {{out:similarity-scale:test queries with no product above 0.5}} test queries. Nor does semantic retrieval ever come back empty: a [code that no product holds](#codes-carry-no-weight) still gets a full top 10. Decide that a query has no match some other way, for example when lexical retrieval finds none of its rare terms.
 
